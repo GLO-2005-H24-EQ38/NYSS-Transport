@@ -49,7 +49,7 @@ class Database:
             raise ValueError("There are no rollbacks in the rollback stack.")
         rollback_to_push = self.migration_counter - 1
         migration_files = f"db_scripts/migrations"
-        name = os.listdir(migration_files)[(rollback_to_push) % Database.NUM_OF_DEVS]
+        name = sorted(os.listdir(migration_files))[(rollback_to_push) % Database.NUM_OF_DEVS]
         rollback_file = "db_scripts/migrations/" + name + f"/rollback/rollback_{name}_{(rollback_to_push // Database.NUM_OF_DEVS) + 1}.sql"
         print(f"rollback: {name} {(rollback_to_push // Database.NUM_OF_DEVS) + 1}")
         run_sql_file(self.cursor, rollback_file, accept_empty=False)
