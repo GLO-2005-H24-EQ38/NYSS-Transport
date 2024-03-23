@@ -11,7 +11,7 @@ class Database:
         """
             Chargez les variables d'environnement de votre fichier .env, puis complétez les lignes 15 à 19 afin de récupérer les valeurs de ces variables
         """
-        load_dotenv("environement.env")
+        load_dotenv()
         self.host = os.environ.get("HOST")
         self.port = int(os.environ.get("PORT"))
         self.database = os.environ.get("DATABASE")
@@ -37,7 +37,7 @@ class Database:
     def push_migration(self):
         migration_to_push = self.migration_counter
         migration_files = f"db_scripts/migrations"
-        name = os.listdir(migration_files)[migration_to_push % Database.NUM_OF_DEVS]
+        name = sorted(os.listdir(migration_files))[migration_to_push % Database.NUM_OF_DEVS]
         migration_file = "db_scripts/migrations/" + name + f"/migrate/migrate_{name}_{(migration_to_push // Database.NUM_OF_DEVS) + 1}.sql"
         print(f"migration: {name} {(migration_to_push // Database.NUM_OF_DEVS) + 1}")
         run_sql_file(self.cursor, migration_file, accept_empty=False)
