@@ -10,25 +10,26 @@ CREATE TABLE user (
 );
 
 CREATE TABLE creditCard (
-    number integer(16),
-    CVC integer(3) NOT NULL ,
+    number integer,
     holderName varchar(100) NOT NULL ,
-    expirationDate varchar(5) NOT NULL ,
+    expirationDate char(5) NOT NULL ,
     PRIMARY KEY (number)
+);
+
+CREATE TABLE company (
+    name varchar(100),
+    PRIMARY KEY (name)
 );
 
 CREATE TABLE access (
     number integer,
     name varchar(100) NOT NULL ,
     price float NOT NULL ,
+    company varchar(100),
     type enum('ticket','subscription') NOT NULL,
     expiration date NOT NULL,
-    PRIMARY KEY (Number)
-);
-
-CREATE TABLE company (
-    name varchar(100),
-    PRIMARY KEY (name)
+    PRIMARY KEY (Number),
+    FOREIGN KEY (company) REFERENCES company (name) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE commuter(
@@ -42,8 +43,10 @@ CREATE TABLE commuter(
 CREATE TABLE admin(
     user varchar(100),
     code integer NOT NULL ,
+    company varchar(100),
     PRIMARY KEY (user),
-    FOREIGN KEY (user) REFERENCES user (email) ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY (user) REFERENCES user (email) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (company) REFERENCES company (name) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE ticket(

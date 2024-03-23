@@ -5,20 +5,18 @@ from sql_utils import run_sql_file
 
 
 class Database:
-
     NUM_OF_DEVS = 4
+
     def __init__(self):
         """
             Chargez les variables d'environnement de votre fichier .env, puis complétez les lignes 15 à 19 afin de récupérer les valeurs de ces variables
         """
-        load_dotenv("environment.env")
+        load_dotenv("environement.env")
         self.host = os.environ.get("HOST")
-        self.port = int( os.environ.get("PORT") )
+        self.port = int(os.environ.get("PORT"))
         self.database = os.environ.get("DATABASE")
         self.user = os.environ.get("USER")
         self.password = os.environ.get("PASSWORD")
-
-
 
         self._open_sql_connection()
 
@@ -40,9 +38,9 @@ class Database:
         migration_to_push = self.migration_counter
         migration_files = f"db_scripts/migrations"
         name = os.listdir(migration_files)[migration_to_push % Database.NUM_OF_DEVS]
-        migration_file = "db_scripts/migrations/" + name + f"/migrate/migrate_{name}_{(migration_to_push//Database.NUM_OF_DEVS)+1}.sql"
-        print(f"migration: {name} {(migration_to_push//Database.NUM_OF_DEVS)+1}")
-        run_sql_file(self.cursor, migration_file , accept_empty=False)
+        migration_file = "db_scripts/migrations/" + name + f"/migrate/migrate_{name}_{(migration_to_push // Database.NUM_OF_DEVS) + 1}.sql"
+        print(f"migration: {name} {(migration_to_push // Database.NUM_OF_DEVS) + 1}")
+        run_sql_file(self.cursor, migration_file, accept_empty=False)
         self.migration_counter += 1
         print(f"migration: {name} {(migration_to_push // Database.NUM_OF_DEVS) + 1} is done")
 
@@ -52,12 +50,11 @@ class Database:
         rollback_to_push = self.migration_counter - 1
         migration_files = f"db_scripts/migrations"
         name = os.listdir(migration_files)[(rollback_to_push) % Database.NUM_OF_DEVS]
-        rollback_file = "db_scripts/migrations/" + name + f"/rollback/rollback_{name}_{(rollback_to_push // Database.NUM_OF_DEVS)+1}.sql"
-        print(f"rollback: {name} {(rollback_to_push // Database.NUM_OF_DEVS)+1}")
+        rollback_file = "db_scripts/migrations/" + name + f"/rollback/rollback_{name}_{(rollback_to_push // Database.NUM_OF_DEVS) + 1}.sql"
+        print(f"rollback: {name} {(rollback_to_push // Database.NUM_OF_DEVS) + 1}")
         run_sql_file(self.cursor, rollback_file, accept_empty=False)
         self.migration_counter -= 1
-        print(f"rollback: {name} {(self.migration_counter  // Database.NUM_OF_DEVS) + 1} is done")
-
+        print(f"rollback: {name} {(self.migration_counter // Database.NUM_OF_DEVS) + 1} is done")
 
     def up(self):
         self.drop()
