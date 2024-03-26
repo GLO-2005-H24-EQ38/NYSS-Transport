@@ -29,11 +29,11 @@ def parse_sql(filename):
             continue
 
         if DELIMITER not in line:
-            stmt += line.replace(DELIMITER, ';')
+            stmt += line
             continue
 
         if stmt:
-            stmt += line
+            stmt += line.replace(DELIMITER, ';')
             stmts.append(stmt.strip())
             stmt = ''
         else:

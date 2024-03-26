@@ -10,7 +10,7 @@ CREATE TABLE user (
 );
 
 CREATE TABLE creditCard (
-    number integer,
+    number INT(20),
     holderName varchar(100) NOT NULL ,
     expirationDate char(5) NOT NULL ,
     PRIMARY KEY (number)
