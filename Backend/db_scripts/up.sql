@@ -22,13 +22,13 @@ CREATE TABLE company (
 );
 
 CREATE TABLE access (
-    number integer,
+    id integer,
     name varchar(100) NOT NULL ,
     price float NOT NULL ,
     company varchar(100),
     type enum('ticket','subscription') NOT NULL,
-    expiration date NOT NULL,
-    PRIMARY KEY (Number),
+    duration time NOT NULL,
+    PRIMARY KEY (id),
     FOREIGN KEY (company) REFERENCES company (name) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
@@ -53,13 +53,28 @@ CREATE TABLE ticket(
     access integer,
     passes integer NOT NULL,
     PRIMARY KEY (access),
-    FOREIGN KEY (access) REFERENCES access (Number) ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY (access) REFERENCES access (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE subscription (
     access integer,
     start DATE,
     PRIMARY KEY (access),
-    FOREIGN KEY (access) REFERENCES access (Number) ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY (access) REFERENCES access (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
+
+CREATE TABLE transaction (
+    accessNumber integer,
+    transactionNumber integer NOT NULL,
+    creditCard integer NOT NULL,
+    user varchar(100) NOT NULL,
+    accessId integer NOT NULL ,
+    transactionDate DATE NOT NULL ,
+    expirationDate DATE NOT NULL ,
+    PRIMARY KEY (accessNumber),
+    FOREIGN KEY (user) REFERENCES commuter (user)  ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (creditCard) REFERENCES creditCard (number),
+    FOREIGN KEY (accessId) REFERENCES access (id) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
 
