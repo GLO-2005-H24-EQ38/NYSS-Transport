@@ -14,7 +14,7 @@ class Database:
         load_dotenv()
         self.host = os.environ.get("HOST")
         self.port = int(os.environ.get("PORT"))
-        self.database = os.environ.get("DATABASE")
+        self.database = os.environ.get("")
         self.user = os.environ.get("USER")
         self.password = os.environ.get("PASSWORD")
 

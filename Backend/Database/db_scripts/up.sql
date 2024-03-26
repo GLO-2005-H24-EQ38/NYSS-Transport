@@ -4,7 +4,7 @@ CREATE TABLE user (
     password varchar(100) NOT NULL ,
     address varchar(100) NOT NULL ,
     birthday date NOT NULL ,
-    phone varchar(20),
+    phone INTEGER(10),
     role enum('commuter','admin') DEFAULT 'commuter' NOT NULL ,
     PRIMARY KEY (email)
 );
