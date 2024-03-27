@@ -10,7 +10,7 @@ CREATE TABLE user (
 );
 
 CREATE TABLE creditCard (
-    number INT(20),
+    number integer,
     holderName varchar(100) NOT NULL ,
     expirationDate char(5) NOT NULL ,
     PRIMARY KEY (number)
@@ -34,7 +34,7 @@ CREATE TABLE access (
 
 CREATE TABLE commuter(
     user varchar(100),
-    creditCard INTEGER(10) ,
+    creditCard integer ,
     PRIMARY KEY (user),
     FOREIGN KEY (user) REFERENCES user (email) ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (creditCard) references creditCard(number) ON UPDATE CASCADE ON DELETE SET NULL

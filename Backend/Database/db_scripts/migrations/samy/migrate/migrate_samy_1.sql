@@ -1,12 +1,17 @@
 DELIMITER //
 
-CREATE PROCEDURE addCreditcard(IN holder varchar(100), IN cardNumber INT(10), IN expiration varchar(5),IN userEmail varchar(100))
+CREATE PROCEDURE addCreditcard(IN holder varchar(100), IN cardNumber INTEGER, IN expiration varchar(5),IN userEmail varchar(100))
 BEGIN
+    IF NOT EXISTS (SELECT * FROM commuter WHERE user = userEmail) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'User does not exist';
+    END IF;
+
     IF NOT EXISTS (SELECT * FROM Creditcard WHERE cardNumber = number) THEN
+
         INSERT INTO Creditcard (holderName, Number, expirationDate) VALUES (holder, cardNumber, expiration);
     END IF;
 
-    UPDATE commuter SET creditCard = cardNumber WHERE userEmail = user;
+    UPDATE commuter SET creditCard = cardNumber WHERE user = userEmail;
 
 END //
 
@@ -21,3 +26,4 @@ insert into commuter (user) value ('yo.com');
 
 CALL addCreditcard('whatevs', 1234567890, '12/22', 'whatever.com');
 CALL addCreditcard('whatevs', 1234567890, '12/22', 'yo.com');
+CALL addCreditcard('whatevs', 123456590, '12/22', 'noneExist.com');
