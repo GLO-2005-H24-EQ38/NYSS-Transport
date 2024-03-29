@@ -26,4 +26,3 @@ insert into commuter (user) value ('yo.com');
 
 CALL addCreditcard('whatevs', 1234567890, '12/22', 'whatever.com');
 CALL addCreditcard('whatevs', 1234567890, '12/22', 'yo.com');
-CALL addCreditcard('whatevs', 123456590, '12/22', 'noneExist.com');
