@@ -6,14 +6,17 @@ CREATE TABLE user (
     birthday date NOT NULL ,
     phone INTEGER(10),
     role enum('commuter','admin') DEFAULT 'commuter' NOT NULL ,
-    PRIMARY KEY (email)
+    PRIMARY KEY (email),
+    CONSTRAINT validEmail CHECK (email LIKE '%@%.%'),
+    CONSTRAINT validPhone CHECK (phone > 0)
 );
 
 CREATE TABLE creditCard (
     number integer,
     holderName varchar(100) NOT NULL ,
     expirationDate char(5) NOT NULL ,
-    PRIMARY KEY (number)
+    PRIMARY KEY (number),
+    CONSTRAINT invalidExpirationDate CHECK (expirationDate LIKE '__/__')
 );
 
 CREATE TABLE company (

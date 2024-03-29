@@ -7,7 +7,6 @@ BEGIN
     END IF;
 
     IF NOT EXISTS (SELECT * FROM Creditcard WHERE cardNumber = number) THEN
-
         INSERT INTO Creditcard (holderName, Number, expirationDate) VALUES (holder, cardNumber, expiration);
     END IF;
 
@@ -26,4 +25,3 @@ insert into commuter (user) value ('yo.com');
 
 CALL addCreditcard('whatevs', 1234567890, '12/22', 'whatever.com');
 CALL addCreditcard('whatevs', 1234567890, '12/22', 'yo.com');
-CALL addCreditcard('whatevs', 123456590, '12/22', 'noneExist.com');
