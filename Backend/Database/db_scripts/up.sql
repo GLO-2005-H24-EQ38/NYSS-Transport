@@ -4,13 +4,14 @@ CREATE TABLE user (
     password varchar(100) NOT NULL ,
     address varchar(100) NOT NULL ,
     birthday date NOT NULL ,
-    phone INTEGER(10),
+    phone BIGINT,
     role enum('commuter','admin') DEFAULT 'commuter' NOT NULL ,
-    PRIMARY KEY (email)
+    PRIMARY KEY (email),
+    CONSTRAINT check_phone_length_is_10_digits CHECK (LENGTH(phone) = 10)
 );
 
 CREATE TABLE creditCard (
-    number integer,
+    number BIGINT,
     holderName varchar(100) NOT NULL ,
     expirationDate char(5) NOT NULL ,
     PRIMARY KEY (number)
@@ -34,7 +35,7 @@ CREATE TABLE access (
 
 CREATE TABLE commuter(
     user varchar(100),
-    creditCard integer ,
+    creditCard BIGINT ,
     PRIMARY KEY (user),
     FOREIGN KEY (user) REFERENCES user (email) ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (creditCard) references creditCard(number) ON UPDATE CASCADE ON DELETE SET NULL
@@ -66,7 +67,7 @@ CREATE TABLE subscription (
 CREATE TABLE transaction (
     accessNumber integer,
     transactionNumber integer NOT NULL,
-    creditCard integer NOT NULL,
+    creditCard BIGINT NOT NULL,
     user varchar(100) NOT NULL,
     accessId integer NOT NULL ,
     transactionDate DATE NOT NULL ,
@@ -76,5 +77,3 @@ CREATE TABLE transaction (
     FOREIGN KEY (creditCard) REFERENCES creditCard (number),
     FOREIGN KEY (accessId) REFERENCES access (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
-
-
