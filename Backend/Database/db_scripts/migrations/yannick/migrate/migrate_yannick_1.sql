@@ -1,4 +1,5 @@
 DROP FUNCTION IF EXISTS BuyAccess;
+DROP PROCEDURE IF EXISTS DeleteAccess;
 
 DELIMITER //
 CREATE FUNCTION BuyAccess(
@@ -56,6 +57,15 @@ END //
 
 DELIMITER ;
 
+DELIMITER //
+          CREATE PROCEDURE DeleteAccess(
+              IN p_access_id INT
+          )
+BEGIN
+    DELETE FROM access WHERE id = p_access_id;
+END //
+DELIMITER ;
+
 
 -- example of a transaction with credit card present
 SET @transaction_number = 1;
@@ -66,3 +76,7 @@ SET @result = BuyAccess(1, @transaction_number, @p_email, 1);
 -- SET @transaction_number = 2;
 -- SET @p_email = 'emai';
 -- SET @result = BuyAccess(1, @transaction_number, @p_email, 1);
+
+-- TODO: our table transaction need revision because delete an access deletes all transactions made on it
+-- TODO which is a behavior that we might not want
+-- CALL DeleteAccess(1);
