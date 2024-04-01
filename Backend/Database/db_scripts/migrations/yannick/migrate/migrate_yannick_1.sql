@@ -57,6 +57,12 @@ END //
 DELIMITER ;
 
 
+-- example of a transaction with credit card present
 SET @transaction_number = 1;
 SET @p_email = 'user1@example.com';
 SET @result = BuyAccess(1, @transaction_number, @p_email, 1);
+
+-- example of a transaction with missing credit card (should fail and throw an error)
+-- SET @transaction_number = 2;
+-- SET @p_email = 'emai';
+-- SET @result = BuyAccess(1, @transaction_number, @p_email, 1);
