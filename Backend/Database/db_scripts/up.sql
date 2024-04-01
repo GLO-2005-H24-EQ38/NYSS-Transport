@@ -12,7 +12,7 @@ CREATE TABLE user (
 );
 
 CREATE TABLE creditCard (
-    number integer,
+    number BIGINT,
     holderName varchar(100) NOT NULL ,
     expirationDate char(5) NOT NULL ,
     PRIMARY KEY (number),
@@ -37,7 +37,7 @@ CREATE TABLE access (
 
 CREATE TABLE commuter(
     user varchar(100),
-    creditCard integer ,
+    creditCard BIGINT ,
     PRIMARY KEY (user),
     FOREIGN KEY (user) REFERENCES user (email) ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (creditCard) references creditCard(number) ON UPDATE CASCADE ON DELETE SET NULL
@@ -69,7 +69,7 @@ CREATE TABLE subscription (
 CREATE TABLE transaction (
     accessNumber VARCHAR(36),
     transactionNumber integer NOT NULL,
-    creditCard integer NOT NULL,
+    creditCard BIGINT NOT NULL,
     user varchar(100) NOT NULL,
     accessId integer NOT NULL ,
     transactionDate DATE NOT NULL ,
