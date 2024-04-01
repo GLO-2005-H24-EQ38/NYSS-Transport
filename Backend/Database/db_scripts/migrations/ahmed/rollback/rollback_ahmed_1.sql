@@ -1,3 +1,5 @@
-use project;
+DROP FUNCTION IF EXISTS SearchAccess;
+DROP FUNCTION IF EXISTS RetrieveWallet;
+DROP PROCEDURE IF EXISTS AddAccess;
 
-DELETE FROM user where name = 'ahmed';
+DELETE FROM user where role = 'commuter' or role = 'admin';
