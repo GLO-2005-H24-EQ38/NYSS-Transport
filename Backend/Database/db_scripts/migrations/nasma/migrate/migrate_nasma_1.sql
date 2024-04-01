@@ -58,7 +58,7 @@ CREATE PROCEDURE AddAccess(
     IN p_price FLOAT,
     IN p_company_name VARCHAR(100),
     IN p_access_type enum('ticket','subscription'),
-    IN p_duration time
+    IN p_duration INT
 )
 BEGIN
     INSERT INTO company (name) VALUES (p_company_name);
@@ -68,52 +68,52 @@ END //
 DELIMITER ;
 
 -- TODO remove them eventually (sample data to check my methods)
-# -- Inserting sample data into the company table
-# INSERT INTO company (name) VALUES ('Company XYZ');
-# INSERT INTO company (name) VALUES ('Company ABC');
-#
-# -- Inserting sample data into the access table
-# INSERT INTO access (id, name, price, company, type, duration) VALUES (1,'Access 1', 20.00, 'Company XYZ', 'ticket', '01:00:00');
-# INSERT INTO access (id,name, price, company, type, duration) VALUES (2,'Access 2', 30.00, 'Company XYZ', 'subscription', '30:00:00');
-# INSERT INTO access (id,name, price, company, type, duration) VALUES (3,'Access 3', 40.00, 'Company ABC', 'ticket', '02:00:00');
-# INSERT INTO access (id,name, price, company, type, duration) VALUES (4,'Access 4', 50.00, 'Company ABC', 'subscription', '90:00:00');
-#
-# -- Inserting sample data into the user table
-# INSERT INTO user (email, name, password, address, birthday, phone, role)
-# VALUES ('user1@example.com', 'User One', 'password123', '123 Main St', '1990-01-01', 1234567890, 'commuter'),
-#        ('admin@example.com', 'Admin One', 'adminpass', '456 Admin Rd', '1985-05-05', 9087654321, 'admin');
-#
-# -- Inserting sample data into the creditCard table
-# INSERT INTO creditCard (number, holderName, expirationDate)
-# VALUES (1234567890123456, 'User One', '12/25'),
-#        (9876543210987654, 'Admin One', '11/24');
-#
-# -- Inserting sample data into the company table
-# INSERT INTO company (name) VALUES ('Company A'), ('Company B');
-#
-# -- Inserting sample data into the access table
-# INSERT INTO access (id, name, price, company, type, duration)
-# VALUES (5, 'Access One', 10.00, 'Company A', 'ticket', '01:00:00'),
-#        (6, 'Access Two', 20.00, 'Company B', 'subscription', '30 00:00:00');
-#
-# -- Inserting sample data into the commuter table
-# INSERT INTO commuter (user, creditCard)
-# VALUES ('user1@example.com', 1234567890123456);
-#
-# -- Inserting sample data into the admin table
-# INSERT INTO admin (user, code, company)
-# VALUES ('admin@example.com', 1234, 'Company A');
-#
-# -- Inserting sample data into the ticket table
-# INSERT INTO ticket (access, passes)
-# VALUES (1, 5);
-#
-# -- Inserting sample data into the subscription table
-# INSERT INTO subscription (access, start)
-# VALUES (2, '2024-01-01');
-#
-# -- Inserting sample data into the transaction table
-# INSERT INTO transaction (accessNumber, transactionNumber, creditCard, user, accessId, transactionDate, expirationDate)
-# VALUES (1, 123, 1234567890123456, 'user1@example.com', 1, '2024-03-29', '2024-03-30'),
-#        (2, 456, 9876543210987654, 'user1@example.com', 2, '2024-03-29', '2024-04-29');
+ -- Inserting sample data into the company table
+ INSERT INTO company (name) VALUES ('Company XYZ');
+ INSERT INTO company (name) VALUES ('Company ABC');
+
+ -- Inserting sample data into the access table
+ INSERT INTO access (id, name, price, company, type, duration) VALUES (1,'Access 1', 20.00, 'Company XYZ', 'ticket', 3);
+ INSERT INTO access (id,name, price, company, type, duration) VALUES (2,'Access 2', 30.00, 'Company XYZ', 'subscription', 5);
+ INSERT INTO access (id,name, price, company, type, duration) VALUES (3,'Access 3', 40.00, 'Company ABC', 'ticket', 7);
+ INSERT INTO access (id,name, price, company, type, duration) VALUES (4,'Access 4', 50.00, 'Company ABC', 'subscription', 8);
+
+ -- Inserting sample data into the user table
+ INSERT INTO user (email, name, password, address, birthday, phone, role)
+ VALUES ('user1@example.com', 'User One', 'password123', '123 Main St', '1990-01-01', 1234567890, 'commuter'),
+        ('admin@example.com', 'Admin One', 'adminpass', '456 Admin Rd', '1985-05-05', 9087654321, 'admin');
+
+ -- Inserting sample data into the creditCard table
+ INSERT INTO creditCard (number, holderName, expirationDate)
+ VALUES (1234567890123456, 'User One', '12/25'),
+        (9876543210987654, 'Admin One', '11/24');
+
+ -- Inserting sample data into the company table
+ INSERT INTO company (name) VALUES ('Company A'), ('Company B');
+
+ -- Inserting sample data into the access table
+ INSERT INTO access (id, name, price, company, type, duration)
+ VALUES (5, 'Access One', 10.00, 'Company A', 'ticket', 30),
+        (6, 'Access Two', 20.00, 'Company B', 'subscription', 14);
+
+ -- Inserting sample data into the commuter table
+ INSERT INTO commuter (user, creditCard)
+ VALUES ('user1@example.com', 1234567890123456);
+
+ -- Inserting sample data into the admin table
+ INSERT INTO admin (user, code, company)
+ VALUES ('admin@example.com', 1234, 'Company A');
+
+ -- Inserting sample data into the ticket table
+ INSERT INTO ticket (access, passes)
+ VALUES (1, 5);
+
+ -- Inserting sample data into the subscription table
+ INSERT INTO subscription (access, start)
+ VALUES (2, '2024-01-01');
+
+ -- Inserting sample data into the transaction table
+ INSERT INTO transaction (accessNumber, transactionNumber, creditCard, user, accessId, transactionDate, expirationDate)
+ VALUES (1, 123, 1234567890123456, 'user1@example.com', 1, '2024-03-29', '2024-03-30'),
+        (2, 456, 9876543210987654, 'user1@example.com', 2, '2024-03-29', '2024-04-29');
 

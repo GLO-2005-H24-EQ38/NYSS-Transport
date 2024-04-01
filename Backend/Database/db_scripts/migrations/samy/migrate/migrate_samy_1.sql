@@ -6,9 +6,9 @@ BEGIN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'User does not exist';
     END IF;
 
-    IF NOT EXISTS (SELECT * FROM Creditcard WHERE cardNumber = number) THEN
+    IF NOT EXISTS (SELECT * FROM creditCard WHERE cardNumber = number) THEN
 
-        INSERT INTO Creditcard (holderName, Number, expirationDate) VALUES (holder, cardNumber, expiration);
+        INSERT INTO creditCard (holderName, Number, expirationDate) VALUES (holder, cardNumber, expiration);
     END IF;
 
     UPDATE commuter SET creditCard = cardNumber WHERE user = userEmail;

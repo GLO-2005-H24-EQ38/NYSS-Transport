@@ -28,7 +28,7 @@ CREATE TABLE access (
     price float NOT NULL ,
     company varchar(100),
     type enum('ticket','subscription') NOT NULL,
-    duration time NOT NULL,
+    duration INT NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (company) REFERENCES company (name) ON UPDATE CASCADE ON DELETE CASCADE
 );
@@ -65,7 +65,7 @@ CREATE TABLE subscription (
 );
 
 CREATE TABLE transaction (
-    accessNumber integer,
+    accessNumber VARCHAR(36),
     transactionNumber integer NOT NULL,
     creditCard BIGINT NOT NULL,
     user varchar(100) NOT NULL,
