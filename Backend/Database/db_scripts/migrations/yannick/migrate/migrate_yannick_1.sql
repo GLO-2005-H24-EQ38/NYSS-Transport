@@ -40,12 +40,12 @@ SELECT creditCard FROM commuter WHERE user = p_email INTO credit_card_number;
 IF credit_card_number IS NULL THEN
     SIGNAL SQLSTATE '45000'
     SET MESSAGE_TEXT = 'User does not have a credit card';
-ELSE
-    SET access_expire_date = DATE_ADD(CURDATE(), INTERVAL access_duration DAY);
 END IF;
 
+SET access_expire_date = DATE_ADD(CURDATE(), INTERVAL access_duration DAY);
+
 INSERT INTO transaction (accessNumber, transactionNumber, creditCard, user, accessId, transactionDate, expirationDate)
-    VALUES (access_number, transaction_number, credit_card_number, p_email, p_access_id, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 DAY));
+    VALUES (access_number, transaction_number, credit_card_number, p_email, p_access_id, CURDATE(), access_expire_date);
 
 -- Concatenate access details to the access_bought as a JSON object
 SET access_bought_info = CONCAT('{name: ', access_name, ', price: ', access_price, ', type: ', access_type,
