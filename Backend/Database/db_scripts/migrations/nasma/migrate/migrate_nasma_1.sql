@@ -7,7 +7,7 @@ DELIMITER //
 CREATE FUNCTION SearchAccess (
     p_company_name VARCHAR(100),
     p_access_name VARCHAR(100),
-    p_price FLOAT
+    p_access_type FLOAT
 )
 RETURNS VARCHAR(10000) DETERMINISTIC
 BEGIN
@@ -24,7 +24,7 @@ BEGIN
     FROM access a
     WHERE (p_company_name IS NULL OR a.company = p_company_name)
         AND (p_access_name IS NULL OR a.name = p_access_name)
-        AND (p_price IS NULL OR a.price = p_price);
+        AND (p_access_type IS NULL OR a.type = p_access_type);
 
     RETURN p_access_list;
 END //
