@@ -4,6 +4,6 @@ import HelloWorld from "@/App.vue";
 
 <template>
   <div>
-    <HelloWorld msg="Hello World!"/>
+    HomeView
   </div>
 </template>
