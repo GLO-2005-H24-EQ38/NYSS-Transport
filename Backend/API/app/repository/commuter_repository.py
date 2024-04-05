@@ -1,4 +1,4 @@
-from app.service.dtos.commuter_dtos import Commuter
+from app.service.dtos.commuter_dtos import Commuter, CommuterFullInfo
 
 
 class CommuterRepository:
@@ -12,6 +12,5 @@ class CommuterRepository:
         else:
             return False
 
-    def get_commuter_info(self, email) -> Commuter:
-        saved_commuter = self.database.get(email)
-        return Commuter(**saved_commuter)
+    def get_commuter_info(self, email: str) -> CommuterFullInfo:
+        return self.database.get(email)

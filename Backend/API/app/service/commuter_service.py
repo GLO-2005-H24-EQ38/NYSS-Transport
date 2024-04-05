@@ -18,11 +18,11 @@ class CommuterService():
             raise InvalidCommuter(ErrorResponseStatus.CONFLICT, RequestErrorCause.ALREADY_EXISTS,
                                   ResquestErrorDescription.ALREADY_EXISTS_DESCRIPTION)
 
-    def login(self, commuter: User) -> Token:
+    def login(self, commuter: Commuter) -> Token:
+        print(commuter.email, commuter.password)
         commuter_saved_info = self.commuter_repository.get_commuter_info(commuter.email)
 
-        if commuter_saved_info.password == commuter.password:
-            self.logged_in_commuter = commuter_saved_info
+        if commuter_saved_info.verify_password(commuter.password):
             token = Token()
             self.logged_in_commuter[token.value] = commuter.email
             return token
