@@ -7,8 +7,8 @@ import bcrypt
 class Token():
     """used for user authentication"""
 
-    def __init__(self):
-        self.value = uuid.uuid4().hex
+    def __init__(self, token=uuid.uuid4().hex):
+        self.value = token
 
     def __str__(self):
         return self.value
