@@ -22,6 +22,7 @@ export default {
     <div class="nav-container" style="flex:1; justify-content: right">
         <div style="margin-right: 2rem">Home</div>
         <div style="margin-right: 2rem">About</div>
+        <div id="profile" v-if="this.$route.path === '/'" @click="this.$router.push('/user')" style="margin-right: 2rem">Profile</div>
       </div>
   </nav>
 
@@ -41,6 +42,9 @@ div {
 .nav-container {
   display: flex;
   flex-direction: row;
+}
+#profile {
+  cursor: pointer;
 }
 
 button {

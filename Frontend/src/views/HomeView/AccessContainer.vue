@@ -8,14 +8,14 @@ export default {
 </script>
 
 <template>
-  <div class="restaurant-cards">
+  <div class="access-cards-container">
     <AccessCard v-for="index in 8" :key="index" />
   </div>
 
 </template>
 
 <style scoped>
-.restaurant-cards {
+.access-cards-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: start;
