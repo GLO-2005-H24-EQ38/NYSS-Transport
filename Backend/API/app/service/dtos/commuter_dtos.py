@@ -1,3 +1,5 @@
+import re
+
 from app.service.dtos.admin_dtos import User
 
 
@@ -14,10 +16,17 @@ class CommuterFullInfo(Commuter):
 
     def __init__(self, name, password, address, email, tel, dateOfBirth):
         super().__init__(email, password)
+        self.__validate_phone_number(tel)
         self.name = name
         self.date_of_birth = dateOfBirth
         self.address = address
         self.tel = tel
+
+    def __validate_phone_number(self, tel):
+        if not tel:
+            raise ValueError("Phone number is required")
+        elif not re.match(CommuterFullInfo.PHONE_NUMBER_REGEX, tel):
+            raise ValueError("Invalid phone number")
 
     def to_json(self):
         return {

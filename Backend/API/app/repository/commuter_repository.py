@@ -2,20 +2,16 @@ from app.service.dtos.commuter_dtos import Commuter
 
 
 class CommuterRepository:
-    def __init__(self, database):
-        self.database = database
+    def __init__(self, database=None):
+        self.database = {}  # will be replaced with param database but for now it's a dictionary
+
+    def signup_commuter(self, new_commuter: Commuter) -> bool:
+        if not self.database.get(new_commuter.email):
+            self.database[new_commuter.email] = new_commuter
+            return True
+        else:
+            return False
 
     def get_commuter_info(self, email) -> Commuter:
-        print('getting info for commuter :', email)
-        fake_db_response = {
-            "name": "John Doe",
-            "email": "yann@me.com",
-            "address": "1234 Main St",
-            "tel": "1234567890",
-            "dateOfBirth": "01/01/2000"         # dd/MM/YYYY
-        }
-        return Commuter(**fake_db_response)
-
-    def register_commuter(self, commuter: Commuter) -> bool:
-        print('registering commuter :', commuter.email)
-        return True
+        saved_commuter = self.database.get(email)
+        return Commuter(**saved_commuter)

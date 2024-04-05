@@ -41,13 +41,13 @@ class RequestError(RuntimeError):
         }
 
 
-class InvalidCommuter(RuntimeError):
+class InvalidCommuter(RequestError):
     def __init__(self, error_response_status: ErrorResponseStatus, error_cause: RequestErrorCause,
                  description: ResquestErrorDescription):
         super().__init__(error_response_status, error_cause, description)
 
 
-class InvalidAdmin(RuntimeError):
+class InvalidAdmin(RequestError):
     def __init__(self, error_response_status: ErrorResponseStatus, error_cause: RequestErrorCause,
                  description: ResquestErrorDescription):
         super().__init__(error_response_status, error_cause, description)

@@ -1,3 +1,4 @@
+from app.repository.commuter_repository import CommuterRepository
 from app.service.dtos.admin_dtos import User, Token
 from app.service.dtos.commuter_dtos import Commuter
 from app.service.exceptions import *
@@ -5,12 +6,13 @@ from app.service.exceptions import *
 
 class CommuterService():
 
-    def __init__(self, commuter_repository):
+    def __init__(self, commuter_repository: CommuterRepository = CommuterRepository()):
         self.commuter_repository = commuter_repository
         self.logged_in_commuter = {}
 
-    def register_commuter(self, commuter: Commuter):
-        if self.commuter_repository.register_commuter(commuter):
+    def signup_commuter(self, new_commuter: Commuter) -> str:
+        new_commuter.secure_password()
+        if self.commuter_repository.signup_commuter(new_commuter):
             return "register successful"
         else:
             raise InvalidCommuter(ErrorResponseStatus.CONFLICT, RequestErrorCause.ALREADY_EXISTS,
@@ -23,7 +25,7 @@ class CommuterService():
             self.logged_in_commuter = commuter_saved_info
             token = Token()
             self.logged_in_commuter[token.value] = commuter.email
-            return "login successful"
+            return token
         else:
             raise InvalidCommuter(ErrorResponseStatus.UNAUTHORIZED, RequestErrorCause.UNAUTHORIZED,
                                   ResquestErrorDescription.UNAUTHORIZED_DESCRIPTION)
