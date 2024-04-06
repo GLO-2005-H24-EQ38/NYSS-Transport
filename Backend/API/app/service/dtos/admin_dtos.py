@@ -65,28 +65,31 @@ class Admin(User):
 
 
 class Access:
-    def __init__(self, accessName, price, accessType, duration, company, numberOfPassage):
+    def __init__(self, accessName, price, accessType, duration, company, numberOfPassage=None):
         self.id = uuid.uuid4().hex
         self.name = accessName
         self.price = float(price)
         self.type = accessType
         self.duration = float(duration)
         self.company = company
-        self.passes = int(numberOfPassage)
+        self.numberOfPassage = int(numberOfPassage) if numberOfPassage is not None else None
 
     def secure_access_id(self):
         self.id = uuid.uuid4().hex
 
     def to_json(self):
-        return {
+        access_json = {
             "accessId": self.id,
             "accessName": self.name,
             "price": self.price,
             "accessType": self.type,
             "duration": self.duration,
             "company": self.company,
-            "numberOfPassage": self.passes
         }
+        if self.numberOfPassage is not None:
+            access_json["numberOfPassage"] = self.numberOfPassage
+        return access_json
+
 
 
 if __name__ == '__main__':
