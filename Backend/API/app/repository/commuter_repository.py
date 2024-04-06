@@ -41,3 +41,11 @@ class CommuterRepository:
             return True
         else:
             return False
+
+    def get_payment_method(self, email) -> str | None:
+
+        commuter_data = self.database.get(email)
+        if commuter_data['credit_card'] is None:
+            return None
+        else:
+            return commuter_data['credit_card']

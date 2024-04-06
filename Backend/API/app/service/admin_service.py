@@ -23,28 +23,28 @@ class AdminService():
             return token
         else:
             raise InvalidAdmin(ErrorResponseStatus.UNAUTHORIZED, RequestErrorCause.UNAUTHORIZED,
-                               ResquestErrorDescription.UNAUTHORIZED_DESCRIPTION)
+                               RequestErrorDescription.UNAUTHORIZED_DESCRIPTION)
 
     def create_access(self, new_access: Access, token: Token) -> Access:
         # Vérifier si l'utilisateur est authentifié en tant qu'admin
         if token.value not in self.logged_in_admin:
             raise InvalidAdmin(ErrorResponseStatus.UNAUTHORIZED, RequestErrorCause.UNAUTHORIZED,
-                               ResquestErrorDescription.UNAUTHORIZED_DESCRIPTION)
+                               RequestErrorDescription.UNAUTHORIZED_DESCRIPTION)
 
         if new_access.type not in ["Ticket", "Subscription"]:
             raise InvalidAdmin(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
-                               ResquestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
+                               RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
 
         if new_access.type == "Ticket":
             if new_access.numberOfPassage is None:
                 raise InvalidAdmin(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.MISSING_PARAMETER,
-                                   ResquestErrorDescription.MISSING_PARAMETER_DESCRIPTION)
+                                   RequestErrorDescription.MISSING_PARAMETER_DESCRIPTION)
         else:
             # Si ce n'est pas un "Ticket", vérifie que numberOfPassage n'est pas défini
             if new_access.numberOfPassage is not None:
                 print(new_access.numberOfPassage)
                 raise InvalidAdmin(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
-                                   ResquestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
+                                   RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
 
 
         # Générer un identifiant unique pour l'accès

@@ -41,7 +41,7 @@ class User(ABC):
             raise TypeError("Email is required : email")
         elif not re.match(User.EMAIL_REGEX, email):
             raise RequestError(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
-                               ResquestErrorDescription.INVALID_PARAMETER_DESCRIPTION, "email")
+                               RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION, "email")
 
     def __validate_password(self, password):
         if not password:
