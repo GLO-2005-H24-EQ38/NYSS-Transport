@@ -2,7 +2,7 @@
 import PaymentMethod from "@/components/CommuterProfile/PaymentMethod.vue";
 
 import UserInfo from "@/components/CommuterProfile/UserInfo.vue";
-import AccessCard from "@/components/Access/AccessCard.vue";
+import AccessCard from "@/components/Access/Communter/AccessCard.vue";
 import TransactionContainer from "@/components/CommuterProfile/TransactionContainer.vue";
 
 export default {

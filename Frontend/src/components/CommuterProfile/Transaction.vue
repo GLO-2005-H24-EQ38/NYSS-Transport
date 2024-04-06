@@ -1,16 +1,18 @@
 <script>
 import QrcodeVue from "qrcode.vue";
+import QRCodeTicket from "@/components/CommuterProfile/QRCodeTicket.vue";
 
 export default {
   name: "Transaction",
-  components: {QrcodeVue},
+  components: {QRCodeTicket, QrcodeVue},
   data() {
     return {
       accessNumber: "40001",
       transactionNumber: "40001",
       expDate: "12/24",
       transactionDate: "01/05/2024",
-      QRValue: this.accessNumber
+      QRValue: this.accessNumber,
+      showQRCode: false,
     }
   }
 }
@@ -34,12 +36,13 @@ export default {
         Transaction Date : 01/05/2024
       </div>
     </div>
-<!--    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center">-->
-<!--      <a href="#">Show QR Code</a>-->
-<!--    </div>-->
-    <div>
-      <qrcode-vue :value="QRValue" size="50" level="H"></qrcode-vue>
+    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center">
+      <a href="#" @click="showQRCode = !showQRCode">Show QR Code</a>
     </div>
+    <QRCodeTicket v-if="showQRCode" />
+<!--    <div>-->
+<!--      <qrcode-vue :value="QRValue" size="50" level="H"></qrcode-vue>-->
+<!--    </div>-->
   </div>
 </template>
 

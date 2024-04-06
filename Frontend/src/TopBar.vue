@@ -20,8 +20,8 @@ export default {
 </div>
          </div>
     <div class="nav-container" style="flex:1; justify-content: right">
-        <div style="margin-right: 2rem">Home</div>
-        <div style="margin-right: 2rem">About</div>
+        <div style="margin-right: 2rem; cursor: pointer" v-if="this.$route.path !== '/admin'" @click="this.$router.push('/')" >Home</div>
+        <div style="margin-right: 2rem; cursor: pointer">About</div>
         <div id="profile" v-if="this.$route.path === '/'" @click="this.$router.push('/user')" style="margin-right: 2rem">Profile</div>
       </div>
   </nav>

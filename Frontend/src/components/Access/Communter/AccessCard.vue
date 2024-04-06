@@ -26,7 +26,7 @@ export default {
   <div class="access-card">
     <img
         style="object-fit: contain"
-        src="../../assets/stm_logo.png"
+        src="../../../assets/stm_logo.png"
         alt="stm"/>
     <div class="card-body">
       <div class="single-line card-title">

@@ -1,5 +1,5 @@
 <script>
-import AccessCard from "@/components/Access/AccessCard.vue";
+import AccessCard from "@/components/Access/Communter/AccessCard.vue";
 import Transaction from "@/components/CommuterProfile/Transaction.vue";
 
 export default {

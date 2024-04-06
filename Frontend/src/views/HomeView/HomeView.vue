@@ -1,5 +1,5 @@
 <script setup>
-import AccessContainer from "@/components/Access/AccessContainer.vue";
+import AccessContainer from "@/components/Access/Communter/AccessContainer.vue";
 </script>
 
 <template>

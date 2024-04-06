@@ -1,5 +1,5 @@
 <script>
-import AccessCard from "@/components/Access/AccessCard.vue";
+import AccessCard from "@/components/Access/Communter/AccessCard.vue";
 
 export default {
   name: "Access-Container",
@@ -9,7 +9,7 @@ export default {
 
 <template>
   <div class="access-cards-container">
-    <AccessCard v-for="index in 8" :key="index" />
+    <AccessCard v-for="index in 9" :key="index" />
   </div>
 
 </template>
@@ -18,7 +18,7 @@ export default {
 .access-cards-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: start;
+  justify-content: space-around;
   margin-top: 40px;
 }
 </style>

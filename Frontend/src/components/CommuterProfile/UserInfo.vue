@@ -1,11 +1,6 @@
 <script>
-import Avatar from 'vue-avatar'
-
 export default {
   name: "UserInfo",
-  components: {
-    Avatar
-  }
 }
 </script>
 
@@ -35,6 +30,12 @@ export default {
       <div style="display:flex; flex-direction: column;">
         <div style="font-weight: bold">Birth Date:</div>
         <div>2000-01-01</div>
+      </div>
+    </div>
+      <div v-if="this.$route.path === '/admin'" id="section-3" style="margin-left: 1rem; flex: 2; display: flex; justify-content: center; align-items: flex-start; flex-direction: column">
+      <div style="display:flex; flex-direction: column;">
+        <div style="font-weight: bold">Company:</div>
+        <div>Réseau de Transport de la Capitale</div>
       </div>
     </div>
     </div>
