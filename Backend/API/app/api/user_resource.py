@@ -115,3 +115,19 @@ def buy_access():
         response = jsonify({"error": str(error)})
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
+
+@app.route("/user/access", methods=["GET"])
+def get_wallet():
+    try:
+        token = request.headers.get("Authorization")
+        response = commuter_service.get_wallet(Token(token))
+        bought_access_json = [bought_access.to_json() for bought_access in response]
+        return jsonify(bought_access_json), 200
+    except RequestError as error:
+        response = jsonify(error.to_json())
+        response.status_code = error.error_response_status
+        return response
+    except TypeError as error:
+        response = jsonify({"error": str(error)})
+        response.status_code = ErrorResponseStatus.BAD_REQUEST.value
+        return response

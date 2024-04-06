@@ -1,4 +1,6 @@
-from app.service.dtos.commuter_dtos import Commuter, CommuterFullInfo, CreditCard
+from typing import List
+
+from app.service.dtos.commuter_dtos import Commuter, CommuterFullInfo, CreditCard, BoughtAccess
 
 
 class CommuterRepository:
@@ -12,7 +14,7 @@ class CommuterRepository:
         """
         if not self.database.get(new_commuter.email):
             # Crée un dictionnaire pour stocker le Commuter et les informations de carte de crédit associées
-            self.database[new_commuter.email] = {'commuter': new_commuter, 'credit_card': None}
+            self.database[new_commuter.email] = {'commuter': new_commuter, 'credit_card': None, 'bought_access': []}
             return True
         else:
             return False
@@ -49,3 +51,12 @@ class CommuterRepository:
             return None
         else:
             return commuter_data['credit_card']
+
+    def add_bought_access(self, email, bought_access: List[BoughtAccess]):
+        commuter_data = self.database.get(email)
+        if commuter_data:
+            commuter_data['bought_access'].extend(bought_access)
+
+    def get_bought_access(self, email) -> List[BoughtAccess]:
+        commuter_data = self.database.get(email)
+        return commuter_data['bought_access']

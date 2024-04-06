@@ -72,5 +72,16 @@ class CommuterService():
         expiration_date_str = expiration_date.strftime("%Y/%m/%d")
 
         bought_access = generate_bought_access_list(access, expiration_date_str, transaction.quantity)
+        self._commuter_repository.add_bought_access(email, bought_access)
 
         return bought_access
+
+    def get_wallet(self, token:Token) -> List[BoughtAccess]:
+        if token.value not in self._logged_in_commuter:
+            raise InvalidCommuter(ErrorResponseStatus.UNAUTHORIZED, RequestErrorCause.UNAUTHORIZED,
+                                  RequestErrorDescription.UNAUTHORIZED_DESCRIPTION)
+
+        email = self._logged_in_commuter[token.value]
+        wallet = self._commuter_repository.get_bought_access(email)
+
+        return wallet
