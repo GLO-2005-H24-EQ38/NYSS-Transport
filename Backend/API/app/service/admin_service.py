@@ -31,19 +31,26 @@ class AdminService():
             raise InvalidAdmin(ErrorResponseStatus.UNAUTHORIZED, RequestErrorCause.UNAUTHORIZED,
                                ResquestErrorDescription.UNAUTHORIZED_DESCRIPTION)
 
-        # Insérer ici la logique pour vérifier le type d'accès et d'autres critères
         if new_access.type not in ["Ticket", "Subscription"]:
             raise InvalidAdmin(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
                                ResquestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
 
-        if new_access.type == "Ticket" and not new_access.passes:
-            raise InvalidAdmin(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.MISSING_PARAMETER,
-                               ResquestErrorDescription.MISSING_PARAMETER_DESCRIPTION)
+        if new_access.type == "Ticket":
+            if new_access.numberOfPassage is None:
+                raise InvalidAdmin(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.MISSING_PARAMETER,
+                                   ResquestErrorDescription.MISSING_PARAMETER_DESCRIPTION)
+        else:
+            # Si ce n'est pas un "Ticket", vérifie que numberOfPassage n'est pas défini
+            if new_access.numberOfPassage is not None:
+                print(new_access.numberOfPassage)
+                raise InvalidAdmin(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
+                                   ResquestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
+
 
         # Générer un identifiant unique pour l'accès
         new_access.secure_access_id()
 
-        # Insérez ici la logique pour stocker l'accès dans votre base de données
+        # Stocker l'accès dans la base de données
         self.admin_repository.save_access(new_access)
 
         # Retourner l'accès créé

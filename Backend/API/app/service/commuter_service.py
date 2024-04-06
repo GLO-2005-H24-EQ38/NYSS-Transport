@@ -1,7 +1,8 @@
 from app.repository.commuter_repository import CommuterRepository
-from app.service.dtos.admin_dtos import Token
-from app.service.dtos.commuter_dtos import Commuter, CommuterFullInfo
+from app.service.dtos.admin_dtos import User, Token
+from app.service.dtos.commuter_dtos import Commuter, CommuterFullInfo, CreditCard
 from app.service.exceptions import *
+
 
 
 class CommuterService():
@@ -29,3 +30,18 @@ class CommuterService():
         else:
             raise InvalidCommuter(ErrorResponseStatus.UNAUTHORIZED, RequestErrorCause.UNAUTHORIZED,
                                   ResquestErrorDescription.UNAUTHORIZED_DESCRIPTION)
+
+    def add_payment_method(self, credit_card: CreditCard, token: Token) ->str:
+        if token.value not in self.logged_in_commuter:
+            raise InvalidCommuter(ErrorResponseStatus.UNAUTHORIZED, RequestErrorCause.UNAUTHORIZED,
+                               ResquestErrorDescription.UNAUTHORIZED_DESCRIPTION)
+
+        email = self.logged_in_commuter[token.value]
+        success = self.commuter_repository.add_payment_method(email, credit_card)
+
+        if success:
+            return "Successfully added payment method"
+        else:
+            raise InvalidCommuter(ErrorResponseStatus.NOT_FOUND, RequestErrorCause.NOT_FOUND,
+                                  RequestErrorDescription.NOT_FOUND_DESCRIPTION)
+
