@@ -5,7 +5,7 @@ import bcrypt
 
 
 class Token():
-    """used for user authentication"""
+    """Used for user authentication"""
 
     def __init__(self, token=uuid.uuid4().hex):
         self.value = token
@@ -47,6 +47,7 @@ class User():
         self.password = self._hash_secret(self.password)
 
     def verify_password(self, password) -> bool:
+        print(password)
         return bcrypt.checkpw(password.encode(), self.password)
 
 
@@ -61,6 +62,31 @@ class Admin(User):
 
     def verify_admin_code(self, admin_code) -> bool:
         return bcrypt.checkpw(admin_code.encode(), self.admin_code)
+
+
+class Access:
+    def __init__(self, accessName, price, accessType, duration, company, numberOfPassage):
+        self.id = uuid.uuid4().hex
+        self.name = accessName
+        self.price = float(price)
+        self.type = accessType
+        self.duration = float(duration)
+        self.company = company
+        self.passes = int(numberOfPassage)
+
+    def secure_access_id(self):
+        self.id = uuid.uuid4().hex
+
+    def to_json(self):
+        return {
+            "accessId": self.id,
+            "accessName": self.name,
+            "price": self.price,
+            "accessType": self.type,
+            "duration": self.duration,
+            "company": self.company,
+            "numberOfPassage": self.passes
+        }
 
 
 if __name__ == '__main__':
