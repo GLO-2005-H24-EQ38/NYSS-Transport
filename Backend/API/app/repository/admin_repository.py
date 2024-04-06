@@ -15,7 +15,9 @@ class AdminRepository:
         }  # TODO will be replaced by the true params of the DB
         self._access = {
             "dummy_access_id": Access(accessName="Dummy Access", price=10.0, accessType="Ticket", duration=4,
-                                      company="Dummy Company", numberOfPassage=3)
+                                      company="Dummy Company", numberOfPassage=3),
+            "dummy_access_sub_id": Access(accessName="Dummy Access", price=10.0, accessType="Subscription", duration=4,
+                                      company="Dummy Company")
         }  # TODO will be replaced by the true params of the DB
 
     def get_created_access(self):
