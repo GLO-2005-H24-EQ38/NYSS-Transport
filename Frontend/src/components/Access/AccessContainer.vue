@@ -1,5 +1,5 @@
 <script>
-import AccessCard from "@/views/HomeView/AccessCard.vue";
+import AccessCard from "@/components/Access/AccessCard.vue";
 
 export default {
   name: "Access-Container",

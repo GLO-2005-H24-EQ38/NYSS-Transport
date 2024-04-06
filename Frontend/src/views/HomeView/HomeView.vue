@@ -1,5 +1,5 @@
 <script setup>
-import AccessContainer from "@/views/HomeView/AccessContainer.vue";
+import AccessContainer from "@/components/Access/AccessContainer.vue";
 </script>
 
 <template>

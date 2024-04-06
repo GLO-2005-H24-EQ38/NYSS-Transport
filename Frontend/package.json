@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "bootstrap-vue": "^2.23.1",
+    "qrcode.vue": "^3.4.1",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },
