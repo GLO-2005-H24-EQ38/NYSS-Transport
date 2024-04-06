@@ -1,6 +1,8 @@
 import re
+from datetime import datetime
 
 from app.service.dtos.admin_dtos import User
+from app.service.exceptions import *
 
 
 class Commuter(User):
@@ -36,6 +38,24 @@ class CommuterFullInfo(Commuter):
             "tel": self.tel,
             "dateOfBirth": self.date_of_birth
         }
+
+class CreditCard():
+    def __init__(self, holder, cardNumber, expirationDate):
+        self.holder = holder
+        self.cardNumber = self.__validate_cardNumber(cardNumber)
+        self.expirationDate = self.__validate_cardExpirationDate(expirationDate)
+
+    def __validate_cardNumber(self, cardNumber):
+        if not (8 <= len(str(cardNumber)) <= 16):
+            raise InvalidCommuter(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER, RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
+        return cardNumber
+
+    def __validate_cardExpirationDate(self, expirationDate):
+        exp_date = datetime.strptime(expirationDate, "%m/%y")
+        if exp_date <= datetime.now():
+            raise InvalidCommuter(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER, RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
+        return expirationDate
+
 
 
 if __name__ == '__main__':
