@@ -18,7 +18,7 @@ class RequestErrorCause(Enum):
     UNAUTHORIZED = "UNAUTHORIZED"
 
 
-class ResquestErrorDescription(Enum):
+class RequestErrorDescription(Enum):
     INVALID_PARAMETER_DESCRIPTION = "Invalid parameter"
     MISSING_PARAMETER_DESCRIPTION = "Missing parameter"
     NOT_FOUND_DESCRIPTION = "Not found"
@@ -29,7 +29,7 @@ class ResquestErrorDescription(Enum):
 
 class RequestError(RuntimeError):
     def __init__(self, error_response_status: ErrorResponseStatus, error_cause: RequestErrorCause,
-                 description: ResquestErrorDescription):
+                 description: RequestErrorDescription):
         self.error_response_status = error_response_status.value
         self.error_cause = error_cause.value
         self.description = description.value
@@ -43,11 +43,11 @@ class RequestError(RuntimeError):
 
 class InvalidCommuter(RequestError):
     def __init__(self, error_response_status: ErrorResponseStatus, error_cause: RequestErrorCause,
-                 description: ResquestErrorDescription):
+                 description: RequestErrorDescription):
         super().__init__(error_response_status, error_cause, description)
 
 
 class InvalidAdmin(RequestError):
     def __init__(self, error_response_status: ErrorResponseStatus, error_cause: RequestErrorCause,
-                 description: ResquestErrorDescription):
+                 description: RequestErrorDescription):
         super().__init__(error_response_status, error_cause, description)
