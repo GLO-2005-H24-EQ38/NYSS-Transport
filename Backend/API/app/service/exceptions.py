@@ -19,7 +19,7 @@ class RequestErrorCause(Enum):
 
 
 class ResquestErrorDescription(Enum):
-    INVALID_PARAMETER_DESCRIPTION = "Invalid parameter"
+    INVALID_PARAMETER_DESCRIPTION = "Invalid parameter : "
     MISSING_PARAMETER_DESCRIPTION = "Missing parameter"
     NOT_FOUND_DESCRIPTION = "Not found"
     ALREADY_EXISTS_DESCRIPTION = "Already exists"
@@ -29,25 +29,26 @@ class ResquestErrorDescription(Enum):
 
 class RequestError(RuntimeError):
     def __init__(self, error_response_status: ErrorResponseStatus, error_cause: RequestErrorCause,
-                 description: ResquestErrorDescription):
+                 description: ResquestErrorDescription, param=""):
         self.error_response_status = error_response_status.value
         self.error_cause = error_cause.value
         self.description = description.value
+        self.param = param
 
     def to_json(self):
         return {
             "error_cause": self.error_cause,
-            "description": self.description
+            "description": self.description + self.param
         }
 
 
 class InvalidCommuter(RequestError):
     def __init__(self, error_response_status: ErrorResponseStatus, error_cause: RequestErrorCause,
-                 description: ResquestErrorDescription):
-        super().__init__(error_response_status, error_cause, description)
+                 description: ResquestErrorDescription, param=""):
+        super().__init__(error_response_status, error_cause, description, param)
 
 
 class InvalidAdmin(RequestError):
     def __init__(self, error_response_status: ErrorResponseStatus, error_cause: RequestErrorCause,
-                 description: ResquestErrorDescription):
-        super().__init__(error_response_status, error_cause, description)
+                 description: ResquestErrorDescription, param=""):
+        super().__init__(error_response_status, error_cause, description, param)

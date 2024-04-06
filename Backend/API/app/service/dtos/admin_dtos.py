@@ -1,7 +1,10 @@
 import re
 import uuid
+from abc import ABC
 
 import bcrypt
+
+from app.service.exceptions import *
 
 
 class Token():
@@ -22,21 +25,27 @@ class Token():
         }
 
 
-class User():
+class User(ABC):
     """Base class for all users (includes admin and commuter)"""
 
     EMAIL_REGEX = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
 
     def __init__(self, email, password):
         self.__validate_email(email)
+        self.__validate_password(password)
         self.email = email
         self.password = password
 
     def __validate_email(self, email):
         if not email:
-            raise ValueError("Email is required")
+            raise TypeError("Email is required : email")
         elif not re.match(User.EMAIL_REGEX, email):
-            raise ValueError("Invalid email")
+            raise RequestError(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
+                               ResquestErrorDescription.INVALID_PARAMETER_DESCRIPTION, "email")
+
+    def __validate_password(self, password):
+        if not password:
+            raise TypeError("Password is required : password")
 
     def _hash_secret(self, secret) -> bytes:
         salt = bcrypt.gensalt()
@@ -96,3 +105,6 @@ if __name__ == '__main__':
     admin.secure_password()
     admin.secure_admin_code()
     print(admin.password, admin.admin_code)
+
+    user = User("sda@sdsd.sd", "password")
+    print(user.password)

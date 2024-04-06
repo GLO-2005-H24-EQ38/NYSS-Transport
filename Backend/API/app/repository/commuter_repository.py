@@ -2,8 +2,9 @@ from app.service.dtos.commuter_dtos import Commuter, CommuterFullInfo
 
 
 class CommuterRepository:
-    def __init__(self, database=None):
+    def __init__(self, database=None, access: dict = {}):
         self.database = {}  # will be replaced with param database but for now it's a dictionary
+        self.access = access
 
     def signup_commuter(self, new_commuter: Commuter) -> bool:
         if not self.database.get(new_commuter.email):

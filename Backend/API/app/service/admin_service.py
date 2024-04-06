@@ -13,7 +13,7 @@ class AdminService():
         self.admin_repository = admin_repository
         self.logged_in_admin = {}
 
-    def login_admin(self, admin: Admin) ->Token:
+    def login_admin(self, admin: Admin) -> Token:
         print(admin.email, admin.password, admin.admin_code)
         admin_saved_info = self.admin_repository.get_admin_by_email(admin.email)
 
@@ -23,7 +23,7 @@ class AdminService():
             return token
         else:
             raise InvalidAdmin(ErrorResponseStatus.UNAUTHORIZED, RequestErrorCause.UNAUTHORIZED,
-                                  ResquestErrorDescription.UNAUTHORIZED_DESCRIPTION)
+                               ResquestErrorDescription.UNAUTHORIZED_DESCRIPTION)
 
     def create_access(self, new_access: Access, token: Token) -> Access:
         # Vérifier si l'utilisateur est authentifié en tant qu'admin

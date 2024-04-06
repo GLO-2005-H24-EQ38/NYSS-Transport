@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 
+from app.repository.admin_repository import AdminRepository
 from app.repository.commuter_repository import CommuterRepository
 from app.service.commuter_service import CommuterService
 from app.service.dtos.admin_dtos import User, Token
@@ -11,9 +12,12 @@ from app.service.admin_service import AdminService
 
 app = Flask(__name__)
 
-# creates a repo by default. if you want to use a different repository, pass it
-# as an argument to the CommuterService constructor CommuterService(your_repo)
-commuter_service = CommuterService()
+admin_repository = AdminRepository()
+commuter_repository = CommuterRepository(
+    admin_repository.get_created_access())  # This won't be needed when the database is implemented
+commuter_service = CommuterService(commuter_repository)
+
+CREATED = 201
 admin_service = AdminService()
 
 
@@ -22,8 +26,10 @@ def signup():
     try:
         data = request.get_json()
         commuter = CommuterFullInfo(**data)
-        response = commuter_service.signup_commuter(commuter)
-        return jsonify(response)
+        message = commuter_service.signup_commuter(commuter)
+        reponse = jsonify(message)
+        reponse.status_code = CREATED
+        return reponse
 
     except RequestError as error:
         response = jsonify(error.to_json())

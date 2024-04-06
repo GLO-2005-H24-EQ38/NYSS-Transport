@@ -9,9 +9,15 @@ class AdminRepository:
         dummy_admin.secure_password()
         dummy_admin.secure_admin_code()
         print(dummy_admin)
+
         self.database = {
             "ema@fd.fasdf": dummy_admin
         } #TODO will be replaced by the true params of the DB
+        self._access = {}
+
+    def get_created_access(self):
+        """this method will be removed when the database is implemented"""
+        return self._access
 
     def get_admin_by_email(self, email: str) -> bool:
         return self.database.get(email)
