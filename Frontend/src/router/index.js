@@ -3,7 +3,7 @@ import HomeView from '../views/HomeView/HomeView.vue'
 import LogIn from "@/views/Authentication/LogIn.vue";
 import SignUp from "@/views/Authentication/SignUp.vue";
 import AdminView from "@/views/HomeView/AdminView.vue";
-import UserView from "@/views/UserView.vue";
+import UserView from "@/views/userView/UserView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
