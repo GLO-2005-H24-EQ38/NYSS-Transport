@@ -108,9 +108,6 @@ export default {
   border-radius: 8px;
   width: max-content;
 }
-.addPayment {
-  color: white;
-}
 .addPayment:hover {
   cursor: pointer;
   text-decoration: underline;
