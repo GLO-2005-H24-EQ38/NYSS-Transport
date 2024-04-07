@@ -8,8 +8,8 @@ export default {
   data() {
     return {
       accessNumber: "40001",
-      transactionNumber: "40001",
-      expDate: "12/24",
+      transactionNumber: "217000548",
+      expDate: "01/07/24",
       transactionDate: "01/05/2024",
       QRValue: this.accessNumber,
       showQRCode: false,
@@ -19,40 +19,86 @@ export default {
 </script>
 
 <template>
-  <div id="transaction" style="display: flex; flex-direction: row">
-    <div style="display: flex; flex-direction: column; flex: 1">
-      <div>
-        Access Number : #40001
+  <div class="transaction-card" style="position: relative">
+    <img
+        style="object-fit: contain"
+        src="@/assets/stm_logo.png"
+        alt="stm"/>
+    <div class="card-body">
+      <div class="card-title" style="display: flex; flex-direction: row">
+        <div style="flex: 1">
+         Access N.# : {{ accessNumber }}
+        </div>
       </div>
-      <div>
-        Transaction Number : #40001
+      <div class="registerVisitButton">
+         Expires {{ expDate }}
+        </div>
+      <div style="display: flex; flex-direction: row">
+        <div class="card-text" style="flex:1">Type: Ticket</div>
+        <div class="card-text" style="flex:1; justify-content: flex-end; display: flex">Purchased : {{ transactionDate }}</div>
       </div>
+      <div class="card-text">Transaction N.#: {{ transactionNumber }}</div>
     </div>
-    <div style="display: flex; flex-direction: column; flex: 1">
-      <div>
-        Exp. Date : 12/24
-      </div>
-      <div>
-        Transaction Date : 01/05/2024
-      </div>
-    </div>
-    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center">
-      <a href="#" @click="showQRCode = !showQRCode">Show QR Code</a>
-    </div>
-    <QRCodeTicket v-if="showQRCode" />
-<!--    <div>-->
-<!--      <qrcode-vue :value="QRValue" size="50" level="H"></qrcode-vue>-->
-<!--    </div>-->
+    <QRCodeTicket />
   </div>
 </template>
 
 <style scoped>
-#transaction {
-  background-color: #f1f1f1;
-  margin-left: 1rem;
-  margin-right: 1rem;
-  margin-bottom: 0.25rem;
-  border-radius: 1rem;
-  padding: 1rem;
+.transaction-card {
+  transition: ease-in-out 0.25s;
+  position: relative;
+  width: 23rem;
+  height: 100%;
+  margin: 20px;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.transaction-card img {
+  transition: ease-in-out 0.25s;
+  width: 100%;
+  height: 7rem;
+  object-fit: fill;
+}
+
+.card-body {
+  position: relative;
+  padding-top: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin: 0;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+
+}
+
+.registerVisitButton {
+  background-color: #01356a;
+  padding: 1px;
+  border: none;
+  position: absolute;
+  top: -114%;
+  border-top-right-radius: 0.5rem;
+  left: 67%;
+  color: white;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #000000;
+}
+
+.card-text {
+  font-size: 1rem;
+  color: #666;
+  flex-grow: 1;
+}
+
+.transaction-card:hover {
+  transition: ease-in-out 0.25s;
+  cursor: pointer;
+  box-shadow: 0 0 6px rgb(104, 104, 104);
 }
 </style>

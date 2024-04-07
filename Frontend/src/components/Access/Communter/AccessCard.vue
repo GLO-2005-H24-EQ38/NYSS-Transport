@@ -23,22 +23,19 @@ export default {
 </script>
 
 <template>
-  <div class="access-card">
+  <div class="transaction-card">
     <img
         style="object-fit: contain"
         src="../../../assets/stm_logo.png"
         alt="stm"/>
     <div class="card-body">
-      <div class="single-line card-title">
-        2 Passages
-      </div>
-      <div class="card-text">
-            <span
-                :style="{
-                fontWeight: 'bold',
-              }"
-            ></span
-            >
+      <div class="card-title" style="display: flex; flex-direction: row">
+        <div style="flex: 1">
+          2 Passages
+        </div>
+        <div style="flex: 1; display: flex; justify-content: end; align-items: end">
+          $3.75
+        </div>
       </div>
       <div class="card-text">Type: Ticket</div>
     </div>
@@ -62,7 +59,7 @@ export default {
 </template>
 
 <style scoped>
-.access-card {
+.transaction-card {
   transition: ease-in-out 0.25s;
   position: relative;
   width: 23rem;
@@ -72,7 +69,7 @@ export default {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.access-card img {
+.transaction-card img {
   transition: ease-in-out 0.25s;
   width: 100%;
   height: 13rem;
@@ -88,6 +85,7 @@ export default {
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
+
 }
 
 .card-title {
@@ -110,12 +108,6 @@ export default {
   align-items: center;
 }
 
-.single-line {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 .registerVisitButton {
   transition: ease-in-out 0.25s;
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
@@ -136,7 +128,7 @@ export default {
   cursor: pointer;
 }
 
-.access-card:hover {
+.transaction-card:hover {
   transition: ease-in-out 0.25s;
   cursor: pointer;
   box-shadow: 0 0 6px rgb(0, 82, 158);

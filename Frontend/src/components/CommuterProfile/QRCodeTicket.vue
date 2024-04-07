@@ -13,15 +13,32 @@ export default {
 </script>
 
 <template>
-    <div class="modal-background">
+  <div class="modal fade" id="qrCodeTicket" aria-hidden="true" aria-labelledby="asasa" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered" style="display: flex; justify-content: center; align-items: center">
     <div class="modal-content">
-      <div style="display: flex; justify-content: center; align-items: center;flex-direction: column; margin-bottom: 20px">
-     <img src="@/assets/NYSS-Blue.png" alt="logo" style="auto; height: 100px; margin-bottom: 20px">
+      <div class="modal-body">
+        <div style="display: flex; justify-content: center; align-items: center;flex-direction: column; margin-bottom: 20px">
+     <img src="@/assets/NYSS-Blue.png" alt="logo" style="width: auto; height: 100px; margin-bottom: 20px">
         <qrcode-vue :value="QRValue" size="250" level="Q"></qrcode-vue>
       <div style="margin-top: 1rem">{{ QRValue }}</div>
+          <div style="display: flex; justify-content: center; align-items: center; margin-top: 1rem">
+            <button class="btn btn-primary btn-block" data-bs-dismiss="modal">Redeem Now</button>
+          </div>
+      </div>
       </div>
     </div>
-    </div>
+  </div>
+</div>
+<div class="btn btn-secondary" style="display: flex; justify-content: center; align-items: center" href="#" data-bs-target="#qrCodeTicket" data-bs-toggle="modal">Show QR Code</div>
+<!--    <div class="modal-background">-->
+<!--    <div class="modal-content">-->
+<!--      <div style="display: flex; justify-content: center; align-items: center;flex-direction: column; margin-bottom: 20px">-->
+<!--     <img src="@/assets/NYSS-Blue.png" alt="logo" style="auto; height: 100px; margin-bottom: 20px">-->
+<!--        <qrcode-vue :value="QRValue" size="250" level="Q"></qrcode-vue>-->
+<!--      <div style="margin-top: 1rem">{{ QRValue }}</div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    </div>-->
 </template>
 
 <style scoped>

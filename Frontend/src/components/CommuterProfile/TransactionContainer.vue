@@ -9,11 +9,17 @@ export default {
 </script>
 
 <template>
-<div class="access-cards-container">
+    <div class="transaction-container">
     <Transaction v-for="index in 8" :key="index" />
   </div>
+
 </template>
 
 <style scoped>
-
+.transaction-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin-top: 40px;
+}
 </style>

@@ -8,14 +8,14 @@ export default {
   <nav class="navbar navbar-dark nav-bar-container" style="height: 10%; padding: 0">
      <div class="nav-container">
       <div class="logo" style="flex: 1">
-        <img style="object-fit: contain;  width: 200px;" src="./assets/NYSS-White.png"/>
+        <img style="object-fit: contain;  width: 10rem;" src="./assets/NYSS-White.png"/>
       </div>
     </div>
     <div v-if="this.$route.path === '/'" class="nav-container" style="margin-left:2rem; flex: 2; justify-content: center">
     <div class="input-group rounded">
   <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-  <span class="input-group-text border-0" id="search-addon">
-    <i class="bi bi-search"></i>
+  <span style="background-color: transparent" class="input-group-text border-0" id="search-addon">
+    <i class="bi bi-search" style="cursor:pointer; color: white"></i>
   </span>
 </div>
          </div>
@@ -58,6 +58,5 @@ button {
 button:hover{
   text-decoration: underline;
 }
-
 
 </style>

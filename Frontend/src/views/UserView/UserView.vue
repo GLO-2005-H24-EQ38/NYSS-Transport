@@ -12,14 +12,32 @@ export default {
 </script>
 
 <template>
-  <h2 style="margin:1rem">Profile</h2>
-  <UserInfo />
-  <h2 style="margin:1rem">Payment Method</h2>
-  <PaymentMethod />
+  <div class="userview">
+    <div style="flex: 4"><h2 style="margin:1rem">Profile</h2>
+      <UserInfo/>
+    </div>
+    <div>
+      <h2 style="margin:1rem; flex: 1">Payment Method</h2>
+      <PaymentMethod/>
+    </div>
+
+  </div>
+
   <h2 style="margin:1rem">Wallet</h2>
   <TransactionContainer/>
 </template>
 
 <style scoped>
+.userview {
+  display: flex;
+  flex-direction: row
+}
 
+@media only screen and (max-width: 600px) {
+  .userview {
+    display: flex;
+    flex-direction: column
+  }
+
+}
 </style>
