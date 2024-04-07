@@ -53,7 +53,7 @@ export default {
 <style scoped>
 .backgroundQuebec {
   background-image: url("@/assets/quebec-map.png");
-  height: 88vh;
+  min-height: 100vh;
 }
 
 .button {

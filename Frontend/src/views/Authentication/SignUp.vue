@@ -85,7 +85,7 @@ export default {
 <style scoped>
 .backgroundQuebec {
   background-image: url("@/assets/quebec-map.png");
-  height: 88vh;
+  min-height: 100vh;
 }
 
 .button {
@@ -97,6 +97,7 @@ export default {
 }
 
 .signup-container{
+  margin: 1rem;
   padding: 1rem;
   border-radius: 0.75rem;
   display: flex;
