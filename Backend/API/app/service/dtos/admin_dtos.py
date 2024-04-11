@@ -79,12 +79,9 @@ class Access:
         self.name = accessName
         self.price = float(price)
         self.type = accessType
-        self.duration = float(duration)
+        self.duration = int(duration)
         self.company = company
         self.numberOfPassage = int(numberOfPassage) if numberOfPassage is not None else None
-
-    def secure_access_id(self):
-        self.id = uuid.uuid4().hex
 
     def to_json(self):
         access_json = {
@@ -98,7 +95,6 @@ class Access:
         if self.numberOfPassage is not None:
             access_json["numberOfPassage"] = self.numberOfPassage
         return access_json
-
 
 
 if __name__ == '__main__':

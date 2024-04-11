@@ -60,9 +60,15 @@ class CommuterFullInfo(Commuter):
 
 class CreditCard():
     def __init__(self, holder, cardNumber, expirationDate):
-        self.holder = holder
+        self.holder = self.__validate_holder(holder)
         self.cardNumber = self.__validate_cardNumber(cardNumber)
         self.expirationDate = self.__validate_cardExpirationDate(expirationDate)
+
+    def __validate_holder(self, holder):
+        if not holder and not holder.strip():
+            raise InvalidCommuter(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
+                                  RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
+        return holder
 
     def __validate_cardNumber(self, cardNumber):
         if not (8 <= len(str(cardNumber)) <= 16):

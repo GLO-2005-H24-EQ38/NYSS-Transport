@@ -62,6 +62,7 @@ def login():
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
 
+
 @app.route("/user/admin/access", methods=["POST"])
 def create_access():
     try:
@@ -79,6 +80,7 @@ def create_access():
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
 
+
 @app.route("/user/payment", methods=["POST"])
 def add_payment_method():
     try:
@@ -95,6 +97,7 @@ def add_payment_method():
         response = jsonify({"error": str(error)})
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
+
 
 @app.route("/user/access/checkout", methods=["GET"])
 def buy_access():
@@ -115,6 +118,7 @@ def buy_access():
         response = jsonify({"error": str(error)})
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
+
 
 @app.route("/user/access", methods=["GET"])
 def get_wallet():

@@ -47,9 +47,6 @@ class AdminService():
                                    RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
 
 
-        # Générer un identifiant unique pour l'accès
-        new_access.secure_access_id()
-
         # Stocker l'accès dans la base de données
         self.admin_repository.save_access(new_access)
 
