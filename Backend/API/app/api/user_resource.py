@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import cross_origin
 
 from app.repository.admin_repository import AdminRepository
 from app.repository.commuter_repository import CommuterRepository
@@ -22,7 +23,6 @@ commuter_service = CommuterService(commuter_repository, admin_repository)
 
 CREATED = 201
 
-
 commuter = CommuterFullInfo(
     name="John",
     email="test@test.com",
@@ -39,6 +39,7 @@ commuter = CommuterFullInfo(
 
 
 @app.route("/user/signup", methods=["POST"])
+@cross_origin()
 def signup():
     try:
         data = request.get_json()
@@ -48,9 +49,9 @@ def signup():
         else:
             commuter = CommuterFullInfo(**data)
             message = commuter_service.signup_commuter(commuter)
-        reponse = jsonify(message)
-        reponse.status_code = CREATED
-        return reponse
+        response = jsonify(message)
+        response.status_code = CREATED
+        return response
 
     except RequestError as error:
         response = jsonify(error.to_json())
@@ -63,6 +64,7 @@ def signup():
 
 
 @app.route("/user/login", methods=["POST"])
+@cross_origin()
 def login():
     try:
         data = request.get_json()
