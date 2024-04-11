@@ -4,6 +4,14 @@ DROP PROCEDURE IF EXISTS RegisterAdmin;
 DROP PROCEDURE IF EXISTS LoginUser;
 
 DELIMITER //
+
+CREATE FUNCTION CompanyExists(p_company VARCHAR(100)) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE company_count INT;
+    SELECT COUNT(*) INTO company_count FROM company u WHERE u.name = p_company;
+    RETURN company_count;
+END //
+
 CREATE PROCEDURE RegisterCommuter(
     IN p_email VARCHAR(100),
     IN p_name VARCHAR(100),
@@ -30,8 +38,10 @@ CREATE PROCEDURE RegisterAdmin(
     IN p_company VARCHAR(100)
 )
 BEGIN
-INSERT INTO company (name)
-VALUES (p_company);
+    IF (SELECT CompanyExists(p_company)) = 0 THEN
+        INSERT INTO company (name)
+            VALUES (p_company);
+        END IF;
 INSERT INTO user (email, name, password, address, birthday, phone, role)
 VALUES (p_email, p_name, p_password, p_address, p_dob, p_phone, 'admin');
 INSERT INTO admin (user, code, company)
