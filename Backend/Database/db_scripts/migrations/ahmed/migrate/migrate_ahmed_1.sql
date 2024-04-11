@@ -1,47 +1,41 @@
 DROP FUNCTION IF EXISTS EmailExists;
-DROP PROCEDURE IF EXISTS RegisterUser;
+DROP PROCEDURE IF EXISTS RegisterCommuter;
+DROP PROCEDURE IF EXISTS RegisterAdmin;
 DROP PROCEDURE IF EXISTS LoginUser;
 
 DELIMITER //
-# CREATE FUNCTION EmailExists(p_email VARCHAR(100)) RETURNS INT DETERMINISTIC
-# BEGIN
-#     DECLARE email_count INT;
-#     SELECT COUNT(*) INTO email_count FROM user u WHERE u.email = p_email;
-#     RETURN email_count;
-# END //
+CREATE PROCEDURE RegisterCommuter(
+    IN p_email VARCHAR(100),
+    IN p_name VARCHAR(100),
+    IN p_password VARCHAR(100),
+    IN p_address VARCHAR(50),
+    IN p_dob DATE,
+    IN p_phone BIGINT
+)
+BEGIN
+INSERT INTO user (email, name, password, address, birthday, phone, role)
+VALUES (p_email, p_name, p_password, p_address, p_dob, p_phone, 'commuter');
+INSERT INTO commuter (user)
+VALUES (p_email);
+END //
 
-CREATE PROCEDURE RegisterUser(
+CREATE PROCEDURE RegisterAdmin(
     IN p_email VARCHAR(100),
     IN p_name VARCHAR(100),
     IN p_password VARCHAR(100),
     IN p_address VARCHAR(50),
     IN p_dob DATE,
     IN p_phone BIGINT,
-    IN p_role enum('commuter', 'admin'),
     IN p_admin_code integer,
     IN p_company VARCHAR(100)
 )
 BEGIN
-#     DECLARE email_exists INT;
-#
-#     -- Check if the email already exists
-#     SET email_exists = EmailExists(p_email);
-#
-#     -- If email exists, do not proceed with registration
-#     IF email_exists > 0 THEN
-#         SIGNAL SQLSTATE '45000'
-#             SET MESSAGE_TEXT = 'Email already exists';
-#     ELSE
-    INSERT INTO user (email, name, password, address, birthday, phone, role)
-    VALUES (p_email, p_name, p_password, p_address, p_dob, p_phone, p_role);
-
-    IF p_role = 'commuter' THEN
-    INSERT INTO commuter (user)
-    VALUES (p_email);
-    ELSEIF p_role = 'admin' and p_admin_code != 0 THEN
-    INSERT INTO admin (user, code)
-    VALUES (p_email, p_admin_code);
-    END IF;
+INSERT INTO company (name)
+VALUES (p_company);
+INSERT INTO user (email, name, password, address, birthday, phone, role)
+VALUES (p_email, p_name, p_password, p_address, p_dob, p_phone, 'admin');
+INSERT INTO admin (user, code, company)
+VALUES (p_email, p_admin_code, p_company);
 END //
 
 CREATE PROCEDURE LoginUser(
@@ -71,8 +65,7 @@ BEGIN
     END IF;
 END; //
 DELIMITER ;
-
-CALL RegisterUser('Samy@sa.my', 'Samy','sami:)','Quebec', '2000-01-01', 4521445987,'commuter' ,0, NULL);
-CALL RegisterUser('Nasma@nas.ma', 'Nasma','nasooma','Quebec', '2000-01-01', 4521445987,'commuter' ,0, NULL);
-CALL RegisterUser('Yannick@yann.ick', 'Yannick','the_one_true_yannick','Quebec', '2000-01-01', 4521445987,'commuter' ,0, NULL);
-CALL RegisterUser('admin1@nyss.ca', 'Incognito', 'fishing_with_an_f', 'Montreal', '1900-01-01', '4185559999', 'admin', 5, 'RTC Quebec');
+CALL RegisterCommuter('Samy@sa.my', 'Samy','sami:)','Quebec', '2000-01-01', 4521445987);
+CALL RegisterCommuter('Nasma@nas.ma', 'Nasma','nasooma','Quebec', '2000-01-01', 4521445987);
+CALL RegisterCommuter('Yannick@yann.ick', 'Yannick','the_one_true_yannick','Quebec', '2000-01-01', 4521445987);
+CALL RegisterAdmin('admin@nyss.ca', 'Incognito', 'fishing_with_an_f', 'Montreal', '1900-01-01', '4185559999', 52, 'RTC Quebec');
