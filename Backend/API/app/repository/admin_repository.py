@@ -1,3 +1,5 @@
+from typing import Any
+
 from pymysql import IntegrityError
 
 from app.service.dtos.admin_dtos import Admin, Access, AdminFullInfo
@@ -12,7 +14,7 @@ class AdminRepository:
             "dummy_access_id": Access(accessName="Dummy Access", price=10.0, accessType="Ticket", duration=4,
                                       company="Dummy Company", numberOfPassage=3),
             "dummy_access_sub_id": Access(accessName="Dummy Access", price=10.0, accessType="Subscription", duration=4,
-                                      company="Dummy Company")
+                                          company="Dummy Company")
         }
 
     def signup_admin(self, new_admin: AdminFullInfo) -> bool:
@@ -28,8 +30,12 @@ class AdminRepository:
         """this method will be removed when the database is implemented"""
         return self._access
 
-    def get_admin_by_email(self, email: str) -> bool:
-        return self.database.get(email)
+    def get_admin_info(self, email: str) -> Any:
+        admin = self.database.fetch_admin(email)
+        if admin:
+            return admin
+        else:
+            return None
 
     def save_access(self, access: Access):
         self._access[access.id] = access

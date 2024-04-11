@@ -40,15 +40,13 @@ class Database:
         self.cursor = self.connection.cursor()
 
     def register_commuter(self, commuter: CommuterFullInfo) -> bool:
-        request = f"CALL RegisterUser(%s, %s, %s, %s, %s, %s,%s,%s,%s)"
+        request = f"CALL RegisterCommuter(%s, %s, %s, %s, %s, %s)"
         self.cursor.execute(request, (
-            commuter.email, commuter.name, commuter.password, commuter.address, commuter.date_of_birth, commuter.tel,
-            "commuter", 0,
-            None))
+            commuter.email, commuter.name, commuter.password, commuter.address, commuter.date_of_birth, commuter.tel))
 
         return True
 
-    def fetch_commuter(self, email: str):
+    def fetch_commuter(self, email: str) -> Commuter:
         request = "SELECT email, password FROM user WHERE email = %s"
         self.cursor.execute(request, (email,))
         result = self.cursor.fetchall()
@@ -56,12 +54,17 @@ class Database:
         return commuter
 
     def register_admin(self, admin: AdminFullInfo) -> bool:
-        request = f"CALL RegisterUser(%s, %s, %s, %s, %s, %s,%s,%s,%s)"
+        request = f"CALL RegisterAdmin(%s, %s, %s, %s, %s, %s, %s, %s)"
         self.cursor.execute(request, (
-            admin.email, admin.name, admin.password, admin.address, admin.date_of_birth, admin.tel, "admin",
+            admin.email, admin.name, admin.password, admin.address, admin.date_of_birth, admin.tel,
             admin.admin_code, admin.company))
 
         return True
 
-    def fetch_admin(self, admin: Admin):
-        pass
+    def fetch_admin(self, email: str) -> Admin:
+        request = "SELECT email, password, code FROM user JOIN admin WHERE email = %s AND user = email"
+        self.cursor.execute(request, (email,))
+        result = self.cursor.fetchall()
+
+        admin = Admin(result[0][0], result[0][1], result[0][2])
+        return admin

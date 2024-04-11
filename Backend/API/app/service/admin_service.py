@@ -23,10 +23,10 @@ class AdminService():
                                   RequestErrorDescription.ALREADY_EXISTS_DESCRIPTION)
 
     def login_admin(self, admin: Admin) -> Token:
-        print(admin.email, admin.password, admin.admin_code)
-        admin_saved_info = self._admin_repository.get_admin_by_email(admin.email)
+        admin_saved_info = self._admin_repository.get_admin_info(admin.email)
 
-        if admin_saved_info.verify_password(admin.password) and admin_saved_info.verify_admin_code(admin.admin_code):
+        if admin_saved_info and admin_saved_info.verify_password(admin.password) and admin_saved_info.verify_admin_code(
+                admin.admin_code):
             token = Token()
             self.logged_in_admin[token.value] = admin.email
             return token

@@ -25,7 +25,6 @@ class CommuterService():
                                   RequestErrorDescription.ALREADY_EXISTS_DESCRIPTION)
 
     def login(self, commuter: Commuter) -> Token:
-        print(commuter.email, commuter.password)
         commuter_saved_info = self._commuter_repository.get_commuter_info(commuter.email)
 
         if commuter_saved_info and commuter_saved_info.verify_password(commuter.password):
