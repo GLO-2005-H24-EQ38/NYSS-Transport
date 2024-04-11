@@ -9,16 +9,31 @@ from app.service.dtos.admin_dtos import Admin, Access
 from app.service.exceptions import RequestError, ErrorResponseStatus
 
 from app.service.admin_service import AdminService
+from app.repository.database import Database
 
+database = Database()
 app = Flask(__name__)
 
 admin_repository = AdminRepository()
-commuter_repository = CommuterRepository(
-    admin_repository.get_created_access())  # This won't be needed when the database is implemented
+commuter_repository = CommuterRepository(database=database)
 commuter_service = CommuterService(commuter_repository, admin_repository)
 
 CREATED = 201
 admin_service = AdminService()
+
+commuter = CommuterFullInfo(
+    name="John",
+    email="test@test.com",
+    password="password",
+    tel="1234567890",
+    dateOfBirth="1999-01-01",
+    address="1234 Main Street"
+)
+
+
+# commuter.secure_password()
+# result = database.register_commuter(commuter)
+# print("register success: ", result)
 
 
 @app.route("/user/signup", methods=["POST"])
@@ -135,3 +150,7 @@ def get_wallet():
         response = jsonify({"error": str(error)})
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
+
+
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", port=8080, debug=True)

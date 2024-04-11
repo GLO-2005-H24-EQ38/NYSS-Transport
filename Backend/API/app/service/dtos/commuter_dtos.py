@@ -17,7 +17,7 @@ class Commuter(User):
 class CommuterFullInfo(Commuter):
     """Used for registration"""
     PHONE_NUMBER_REGEX = r"^\d{10}$"
-    DATE_REGEX = r"^\d{2}/\d{2}/\d{4}$"
+    DATE_REGEX = r"^\d{4}-\d{2}-\d{2}$"
 
     def __init__(self, name, password, address, email, tel, dateOfBirth):
         super().__init__(email, password)

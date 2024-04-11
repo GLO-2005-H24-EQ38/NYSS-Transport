@@ -56,8 +56,7 @@ class User(ABC):
         self.password = self._hash_secret(self.password)
 
     def verify_password(self, password) -> bool:
-        print(password)
-        return bcrypt.checkpw(password.encode(), self.password)
+        return bcrypt.checkpw(password.encode(), self.password.encode())
 
 
 class Admin(User):
@@ -70,7 +69,7 @@ class Admin(User):
         self.admin_code = self._hash_secret(self.admin_code)
 
     def verify_admin_code(self, admin_code) -> bool:
-        return bcrypt.checkpw(admin_code.encode(), self.admin_code)
+        return bcrypt.checkpw(admin_code.encode(), self.admin_code.encode())
 
 
 class Access:
@@ -96,14 +95,3 @@ class Access:
             access_json["numberOfPassage"] = self.numberOfPassage
         return access_json
 
-
-if __name__ == '__main__':
-    admin = Admin("ema@fd.fasdf", "password", "adminCode")
-
-    print(admin.password, admin.admin_code)
-    admin.secure_password()
-    admin.secure_admin_code()
-    print(admin.password, admin.admin_code)
-
-    user = User("sda@sdsd.sd", "password")
-    print(user.password)

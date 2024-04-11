@@ -4,7 +4,8 @@ from typing import List
 from app.repository.commuter_repository import CommuterRepository
 from app.repository.admin_repository import AdminRepository
 from app.service.dtos.admin_dtos import User, Token
-from app.service.dtos.commuter_dtos import Commuter, CommuterFullInfo, CreditCard, Transaction, BoughtAccess, generate_bought_access_list
+from app.service.dtos.commuter_dtos import Commuter, CommuterFullInfo, CreditCard, Transaction, BoughtAccess, \
+    generate_bought_access_list
 from app.service.exceptions import *
 
 
@@ -27,7 +28,7 @@ class CommuterService():
         print(commuter.email, commuter.password)
         commuter_saved_info = self._commuter_repository.get_commuter_info(commuter.email)
 
-        if commuter_saved_info.verify_password(commuter.password):
+        if commuter_saved_info and commuter_saved_info.verify_password(commuter.password):
             token = Token()
             self._logged_in_commuter[token.value] = commuter.email
             return token
@@ -62,7 +63,7 @@ class CommuterService():
             raise InvalidCommuter(ErrorResponseStatus.PAYMENT_REQUIRED, RequestErrorCause.PAYMENT_REQUIRED,
                                   RequestErrorDescription.PAYMENT_REQUIRED_DESCRIPTION)
 
-        #TODO 	Est-ce qu'on code ceci: le cvc doit confirmer que la carte de credit est valide avant d'entamer le paiement.
+        # TODO 	Est-ce qu'on code ceci: le cvc doit confirmer que la carte de credit est valide avant d'entamer le paiement.
 
         access = self._admin_repository.get_acess_by_accessId(transaction.accessId)
 
@@ -76,7 +77,7 @@ class CommuterService():
 
         return bought_access
 
-    def get_wallet(self, token:Token) -> List[BoughtAccess]:
+    def get_wallet(self, token: Token) -> List[BoughtAccess]:
         if token.value not in self._logged_in_commuter:
             raise InvalidCommuter(ErrorResponseStatus.UNAUTHORIZED, RequestErrorCause.UNAUTHORIZED,
                                   RequestErrorDescription.UNAUTHORIZED_DESCRIPTION)

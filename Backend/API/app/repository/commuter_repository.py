@@ -1,31 +1,33 @@
-from typing import List
+from typing import List, Any
 
+from pymysql import IntegrityError
+
+from app.repository.database import Database
 from app.service.dtos.commuter_dtos import Commuter, CommuterFullInfo, CreditCard, BoughtAccess
 
 
 class CommuterRepository:
-    def __init__(self, database=None, access: dict = {}):
-        self.database = {}  # will be replaced with param database but for now it's a dictionary
+    def __init__(self, database: Database, access: dict = {}):
+
+        self.database = database
         self.access = access
 
-    def signup_commuter(self, new_commuter: Commuter) -> bool:
+    def signup_commuter(self, new_commuter: CommuterFullInfo) -> bool:
         """
         Add a new commuter to the database.
         """
-        if not self.database.get(new_commuter.email):
-            # Crée un dictionnaire pour stocker le Commuter et les informations de carte de crédit associées
-            self.database[new_commuter.email] = {'commuter': new_commuter, 'credit_card': None, 'bought_access': []}
-            return True
-        else:
+        try:
+            return self.database.register_commuter(new_commuter)
+        except IntegrityError:
             return False
 
-    def get_commuter_info(self, email: str) -> CommuterFullInfo:
+    def get_commuter_info(self, email: str) -> Any:
         """
         Retrieve commuter information based on email.
         """
-        commuter_data = self.database.get(email)
+        commuter_data = self.database.fetch_commuter(email)
         if commuter_data:
-            return commuter_data['commuter']
+            return commuter_data
         else:
             return None
 
