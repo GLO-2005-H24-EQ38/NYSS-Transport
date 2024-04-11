@@ -26,7 +26,7 @@ CREATE PROCEDURE RegisterAdmin(
     IN p_address VARCHAR(50),
     IN p_dob DATE,
     IN p_phone BIGINT,
-    IN p_admin_code integer,
+    IN p_admin_code VARCHAR(100),
     IN p_company VARCHAR(100)
 )
 BEGIN
@@ -41,7 +41,7 @@ END //
 CREATE PROCEDURE LoginUser(
     IN p_email VARCHAR(100),
     IN p_password VARCHAR(100),
-    IN p_admin_code integer
+    IN p_admin_code VARCHAR(100)
 )
 BEGIN
     DECLARE user_role ENUM('commuter', 'admin');
