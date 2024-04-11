@@ -19,7 +19,7 @@ export default {
 </script>
 
 <template>
-  <div class="transaction-card" style="position: relative">
+  <div class="access-card" style="position: relative">
     <img
         style="object-fit: contain"
         src="@/assets/stm_logo.png"
@@ -31,7 +31,7 @@ export default {
         </div>
       </div>
       <div class="registerVisitButton">
-         Expires {{ expDate }}
+         Expires on {{ expDate }}
         </div>
       <div style="display: flex; flex-direction: row">
         <div class="card-text" style="flex:1">Type: Ticket</div>
@@ -44,7 +44,7 @@ export default {
 </template>
 
 <style scoped>
-.transaction-card {
+.access-card {
   transition: ease-in-out 0.25s;
   position: relative;
   width: 23rem;
@@ -54,11 +54,11 @@ export default {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.transaction-card img {
+.access-card img {
   transition: ease-in-out 0.25s;
-  width: 100%;
+  width: 60%;
   height: 7rem;
-  object-fit: fill;
+  object-fit: contain;
 }
 
 .card-body {
@@ -78,7 +78,7 @@ export default {
   padding: 1px;
   border: none;
   position: absolute;
-  top: -114%;
+  top: -115%;
   border-top-right-radius: 0.5rem;
   left: 67%;
   color: white;
@@ -96,7 +96,7 @@ export default {
   flex-grow: 1;
 }
 
-.transaction-card:hover {
+.access-card:hover {
   transition: ease-in-out 0.25s;
   cursor: pointer;
   box-shadow: 0 0 6px rgb(104, 104, 104);

@@ -23,7 +23,7 @@ export default {
 </script>
 
 <template>
-  <div class="transaction-card">
+  <div class="access-card">
     <img
         style="object-fit: contain"
         src="../../../assets/stm_logo.png"
@@ -59,7 +59,7 @@ export default {
 </template>
 
 <style scoped>
-.transaction-card {
+.access-card {
   transition: ease-in-out 0.25s;
   position: relative;
   width: 23rem;
@@ -69,7 +69,7 @@ export default {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.transaction-card img {
+.access-card img {
   transition: ease-in-out 0.25s;
   width: 100%;
   height: 13rem;
@@ -128,7 +128,7 @@ export default {
   cursor: pointer;
 }
 
-.transaction-card:hover {
+.access-card:hover {
   transition: ease-in-out 0.25s;
   cursor: pointer;
   box-shadow: 0 0 6px rgb(0, 82, 158);

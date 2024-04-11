@@ -6,11 +6,10 @@ export default {
 
 <template>
   <div class="profile-container">
-    <div class="user-information-header" style="display: flex; flex-direction: row;">
+    <div class="user-information-header">
       <div style="display: flex; justify-content: center; align-items: center; flex-direction: column">
-      <img src="../../assets/stm_logo.png" width="100px" style="border-radius: 1rem; object-fit: contain" alt="The One True Samy"/>
+      <img src="../../assets/man-avatar.jpg" width="100rem" style="border-radius: 1rem; object-fit: contain" alt="The One True Samy"/>
     <div style="font-weight: bold; flex: 1">Samy K.</div>
-        <a href="#">Edit</a>
           </div>
     <div id="section-1" style="margin-left: 1rem; flex: 2; display: flex; justify-content: center; align-items: flex-start; flex-direction: column">
       <div style="display:flex; flex-direction: column;">
@@ -25,7 +24,7 @@ export default {
     <div id="section-2" style="margin-left: 1rem; flex: 2; display: flex; justify-content: center; align-items: flex-start; flex-direction: column">
       <div style="display:flex; flex-direction: column;">
         <div style="font-weight: bold">Home Address:</div>
-        <div>The One True Samy Island, Quebec</div>
+        <div>The One True Samy Island, 4 Rivières, Quebec</div>
       </div>
       <div style="display:flex; flex-direction: column;">
         <div style="font-weight: bold">Birth Date:</div>
@@ -51,5 +50,13 @@ export default {
   background-color: #f1f1f1;
   padding: 10px;
   border-radius: 20px;
+  display: flex;
+  flex-direction: row;
+}
+
+@media only screen and (max-width: 900px) {
+  .user-information-header {
+    flex-direction: column;
+  }
 }
 </style>

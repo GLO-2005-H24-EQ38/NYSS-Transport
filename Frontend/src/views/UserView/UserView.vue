@@ -12,15 +12,17 @@ export default {
 </script>
 
 <template>
-  <div class="userview">
+  <div class="userView">
     <div style="flex: 4"><h2 style="margin:1rem">Profile</h2>
       <UserInfo/>
     </div>
     <div>
       <h2 style="margin:1rem; flex: 1">Payment Method</h2>
-      <PaymentMethod/>
-    </div>
+      <div>
+        <PaymentMethod/>
 
+      </div>
+    </div>
   </div>
 
   <h2 style="margin:1rem">Wallet</h2>
@@ -28,13 +30,13 @@ export default {
 </template>
 
 <style scoped>
-.userview {
+.userView {
   display: flex;
   flex-direction: row
 }
 
-@media only screen and (max-width: 600px) {
-  .userview {
+@media only screen and (max-width: 900px) {
+  .userView {
     display: flex;
     flex-direction: column
   }

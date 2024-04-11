@@ -21,9 +21,9 @@ export default {
      <img src="@/assets/NYSS-Blue.png" alt="logo" style="width: auto; height: 100px; margin-bottom: 20px">
         <qrcode-vue :value="QRValue" size="250" level="Q"></qrcode-vue>
       <div style="margin-top: 1rem">{{ QRValue }}</div>
-          <div style="display: flex; justify-content: center; align-items: center; margin-top: 1rem">
-            <button class="btn btn-primary btn-block" data-bs-dismiss="modal">Redeem Now</button>
-          </div>
+<!--          <div style="display: flex; justify-content: center; align-items: center; margin-top: 1rem">-->
+<!--            <button class="btn btn-primary btn-block" data-bs-dismiss="modal">Redeem Now</button>-->
+<!--          </div>-->
       </div>
       </div>
     </div>

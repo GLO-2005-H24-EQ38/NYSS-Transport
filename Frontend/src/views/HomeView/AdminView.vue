@@ -20,7 +20,6 @@ export default {
 <!--  <AccessManager />-->
   <h2 style="margin:1rem">List of Active Access</h2>
   <div class="add-access">+ Add Access</div>
-  <AdminAccessUnit />
   <AdminAccessContainer />
 </template>
 
