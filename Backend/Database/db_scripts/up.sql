@@ -45,7 +45,7 @@ CREATE TABLE commuter(
 
 CREATE TABLE admin(
     user varchar(100),
-    code integer NOT NULL ,
+    code varchar(100) NOT NULL ,
     company varchar(100),
     PRIMARY KEY (user),
     FOREIGN KEY (user) REFERENCES user (email) ON UPDATE CASCADE ON DELETE CASCADE,
