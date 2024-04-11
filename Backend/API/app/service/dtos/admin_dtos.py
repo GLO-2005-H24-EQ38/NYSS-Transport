@@ -68,11 +68,6 @@ class Admin(User):
     def secure_admin_code(self):
         self.admin_code = self._hash_secret(self.admin_code)
 
-    def _hash_secret(self, secret) -> bytes:
-        salt = bcrypt.gensalt()
-        hashed_password = bcrypt.hashpw(secret, salt)
-        return hashed_password
-
     def verify_admin_code(self, admin_code) -> bool:
         return bcrypt.checkpw(admin_code.encode(), self.admin_code.encode())
 
