@@ -16,7 +16,7 @@ CREATE TABLE creditCard (
     holderName varchar(100) NOT NULL ,
     expirationDate char(5) NOT NULL ,
     PRIMARY KEY (number),
-    CONSTRAINT invalidExpirationDate CHECK (expirationDate LIKE '__/__')
+    CONSTRAINT invalidExpirationDate_invalidFormat CHECK (expirationDate LIKE '__/__')
 );
 
 CREATE TABLE company (
@@ -61,7 +61,6 @@ CREATE TABLE ticket(
 
 CREATE TABLE subscription (
     access integer,
-    start DATE,
     PRIMARY KEY (access),
     FOREIGN KEY (access) REFERENCES access (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
@@ -79,3 +78,27 @@ CREATE TABLE transaction (
     FOREIGN KEY (creditCard) REFERENCES creditCard (number),
     FOREIGN KEY (accessId) REFERENCES access (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
+
+DELIMITER //
+
+CREATE TRIGGER checkExpirationDateBeforeInsert
+BEFORE INSERT ON creditCard
+FOR EACH ROW
+BEGIN
+    DECLARE current_month INT;
+    DECLARE current_year INT;
+    DECLARE card_month INT;
+    DECLARE card_year INT;
+
+    SET current_month = MONTH(CURDATE());
+    SET current_year = YEAR(CURDATE());
+    SET card_month = SUBSTRING(NEW.expirationDate, 1, 2);
+    SET card_year = SUBSTRING(NEW.expirationDate, 4, 2);
+
+    IF (card_year < RIGHT(YEAR(NOW()), 2)) OR
+       (card_year = RIGHT(YEAR(NOW()), 2) AND card_month < MONTH(NOW())) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Expiration date must be in the future';
+    END IF;
+END//
+
+DELIMITER ;

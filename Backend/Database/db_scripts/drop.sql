@@ -1,5 +1,3 @@
-/* procedures to drop if not dropped */
-DROP PROCEDURE IF EXISTS addCreditcard;
 
 /* Drop first due to FOREIGN KEY Constraints */
 Drop TABLE IF EXISTS transaction;
