@@ -1,4 +1,4 @@
-from app.service.dtos.admin_dtos import User, Token
+from app.service.dtos.admin_dtos import User, Token, AdminFullInfo
 from app.service.dtos.admin_dtos import Admin, Access
 
 from app.service.exceptions import *
@@ -9,13 +9,22 @@ from app.service.exceptions import InvalidAdmin
 
 class AdminService():
 
-    def __init__(self, admin_repository: AdminRepository = AdminRepository()):
-        self.admin_repository = admin_repository
+    def __init__(self, admin_repository: AdminRepository):
+        self._admin_repository = admin_repository
         self.logged_in_admin = {}
+
+    def signup_admin(self, new_admin: AdminFullInfo) -> str:
+        new_admin.secure_password()
+        new_admin.secure_admin_code()
+        if self._admin_repository.signup_admin(new_admin):
+            return "register successful"
+        else:
+            raise InvalidCommuter(ErrorResponseStatus.CONFLICT, RequestErrorCause.ALREADY_EXISTS,
+                                  RequestErrorDescription.ALREADY_EXISTS_DESCRIPTION)
 
     def login_admin(self, admin: Admin) -> Token:
         print(admin.email, admin.password, admin.admin_code)
-        admin_saved_info = self.admin_repository.get_admin_by_email(admin.email)
+        admin_saved_info = self._admin_repository.get_admin_by_email(admin.email)
 
         if admin_saved_info.verify_password(admin.password) and admin_saved_info.verify_admin_code(admin.admin_code):
             token = Token()
@@ -46,9 +55,8 @@ class AdminService():
                 raise InvalidAdmin(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
                                    RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
 
-
         # Stocker l'accès dans la base de données
-        self.admin_repository.save_access(new_access)
+        self._admin_repository.save_access(new_access)
 
         # Retourner l'accès créé
         return new_access

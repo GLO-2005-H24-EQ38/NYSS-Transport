@@ -1,24 +1,28 @@
-from app.service.dtos.admin_dtos import Admin, Access
+from pymysql import IntegrityError
+
+from app.service.dtos.admin_dtos import Admin, Access, AdminFullInfo
 from app.service.exceptions import *
 
 
 class AdminRepository:
 
-    def __init__(self, database=None):
-        dummy_admin = Admin("ema@fd.fasdf", "password", "adminCode")
-        dummy_admin.secure_password()
-        dummy_admin.secure_admin_code()
-        print(dummy_admin)
-
-        self.database = {
-            "ema@fd.fasdf": dummy_admin
-        }  # TODO will be replaced by the true params of the DB
+    def __init__(self, database):
+        self.database = database
         self._access = {
             "dummy_access_id": Access(accessName="Dummy Access", price=10.0, accessType="Ticket", duration=4,
                                       company="Dummy Company", numberOfPassage=3),
             "dummy_access_sub_id": Access(accessName="Dummy Access", price=10.0, accessType="Subscription", duration=4,
                                       company="Dummy Company")
-        }  # TODO will be replaced by the true params of the DB
+        }
+
+    def signup_admin(self, new_admin: AdminFullInfo) -> bool:
+        """
+        Add a new commuter to the database.
+        """
+        try:
+            return self.database.register_admin(new_admin)
+        except IntegrityError:
+            return False
 
     def get_created_access(self):
         """this method will be removed when the database is implemented"""
@@ -28,8 +32,6 @@ class AdminRepository:
         return self.database.get(email)
 
     def save_access(self, access: Access):
-        # TODO review si on doit faire une vérification pour s'assurer
-        #  que l'access m'est pas dans la DB déjà
         self._access[access.id] = access
 
     def get_acess_by_accessId(self, accessId: str) -> Access:

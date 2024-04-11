@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify
 from app.repository.admin_repository import AdminRepository
 from app.repository.commuter_repository import CommuterRepository
 from app.service.commuter_service import CommuterService
-from app.service.dtos.admin_dtos import User, Token
+from app.service.dtos.admin_dtos import User, Token, AdminFullInfo
 from app.service.dtos.commuter_dtos import CommuterFullInfo, Commuter, CreditCard, Transaction
 from app.service.dtos.admin_dtos import Admin, Access
 from app.service.exceptions import RequestError, ErrorResponseStatus
@@ -14,12 +14,14 @@ from app.repository.database import Database
 database = Database()
 app = Flask(__name__)
 
-admin_repository = AdminRepository()
+admin_repository = AdminRepository(database=database)
+admin_service = AdminService(admin_repository)
+
 commuter_repository = CommuterRepository(database=database)
 commuter_service = CommuterService(commuter_repository, admin_repository)
 
 CREATED = 201
-admin_service = AdminService()
+
 
 commuter = CommuterFullInfo(
     name="John",
@@ -40,8 +42,12 @@ commuter = CommuterFullInfo(
 def signup():
     try:
         data = request.get_json()
-        commuter = CommuterFullInfo(**data)
-        message = commuter_service.signup_commuter(commuter)
+        if "adminCode" in data:
+            admin = AdminFullInfo(**data)
+            message = admin_service.signup_admin(admin)
+        else:
+            commuter = CommuterFullInfo(**data)
+            message = commuter_service.signup_commuter(commuter)
         reponse = jsonify(message)
         reponse.status_code = CREATED
         return reponse

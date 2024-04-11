@@ -2,7 +2,7 @@ import os
 import pymysql
 from dotenv import load_dotenv
 
-from app.service.dtos.admin_dtos import Admin
+from app.service.dtos.admin_dtos import Admin, AdminFullInfo
 from app.service.dtos.commuter_dtos import Commuter, CommuterFullInfo
 
 
@@ -55,8 +55,13 @@ class Database:
         commuter = Commuter(result[0][0], result[0][1])
         return commuter
 
-    def register_admin(self, admin: Admin):
-        pass
+    def register_admin(self, admin: AdminFullInfo) -> bool:
+        request = f"CALL RegisterUser(%s, %s, %s, %s, %s, %s,%s,%s,%s)"
+        self.cursor.execute(request, (
+            admin.email, admin.name, admin.password, admin.address, admin.date_of_birth, admin.tel, "admin",
+            admin.admin_code, admin.company))
+
+        return True
 
     def fetch_admin(self, admin: Admin):
         pass
