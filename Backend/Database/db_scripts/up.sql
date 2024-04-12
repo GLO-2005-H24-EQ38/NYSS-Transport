@@ -31,6 +31,7 @@ CREATE TABLE access (
     company varchar(100),
     type enum('ticket','subscription') NOT NULL,
     duration INT NOT NULL,
+    suspended BOOLEAN DEFAULT FALSE NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (company) REFERENCES company (name) ON UPDATE CASCADE ON DELETE CASCADE
 );
@@ -79,6 +80,14 @@ CREATE TABLE transaction (
     FOREIGN KEY (accessId) REFERENCES access (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
+CREATE TABLE suspendedAccess (
+    access integer,
+    deletionDate DATE NOT NULL,
+    PRIMARY KEY (access),
+    FOREIGN KEY (access) REFERENCES access (id) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
 DELIMITER //
 
 CREATE TRIGGER checkExpirationDateBeforeInsert
@@ -102,3 +111,4 @@ BEGIN
 END//
 
 DELIMITER ;
+

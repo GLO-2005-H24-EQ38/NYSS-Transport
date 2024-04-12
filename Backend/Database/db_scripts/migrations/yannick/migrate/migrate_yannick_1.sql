@@ -58,11 +58,24 @@ END //
 DELIMITER ;
 
 DELIMITER //
-          CREATE PROCEDURE DeleteAccess(
-              IN p_access_id INT
-          )
+CREATE PROCEDURE DeleteAccess(IN p_access_id INT)
 BEGIN
-    DELETE FROM access WHERE id = p_access_id;
+    DECLARE accessDuration INT;
+    DECLARE deleteDate DATE;
+
+    IF (SELECT id FROM access WHERE id = p_access_id) IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Access does not exist';
+    END IF;
+
+    SELECT duration FROM access WHERE id = p_access_id INTO accessDuration;
+
+    SET deleteDate = DATE_ADD(CURDATE(), INTERVAL accessDuration DAY);
+
+    INSERT INTO suspendedaccess(access,deletionDate) VALUES (p_access_id, deleteDate);
+
+    UPDATE access SET suspended = TRUE WHERE id = p_access_id;
+
 END //
 DELIMITER ;
 
@@ -77,6 +90,5 @@ SET @result = BuyAccess(1, @transaction_number, @p_email, 1);
 -- SET @p_email = 'emai';
 -- SET @result = BuyAccess(1, @transaction_number, @p_email, 1);
 
--- TODO: our table transaction need revision because delete an access deletes all transactions made on it
--- TODO which is a behavior that we might not want
--- CALL DeleteAccess(1);
+CALL DeleteAccess(1);
+
