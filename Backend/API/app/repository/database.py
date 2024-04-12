@@ -4,6 +4,8 @@ from dotenv import load_dotenv
 
 from app.service.dtos.admin_dtos import Admin, AdminFullInfo
 from app.service.dtos.commuter_dtos import Commuter, CommuterFullInfo
+from app.service.exceptions import InvalidCommuter, RequestErrorDescription, RequestErrorCause, ErrorResponseStatus, \
+    InvalidAdmin
 
 
 class Database:
@@ -50,8 +52,11 @@ class Database:
         request = "SELECT email, password FROM user WHERE email = %s"
         self.cursor.execute(request, (email,))
         result = self.cursor.fetchall()
-        commuter = Commuter(result[0][0], result[0][1])
-        return commuter
+        if result:
+            return Commuter(result[0][0], result[0][1])
+        else:
+            raise InvalidCommuter(ErrorResponseStatus.UNAUTHORIZED, RequestErrorCause.UNAUTHORIZED,
+                                  RequestErrorDescription.UNAUTHORIZED_DESCRIPTION)
 
     def register_admin(self, admin: AdminFullInfo) -> bool:
         request = f"CALL RegisterAdmin(%s, %s, %s, %s, %s, %s, %s, %s)"
@@ -66,5 +71,8 @@ class Database:
         self.cursor.execute(request, (email,))
         result = self.cursor.fetchall()
 
-        admin = Admin(result[0][0], result[0][1], result[0][2])
-        return admin
+        if result:
+            return Admin(result[0][0], result[0][1], result[0][2])
+        else:
+            raise InvalidAdmin(ErrorResponseStatus.UNAUTHORIZED, RequestErrorCause.UNAUTHORIZED,
+                               RequestErrorDescription.UNAUTHORIZED_DESCRIPTION)
