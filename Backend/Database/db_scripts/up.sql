@@ -119,7 +119,7 @@ ON SCHEDULE  EVERY 1 DAY STARTS CURDATE() DO
 BEGIN
     DECLARE accessId INT;
     DECLARE complete integer DEFAULT FALSE;
-    DECLARE cur CURSOR FOR SELECT access FROM suspendedAccess WHERE deletionDate < CURDATE();
+    DECLARE cur CURSOR FOR SELECT access FROM suspendedAccess WHERE deletionDate <= CURDATE();
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET complete = TRUE;
 
     OPEN  cur;
