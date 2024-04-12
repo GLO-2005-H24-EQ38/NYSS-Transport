@@ -25,11 +25,17 @@ DECLARE access_duration INT;
 -- Declare variables for credit card details
 DECLARE credit_card_number BIGINT;
 
+-- Check if access is not suspended
+IF ( SELECT suspended FROM access WHERE id = p_access_id AND suspended = TRUE) THEN
+    SIGNAL SQLSTATE '45000'
+    SET MESSAGE_TEXT = 'Access is suspended';
+END IF;
+
 
 -- Retrieve access details
 SELECT A.name, A.price, A.type, A.duration, A.company
 FROM access A
-WHERE A.id = p_access_id
+WHERE A.id = p_access_id AND suspended = FALSE
 INTO access_name, access_price, access_type, access_duration, access_company;
 
 -- generate access number
@@ -92,5 +98,4 @@ SET @result = BuyAccess(1, @transaction_number, @p_email, 1);
 
 CALL DeleteAccess(1);
 
-SHOW EVENTS
 
