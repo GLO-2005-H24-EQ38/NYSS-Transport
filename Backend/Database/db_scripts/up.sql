@@ -112,3 +112,28 @@ END//
 
 DELIMITER ;
 
+DELIMITER //
+
+CREATE EVENT deleteSuspendedAccess
+ON SCHEDULE  EVERY 1 DAY STARTS CURDATE() DO
+BEGIN
+    DECLARE accessId INT;
+    DECLARE complete integer DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT access FROM suspendedAccess WHERE deletionDate < CURDATE();
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET complete = TRUE;
+
+    OPEN  cur;
+    deleteAccesses :LOOP
+        FETCH cur INTO accessId;
+        IF (complete) THEN
+            LEAVE deleteAccesses;
+        END IF;
+
+        DELETE FROM access WHERE id = accessId;
+
+    end loop deleteAccesses;
+    CLOSE cur;
+END//
+
+DELIMITER ;
+

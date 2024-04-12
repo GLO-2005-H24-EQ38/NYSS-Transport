@@ -63,7 +63,7 @@ BEGIN
     DECLARE accessDuration INT;
     DECLARE deleteDate DATE;
 
-    IF (SELECT id FROM access WHERE id = p_access_id) IS NULL THEN
+    IF NOT EXISTS (SELECT * FROM access WHERE id = p_access_id) THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Access does not exist';
     END IF;
@@ -91,4 +91,6 @@ SET @result = BuyAccess(1, @transaction_number, @p_email, 1);
 -- SET @result = BuyAccess(1, @transaction_number, @p_email, 1);
 
 CALL DeleteAccess(1);
+
+SHOW EVENTS
 
