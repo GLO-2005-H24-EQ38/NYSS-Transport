@@ -8,7 +8,7 @@ export default {
   <div class="profile-container">
     <div class="user-information-header">
       <div style="display: flex; justify-content: center; align-items: center; flex-direction: column">
-      <img src="../../assets/man-avatar.jpg" width="100rem" style="border-radius: 1rem; object-fit: contain" alt="The One True Samy"/>
+      <img src="../../assets/samy.jpeg" width="100rem" style="border-radius: 1rem; object-fit: contain" alt="The One True Samy"/>
     <div style="font-weight: bold; flex: 1">Samy K.</div>
           </div>
     <div id="section-1" style="margin-left: 1rem; flex: 2; display: flex; justify-content: center; align-items: flex-start; flex-direction: column">

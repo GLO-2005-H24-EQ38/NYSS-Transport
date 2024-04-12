@@ -1,9 +1,32 @@
 <script>
+import {loginAdmin, loginCommuter, tokensList} from "@/api/login.js";
+
 export default {
   name: "LogIn",
   data() {
     return {
-      loginOption: 'commuter'
+      loginOption: 'commuter',
+      email: '',
+      password: '',
+      adminCode: null,
+    }
+  },
+  methods: {
+    // TODO A revoir avec userCookie
+    async login() {
+      if (this.loginOption === 'commuter') {
+        const res = await loginCommuter(this.email, this.password);
+        console.log("Login Commuter")
+        if(res.token)
+          tokensList.push(res.token);
+          this.$router.push('/');
+      } else {
+        const res = await loginAdmin(this.email, this.password, this.adminCode);
+        console.log("Login Admin")
+        if(res.token)
+          tokensList.push(res.token);
+          this.$router.push('/admin');
+      }
     }
   }
 }
@@ -21,28 +44,29 @@ export default {
         <input type="radio" name="options" v-model="loginOption" value="admin" autocomplete="off"> Admin
       </label>
     </div>
-    <form class="fill-up-form">
+    <form class="fill-up-form" @submit.prevent="login">
       <div class="input-group mb-lg-4">
         <span class="input-group-text" id="basic-addon1"><i class="bi bi-envelope"></i></span>
         <input type="email" class="form-control" placeholder="Email Address" aria-label="Email Address"
-               aria-describedby="basic-addon1">
+             v-model="email"  aria-describedby="basic-addon1">
       </div>
       <div class="input-group mb-lg-4">
           <span class="input-group-text" id="basic-addon1"><i class="bi bi-lock-fill"></i>
 </span>
         <input type="password" class="form-control" placeholder="Password" aria-label="Password"
-               aria-describedby="basic-addon1">
+             v-model="password"  aria-describedby="basic-addon1">
       </div>
       <div v-if="loginOption === 'admin'" class="input-group mb-3">
           <span class="input-group-text" id="basic-addon1"><i class="bi bi-key-fill"></i>
 </span>
-        <input type="number" class="form-control" placeholder="Admin Code" aria-label="Admin Code"
-               aria-describedby="basic-addon1">
+        <input type="text" class="form-control" placeholder="Admin Code" aria-label="Admin Code"
+              v-model="adminCode" aria-describedby="basic-addon1">
       </div>
+      <span style="font-size: small; color: red" id="error"></span>
       <div style="font-size: small">
         Don't have an account ? <a href="/signup">Sign up here</a>
       </div>
-      <div style="display: flex; justify-content: center; margin-top: 2rem">
+      <div style="display: flex; justify-content: center; margin-top: 2rem;flex-direction: column">
         <button class="button" style="display: flex; justify-content: center; width: 100%">Login</button>
       </div>
     </form>

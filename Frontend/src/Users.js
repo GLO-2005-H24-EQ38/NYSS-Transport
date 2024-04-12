@@ -13,7 +13,7 @@ export class Commuter {
 
 export class Admin {
 
-    constructor(name,email,address,tel,password,dateOfBirth,company) {
+    constructor(name, email, address, tel, password, dateOfBirth, adminCode, company) {
         this.name = name;
         this.email = email;
         this.address = address;
@@ -21,6 +21,7 @@ export class Admin {
         this.password = password;
         this.dateOfBirth = dateOfBirth;
         this.company = company;
+        this.adminCode = adminCode;
 
     }
 
