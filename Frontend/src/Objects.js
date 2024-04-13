@@ -33,3 +33,14 @@ export class AddPaymentMethod {
         this.holder = holder;
     }
 }
+
+export class SearchAccessQuery {
+
+    Constructor(name, accessType, company, price) {
+        this.name = name;
+        this.accessType = accessType;
+        this.company = company;
+        this.price = price;
+    }
+
+}

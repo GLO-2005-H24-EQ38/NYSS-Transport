@@ -145,8 +145,6 @@ DELIMITER ;
  VALUES (1234567890123456, 'User One', '12/25'),
         (9876543210987654, 'Admin One', '11/24');
 
- -- Inserting sample data into the company table
- INSERT INTO company (name) VALUES ('RTC'), ('STM');
 
  -- Inserting sample data into the access table
  INSERT INTO access (id, name, price, company, type, duration)

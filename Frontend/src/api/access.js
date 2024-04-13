@@ -19,14 +19,15 @@ export const getAllAccess = async () => {
 }
 
 
-export const searchAccess = async (access) => {
+
+export const searchAccess = async (SearchAccessQuery) => {
     const response = await fetch(URL_API + 'user/access/search', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': Cookies.get('commuterToken')
         },
-        body: JSON.stringify(access)
+        body: JSON.stringify(SearchAccessQuery)
     });
     if (response.status === 200) {
         return await response.json();
