@@ -48,6 +48,14 @@ class AdminRepository:
         except KeyError:
             raise InvalidCommuter(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
                                   RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
-    
+
     def search_created_access(self, search: SearchAccessQuery):
         return self.database.search_access(search)
+
+    def get_admin_full_info(self, email: str) -> AdminFullInfo:
+        admin_info = self.database.fetch_admin_full_info(email)
+        if admin_info:
+            return admin_info
+        else:
+            raise InvalidAdmin(ErrorResponseStatus.NOT_FOUND, RequestErrorCause.NOT_FOUND,
+                               RequestErrorDescription.NOT_FOUND_DESCRIPTION)

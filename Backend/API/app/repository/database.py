@@ -147,6 +147,26 @@ class Database:
         else:
             return None
 
+    def fetch_admin_full_info(self, email: str) -> AdminFullInfo | None:
+        request = "SELECT email, name, password, address, birthday, phone, code, company FROM user JOIN admin WHERE email = %s AND user = email"
+        self.cursor.execute(request, email)
+        result = self.cursor.fetchall()
+
+        if result:
+            admin = AdminFullInfo(
+                email=result[0][0],
+                name=result[0][1],
+                password=result[0][2],
+                address=result[0][3],
+                dateOfBirth=result[0][4].strftime("%Y-%m-%d"),
+                tel=str(result[0][5]),
+                adminCode=str(result[0][6]),
+                company=result[0][7]
+            )
+            return admin
+        else:
+            return None
+
     def close(self):
         self.cursor.close()
         self.connection.close()
