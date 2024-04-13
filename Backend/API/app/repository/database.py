@@ -1,3 +1,4 @@
+import json
 import os
 import pymysql
 from dotenv import load_dotenv
@@ -89,14 +90,17 @@ class Database:
         self.cursor.execute(request, email)
         return True
 
-    def get_card_info(self, email: str) -> CreditCard:
-        request = "SELECT number, holderName, expirationDate FROM creditCard WHERE email = %s;"
+    def get_card_info(self, email: str) -> CreditCard | None:
+        request = "SELECT GetCreditCard(%s);"
         self.cursor.execute(request, email)
         result = self.cursor.fetchall()
 
         if result:
-            last4_card_digits = result[0][0][-4:]
-            return CreditCard(last4_card_digits, result[0][1], result[0][2])
+            print(type(result[0][0]), result[0][0])
+            result = json.loads(result[0][0])
+            last4_card_digits = result["cardNumber"][:1] + result["cardNumber"][-4:]
+            print(last4_card_digits)
+            return CreditCard(last4_card_digits=last4_card_digits, **result)
         else:
             return None
 

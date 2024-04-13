@@ -1,6 +1,7 @@
 
 /* Drop first due to FOREIGN KEY Constraints */
-Drop TABLE IF EXISTS suspendedaccess;
+DROP EVENT IF EXISTS deleteSuspendedAccess;
+Drop TABLE IF EXISTS suspendedAccess;
 Drop TABLE IF EXISTS transaction;
 DROP TABLE IF EXISTS commuter;
 DROP TABLE IF EXISTS admin;
