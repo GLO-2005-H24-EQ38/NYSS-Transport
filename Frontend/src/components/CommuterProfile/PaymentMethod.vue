@@ -20,6 +20,8 @@ export default {
       if (res !== 0) {
         this.paymentExists = true;
         this.setupCard(res);
+      } else {
+        this.paymentExists = false;
       }
     },
     setupCard(res) {
@@ -40,7 +42,7 @@ export default {
     async removeCard() {
       const res = await deletePaymentMethod();
       console.log(res);
-      window.location.reload();
+      await this.getCard()
     }
   },
   created() {
@@ -70,7 +72,7 @@ export default {
       </div>
     </div>
     <div v-else class="PaymentMethod">
-      <PaymentMethodForm/>
+      <PaymentMethodForm v-if="paymentExists === false" @close="getCard" :paymentcallback="getCard"/>
     </div>
   </div>
 
