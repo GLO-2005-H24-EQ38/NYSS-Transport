@@ -56,3 +56,12 @@ class CommuterRepository:
     def get_bought_access(self, email) -> List[BoughtAccess]:
         commuter_data = self.database.get(email)
         return commuter_data['bought_access']
+
+    def delete_payment_method(self, email) -> bool:
+        """
+        Add or update payment method for the commuter with the given email.
+        """
+        try:
+            return self.database.delete_payment_method(email)
+        except IntegrityError:
+            return False

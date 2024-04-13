@@ -85,3 +85,17 @@ class CommuterService():
         wallet = self._commuter_repository.get_bought_access(email)
 
         return wallet
+
+    def delete_payment_method(self, token: Token) -> str:
+        if token.value not in self._logged_in_commuter:
+            raise InvalidCommuter(ErrorResponseStatus.UNAUTHORIZED, RequestErrorCause.UNAUTHORIZED,
+                                  RequestErrorDescription.UNAUTHORIZED_DESCRIPTION)
+
+        email = self._logged_in_commuter[token.value]
+        success = self._commuter_repository.delete_payment_method(email)
+
+        if success:
+            return "Successfully removed payment method"
+        else:
+            raise InvalidCommuter(ErrorResponseStatus.NOT_FOUND, RequestErrorCause.NOT_FOUND,
+                                  RequestErrorDescription.NOT_FOUND_DESCRIPTION)

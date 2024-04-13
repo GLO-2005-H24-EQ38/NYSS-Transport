@@ -82,3 +82,8 @@ class Database:
         self.cursor.execute(request, (credit_card.holder, credit_card.cardNumber, credit_card.expirationDate, email))
 
         return True
+
+    def delete_payment_method(self, email: str) -> bool:
+        request = f"CALL deleteCreditcard(%s)"
+        self.cursor.execute(request, email)
+        return True

@@ -159,6 +159,20 @@ def get_wallet():
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
 
+@app.route("/user/payment", methods=["DELETE"])
+def delete_payment_method():
+    try:
+        token = request.headers.get("Authorization")
+        response = commuter_service.delete_payment_method(Token(token))
+        return jsonify({"message": response}), 204
+    except RequestError as error:
+        response = jsonify(error.to_json())
+        response.status_code = error.error_response_status
+        return response
+    except TypeError as error:
+        response = jsonify({"error": str(error)})
+        response.status_code = ErrorResponseStatus.BAD_REQUEST.value
+        return response
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8080, debug=True)
