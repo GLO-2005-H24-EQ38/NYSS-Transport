@@ -139,7 +139,7 @@ class BoughtAccess():
                                   RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
 
     def __validate_access_type(self, access_type):
-        if access_type not in ["Ticket", "Subscription"]:
+        if access_type not in ["ticket", "subscription"]:
             raise InvalidCommuter(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
                                   RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
         return access_type
