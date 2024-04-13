@@ -124,7 +124,7 @@ def add_payment_method():
         return response
 
 
-@app.route("/user/access/checkout", methods=["GET"])
+@app.route("/user/access/checkout", methods=["POST"])
 @cross_origin()
 def buy_access():
     try:
@@ -181,7 +181,7 @@ def delete_payment_method():
         return response
 
 
-@app.route("/user/access/search", methods=["GET"])
+@app.route("/user/access/search", methods=["POST"])
 @cross_origin()
 def search_access():
     try:
@@ -215,6 +215,23 @@ def get_card_info():
         response.status_code = error.error_response_status
         return response
     except TypeError as error:
+        response = jsonify({"error": str(error)})
+        response.status_code = ErrorResponseStatus.BAD_REQUEST.value
+        return response
+
+@app.route("/user", methods=["GET"])
+@cross_origin()
+def get_user():
+    try:
+        token = request.headers.get("Authorization")
+        response = commuter_service.get_commuter_full_info(Token(token))
+        return jsonify(response.to_json()), 200
+    except RequestError as error:
+        response = jsonify(error.to_json())
+        response.status_code = error.error_response_status
+        return response
+    except TypeError as error:
+        print(error)
         response = jsonify({"error": str(error)})
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
