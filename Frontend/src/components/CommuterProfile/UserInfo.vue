@@ -18,15 +18,17 @@ export default {
   methods: {
     async getUserInfo() {
       const res = await getUser();
+      console.log('=------------------->', res);
       this.user.name = res.name;
       this.user.address = res.address;
       this.user.email = res.email;
       this.user.tel = res.tel;
       this.user.birthDate = res.dateOfBirth;
-      this.user.company = res.company;
+      return res
     }
   },
   mounted() {
+    console.log('=------------------->', this.getUserInfo());
     this.getUserInfo()
   }
 }
