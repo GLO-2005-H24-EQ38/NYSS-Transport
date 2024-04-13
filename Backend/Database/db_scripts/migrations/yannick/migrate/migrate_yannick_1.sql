@@ -86,6 +86,28 @@ END //
 DELIMITER ;
 
 
+-- function to return credit card information
+DROP FUNCTION IF EXISTS GetCreditCard;
+DELIMITER //
+CREATE FUNCTION GetCreditCard(p_email VARCHAR(100))
+RETURNS VARCHAR(10000) DETERMINISTIC
+BEGIN
+    DECLARE credit_card_number BIGINT;
+    DECLARE credit_card_holder VARCHAR(100);
+    DECLARE credit_card_expiration VARCHAR(5);
+    DECLARE credit_card_info VARCHAR(10000);
+
+    SELECT creditCard, holderName, expirationDate
+    FROM commuter JOIN creditCard ON commuter.creditCard = creditCard.number
+    WHERE user = p_email
+    INTO credit_card_number, credit_card_holder, credit_card_expiration;
+
+    SET credit_card_info = CONCAT('{cardNumber: ', credit_card_number, ', holder: ', credit_card_holder, ', expirationDate: ', credit_card_expiration, '}');
+
+    RETURN credit_card_info;
+END //
+
+
 -- example of a transaction with credit card present
 SET @transaction_number = 1;
 SET @p_email = 'user1@example.com';
