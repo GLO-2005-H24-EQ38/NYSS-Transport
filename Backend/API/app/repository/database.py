@@ -2,6 +2,7 @@ import datetime
 import json
 import os
 from decimal import Decimal
+from typing import List
 
 import pymysql
 from dotenv import load_dotenv
@@ -60,8 +61,8 @@ class Database:
         if result:
             return Commuter(result[0][0], result[0][1])
         else:
-            raise InvalidCommuter(ErrorResponseStatus.UNAUTHORIZED, RequestErrorCause.UNAUTHORIZED,
-                                  RequestErrorDescription.UNAUTHORIZED_DESCRIPTION)
+            raise InvalidCommuter(ErrorResponseStatus.NOT_FOUND, RequestErrorCause.NOT_FOUND,
+                                  RequestErrorDescription.NOT_FOUND_DESCRIPTION)
 
     def register_admin(self, admin: AdminFullInfo) -> bool:
         request = f"CALL RegisterAdmin(%s, %s, %s, %s, %s, %s, %s, %s)"
@@ -79,8 +80,8 @@ class Database:
         if result:
             return Admin(result[0][0], result[0][1], result[0][2])
         else:
-            raise InvalidAdmin(ErrorResponseStatus.UNAUTHORIZED, RequestErrorCause.UNAUTHORIZED,
-                               RequestErrorDescription.UNAUTHORIZED_DESCRIPTION)
+            raise InvalidAdmin(ErrorResponseStatus.NOT_FOUND, RequestErrorCause.NOT_FOUND,
+                               RequestErrorDescription.NOT_FOUND_DESCRIPTION)
 
     def add_payment_method(self, email: str, credit_card: CreditCard) -> bool:
         request = f"CALL addCreditcard(%s, %s, %s, %s)"
@@ -99,10 +100,8 @@ class Database:
         result = self.cursor.fetchall()
 
         if result:
-            print(type(result[0][0]), result[0][0])
             result = json.loads(result[0][0])
             last4_card_digits = result["cardNumber"][:1] + result["cardNumber"][-4:]
-            print(last4_card_digits)
             return CreditCard(last4_card_digits=last4_card_digits, **result)
         else:
             return None
@@ -171,6 +170,28 @@ class Database:
         self.cursor.close()
         self.connection.close()
         print("Database connection closed")
+
+    def create_access(self, access: Access) -> Access:
+        request = "SELECT AddAccess(%s, %s, %s, %s, %s, %s, %s)"
+        self.cursor.execute(request, (
+            access.id, access.name, access.price, access.company, access.type, access.duration, access.numberOfPassage))
+        result = self.cursor.fetchall()
+        print("the result: ", result)
+        if result:
+            result = json.loads(result[0][0])
+            print(result)
+            return Access(
+                accesId=result["accessId"],
+                accessName=result["accessName"],
+                price=result["price"],
+                accessType=result["accessType"],
+                duration=result["duration"],
+                company=result["company"],
+                numberOfPassage=result["numberOfPassage"] if result["accessType"] == "ticket" else None
+            )
+        else:
+            raise InvalidAdmin(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
+                               RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
 
 
 if __name__ == '__main__':

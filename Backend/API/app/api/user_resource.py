@@ -23,20 +23,6 @@ commuter_service = CommuterService(commuter_repository, admin_repository)
 
 CREATED = 201
 
-commuter = CommuterFullInfo(
-    name="John",
-    email="test@test.com",
-    password="password",
-    tel="1234567890",
-    dateOfBirth="1999-01-01",
-    address="1234 Main Street"
-)
-
-
-# commuter.secure_password()
-# result = database.register_commuter(commuter)
-# print("register success: ", result)
-
 
 @app.route("/user/signup", methods=["POST"])
 @cross_origin()
