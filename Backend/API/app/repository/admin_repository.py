@@ -3,6 +3,7 @@ from typing import Any
 from pymysql import IntegrityError
 
 from app.service.dtos.admin_dtos import Admin, Access, AdminFullInfo
+from app.service.dtos.commuter_dtos import SearchAccessQuery
 from app.service.exceptions import *
 
 
@@ -47,3 +48,6 @@ class AdminRepository:
         except KeyError:
             raise InvalidCommuter(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
                                   RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
+    
+    def search_created_access(self, search: SearchAccessQuery):
+        return self.database.search_access(search)

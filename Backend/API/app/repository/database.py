@@ -2,8 +2,8 @@ import os
 import pymysql
 from dotenv import load_dotenv
 
-from app.service.dtos.admin_dtos import Admin, AdminFullInfo
-from app.service.dtos.commuter_dtos import Commuter, CommuterFullInfo, CreditCard
+from app.service.dtos.admin_dtos import Admin, AdminFullInfo, Access
+from app.service.dtos.commuter_dtos import Commuter, CommuterFullInfo, CreditCard, SearchAccessQuery
 from app.service.exceptions import InvalidCommuter, RequestErrorDescription, RequestErrorCause, ErrorResponseStatus, \
     InvalidAdmin
 
@@ -52,6 +52,7 @@ class Database:
         request = "SELECT email, password FROM user WHERE email = %s"
         self.cursor.execute(request, (email,))
         result = self.cursor.fetchall()
+
         if result:
             return Commuter(result[0][0], result[0][1])
         else:
@@ -87,3 +88,39 @@ class Database:
         request = f"CALL deleteCreditcard(%s)"
         self.cursor.execute(request, email)
         return True
+
+    def get_card_info(self, email: str) -> CreditCard:
+        request = "SELECT number, holderName, expirationDate FROM creditCard WHERE email = %s;"
+        self.cursor.execute(request, email)
+        result = self.cursor.fetchall()
+
+        if result:
+            last4_card_digits = result[0][0][-4:]
+            return CreditCard(last4_card_digits, result[0][1], result[0][2])
+        else:
+            return None
+
+    def search_access(self, search: SearchAccessQuery):
+        request, parameters = search.searchQuery()
+
+        self.cursor.execute(request, parameters)
+        result = self.cursor.fetchall()
+
+        access_list = []
+        for access in result:
+            access_list.append(Access(
+                accesId=access[0],
+                accessName=access[1],
+                price=access[2],
+                company=access[3],
+                accessType=access[4],
+                duration=access[5],
+                numberOfPassage=access[6] if access[4] == "ticket" else None
+            ))
+
+        return access_list
+
+    def close(self):
+        self.cursor.close()
+        self.connection.close()
+        print("Database connection closed")

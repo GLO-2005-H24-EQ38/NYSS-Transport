@@ -1,5 +1,8 @@
+from typing import List
+
 from app.service.dtos.admin_dtos import User, Token, AdminFullInfo
 from app.service.dtos.admin_dtos import Admin, Access
+from app.service.dtos.commuter_dtos import SearchAccessQuery
 
 from app.service.exceptions import *
 
@@ -60,3 +63,6 @@ class AdminService():
 
         # Retourner l'accès créé
         return new_access
+
+    def search_created_access(self, search: SearchAccessQuery) -> List[Access]:
+        return self._admin_repository.search_created_access(search)

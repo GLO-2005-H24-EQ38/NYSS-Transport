@@ -3,7 +3,9 @@ from typing import List, Any
 from pymysql import IntegrityError
 
 from app.repository.database import Database
-from app.service.dtos.commuter_dtos import Commuter, CommuterFullInfo, CreditCard, BoughtAccess
+from app.service.dtos.admin_dtos import Access
+from app.service.dtos.commuter_dtos import Commuter, CommuterFullInfo, CreditCard, BoughtAccess, SearchAccessQuery
+from app.service.exceptions import ErrorResponseStatus, RequestErrorCause, RequestErrorDescription, InvalidCommuter
 
 
 class CommuterRepository:
@@ -40,13 +42,14 @@ class CommuterRepository:
         except IntegrityError:
             return False
 
-    def get_payment_method(self, email) -> str | None:
+    def get_payment_info(self, email) -> CreditCard | None:
 
-        commuter_data = self.database.get(email)
-        if commuter_data['credit_card'] is None:
-            return None
+        payment_info = self.database.get_card_info(email)
+        if payment_info:
+            return payment_info
         else:
-            return commuter_data['credit_card']
+            raise InvalidCommuter(ErrorResponseStatus.NOT_FOUND, RequestErrorCause.NOT_FOUND,
+                                  RequestErrorDescription.NOT_FOUND_DESCRIPTION)
 
     def add_bought_access(self, email, bought_access: List[BoughtAccess]):
         commuter_data = self.database.get(email)
@@ -56,6 +59,9 @@ class CommuterRepository:
     def get_bought_access(self, email) -> List[BoughtAccess]:
         commuter_data = self.database.get(email)
         return commuter_data['bought_access']
+
+    def search_access(self, search: SearchAccessQuery) -> List[Access]:
+        return self.database.search_access(search)
 
     def delete_payment_method(self, email) -> bool:
         """

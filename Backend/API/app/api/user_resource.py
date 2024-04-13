@@ -5,7 +5,7 @@ from app.repository.admin_repository import AdminRepository
 from app.repository.commuter_repository import CommuterRepository
 from app.service.commuter_service import CommuterService
 from app.service.dtos.admin_dtos import User, Token, AdminFullInfo
-from app.service.dtos.commuter_dtos import CommuterFullInfo, Commuter, CreditCard, Transaction
+from app.service.dtos.commuter_dtos import CommuterFullInfo, Commuter, CreditCard, Transaction, SearchAccessQuery
 from app.service.dtos.admin_dtos import Admin, Access
 from app.service.exceptions import RequestError, ErrorResponseStatus
 
@@ -159,6 +159,7 @@ def get_wallet():
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
 
+
 @app.route("/user/payment", methods=["DELETE"])
 def delete_payment_method():
     try:
@@ -173,6 +174,44 @@ def delete_payment_method():
         response = jsonify({"error": str(error)})
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
+
+
+@app.route("/user/access/search", methods=["GET"])
+def search_access():
+    try:
+        token = request.headers.get("Authorization")
+        data = request.get_json()
+        search_query = SearchAccessQuery(**data)
+        found_access = commuter_service.search_access(search_query, Token(token))
+
+        response = [access.to_json() for access in found_access]
+
+        return jsonify(response), 200
+    except RequestError as error:
+        response = jsonify(error.to_json())
+        response.status_code = error.error_response_status
+        return response
+    except TypeError as error:
+        response = jsonify({"error": str(error)})
+        response.status_code = ErrorResponseStatus.BAD_REQUEST.value
+        return response
+
+
+@app.route("/user/payment", methods=["GET"])
+def get_card_info():
+    try:
+        token = request.headers.get("Authorization")
+        response = commuter_service.get_card_info(Token(token))
+        return jsonify(response.to_json()), 200
+    except RequestError as error:
+        response = jsonify(error.to_json())
+        response.status_code = error.error_response_status
+        return response
+    except TypeError as error:
+        response = jsonify({"error": str(error)})
+        response.status_code = ErrorResponseStatus.BAD_REQUEST.value
+        return response
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8080, debug=True)

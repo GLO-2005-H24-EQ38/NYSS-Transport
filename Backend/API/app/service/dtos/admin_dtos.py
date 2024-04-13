@@ -118,8 +118,11 @@ class AdminFullInfo(Admin):
 
 
 class Access:
-    def __init__(self, accessName, price, accessType, duration, company, numberOfPassage=None):
-        self.id = uuid.uuid4().hex
+    TICKET = "ticket"
+    SUBSCRIPTION = "subscription"
+
+    def __init__(self, accessName, price, accessType, duration, company, accesId=None, numberOfPassage=None):
+        self.id = uuid.uuid4().hex if accesId is None else accesId
         self.name = accessName
         self.price = float(price)
         self.type = accessType

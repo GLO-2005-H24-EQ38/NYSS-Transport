@@ -59,10 +59,11 @@ class CommuterFullInfo(Commuter):
 
 
 class CreditCard():
-    def __init__(self, holder, cardNumber, expirationDate):
+    def __init__(self, holder, expirationDate, cardNumber=None, last4_card_digits=None):
         self.holder = self.__validate_holder(holder)
         self.cardNumber = self.__validate_cardNumber(cardNumber)
         self.expirationDate = self.__validate_cardExpirationDate(expirationDate)
+        self.last4_card_digits = last4_card_digits
 
     def __validate_holder(self, holder):
         if not holder and not holder.strip():
@@ -82,6 +83,13 @@ class CreditCard():
             raise InvalidCommuter(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
                                   RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
         return expirationDate
+
+    def to_json(self):
+        return {
+            "cardNumber": self.cardNumber if self.cardNumber else self.last4_card_digits,
+            "holder": self.holder,
+            "expirationDate": self.expirationDate,
+        }
 
 
 class Transaction():
@@ -137,6 +145,41 @@ class BoughtAccess():
         return access_type
 
 
+class SearchAccessQuery():
+    def __init__(self, name: str = None, accessType: str = None, company: str = None, price: float = None):
+        self.accessName = name
+        self.accessType = accessType
+        self.company = company
+        self.price = price
+
+    def searchQuery(self):
+        """Fuzzy search for access in the database."""
+
+        query = "SELECT * FROM access WHERE 1=1"
+
+        parameters = []
+
+        if self.accessName:
+            query += " AND LOWER(name) LIKE LOWER(%s)"
+            parameters.append('%' + ' '.join(map(re.escape, self.accessName.split())) + '%')
+
+        if self.accessType:
+            query += " AND LOWER(type) LIKE LOWER(%s)"
+            parameters.append('%' + ' '.join(map(re.escape, self.accessType.split())) + '%')
+
+        if self.company:
+            query += " AND LOWER(company) LIKE LOWER(%s)"
+            parameters.append('%' + ' '.join(map(re.escape, self.company.split())) + '%')
+
+        if self.price:
+            query += " AND price <= %s"
+            parameters.append(self.price)
+
+        query += ";"
+
+        return query, parameters
+
+
 def generate_bought_access_list(access, expiration_date, quantity):
     transaction_number = uuid.uuid4().hex  # Generate a single transaction number
     bought_access_list = []
@@ -144,10 +187,3 @@ def generate_bought_access_list(access, expiration_date, quantity):
         bought_access = BoughtAccess(access, expiration_date, transaction_number)
         bought_access_list.append(bought_access)
     return bought_access_list
-
-
-if __name__ == '__main__':
-    commuter = CommuterFullInfo("name", "password", "address", "email@email.com", "0123456789", "dateOfBirth").to_json()
-    print(commuter)
-    if ("  ".strip()):
-        print("True")
