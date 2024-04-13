@@ -87,6 +87,7 @@ def login():
 
 
 @app.route("/user/admin/access", methods=["POST"])
+@cross_origin()
 def create_access():
     try:
         token = request.headers.get("Authorization")
@@ -105,6 +106,7 @@ def create_access():
 
 
 @app.route("/user/payment", methods=["POST"])
+@cross_origin()
 def add_payment_method():
     try:
         token = request.headers.get("Authorization")
@@ -123,6 +125,7 @@ def add_payment_method():
 
 
 @app.route("/user/access/checkout", methods=["GET"])
+@cross_origin()
 def buy_access():
     try:
         token = request.headers.get("Authorization")
@@ -130,7 +133,7 @@ def buy_access():
         data = request.get_json()
         transaction = Transaction(**data)
         response = commuter_service.buy_access(Token(token), cvc, transaction)
-        # Assuming buy_access returns a list of BoughtAccess objects
+
         bought_access_json = [bought_access.to_json() for bought_access in response]
         return jsonify(bought_access_json), 200
     except RequestError as error:
@@ -144,6 +147,7 @@ def buy_access():
 
 
 @app.route("/user/access", methods=["GET"])
+@cross_origin()
 def get_wallet():
     try:
         token = request.headers.get("Authorization")
@@ -161,6 +165,7 @@ def get_wallet():
 
 
 @app.route("/user/payment", methods=["DELETE"])
+@cross_origin()
 def delete_payment_method():
     try:
         token = request.headers.get("Authorization")
@@ -177,6 +182,7 @@ def delete_payment_method():
 
 
 @app.route("/user/access/search", methods=["GET"])
+@cross_origin()
 def search_access():
     try:
         token = request.headers.get("Authorization")
@@ -198,6 +204,7 @@ def search_access():
 
 
 @app.route("/user/payment", methods=["GET"])
+@cross_origin()
 def get_card_info():
     try:
         token = request.headers.get("Authorization")
