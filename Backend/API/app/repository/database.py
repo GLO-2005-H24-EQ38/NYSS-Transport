@@ -1,5 +1,8 @@
+import datetime
 import json
 import os
+from decimal import Decimal
+
 import pymysql
 from dotenv import load_dotenv
 
@@ -124,7 +127,32 @@ class Database:
 
         return access_list
 
+    def get_commuter_full_info(self, email: str) -> CommuterFullInfo | None:
+        request = "SELECT * FROM user WHERE email = %s and role = 'commuter'"
+        self.cursor.execute(request, email)
+        result = self.cursor.fetchall()
+
+        if result:
+            print(result)
+            print(result[0][4].strftime("%Y-%m-%d"))
+            commuter = CommuterFullInfo(
+                email=result[0][0],
+                name=result[0][1],
+                password=result[0][2],
+                address=result[0][3],
+                dateOfBirth=result[0][4].strftime("%Y-%m-%d"),
+                tel=str(result[0][5])
+            )
+            return commuter
+        else:
+            return None
+
     def close(self):
         self.cursor.close()
         self.connection.close()
         print("Database connection closed")
+
+
+if __name__ == '__main__':
+    num = str(Decimal('1234567890'))
+    print(num)
