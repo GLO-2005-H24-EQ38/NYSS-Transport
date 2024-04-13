@@ -118,8 +118,6 @@ BEGIN
         ) SEPARATOR ','
     ) INTO access_created;
 
-    SET access_created = CONCAT('[',access_created, ']');
-
     RETURN access_created;
 END //
 DELIMITER ;
