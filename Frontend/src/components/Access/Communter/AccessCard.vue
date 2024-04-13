@@ -1,10 +1,20 @@
 <script>
+import stmLogo from '@/assets/stm_logo.png';
+import rtcLogo from '@/assets/rtc_logo.jpg';
+
 export default {
   name: "AccessCard",
+  props: {
+    access: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
     return {
       added: false,
-      quantity: 1
+      quantity: 1,
+      logo: ''
     }
   },
   methods: {
@@ -17,7 +27,20 @@ export default {
     },
     incrementQuantity() {
       this.quantity = this.quantity + 1;
+    },
+    getLogo() {
+      if (this.access.company === 'STM') {
+        this.logo = stmLogo;
+      } else if (this.access.company === 'RTC') {
+        this.logo = rtcLogo;
+      } else {
+        this.logo = stmLogo;
+      }
     }
+  },
+  created() {
+    if (this.access)
+      this.getLogo();
   }
 }
 </script>
@@ -26,18 +49,18 @@ export default {
   <div class="access-card">
     <img
         style="object-fit: contain"
-        src="../../../assets/stm_logo.png"
+        :src="this.logo"
         alt="stm"/>
     <div class="card-body">
       <div class="card-title" style="display: flex; flex-direction: row">
         <div style="flex: 1">
-          2 Passages
+          {{ this.access.accessName }}
         </div>
         <div style="flex: 1; display: flex; justify-content: end; align-items: end">
-          $3.75
+          $ {{ this.access.price }}
         </div>
       </div>
-      <div class="card-text">Type: Ticket</div>
+      <div class="card-text">Type: {{ this.access.accessType }}</div>
     </div>
     <div style="margin: 1rem;">
       <div @click="added = true" v-if="!added" style="width: 100%" class="btn btn-primary btn-lg btn-block">

@@ -1,6 +1,34 @@
 <script>
+import {getUser} from "@/api/getuser.js";
+
 export default {
   name: "UserInfo",
+  data() {
+    return {
+      user: {
+        name: '',
+        email: '',
+        tel: '',
+        address: '',
+        birthDate: '',
+        company: '',
+      }
+    }
+  },
+  methods: {
+    async getUserInfo() {
+      const res = await getUser();
+      this.user.name = res.name;
+      this.user.address = res.address;
+      this.user.email = res.email;
+      this.user.tel = res.tel;
+      this.user.birthDate = res.dateOfBirth;
+      this.user.company = res.company;
+    }
+  },
+  mounted() {
+    this.getUserInfo()
+  }
 }
 </script>
 
@@ -9,32 +37,32 @@ export default {
     <div class="user-information-header">
       <div style="display: flex; justify-content: center; align-items: center; flex-direction: column">
       <img src="../../assets/samy.jpeg" width="100rem" style="border-radius: 1rem; object-fit: contain" alt="The One True Samy"/>
-    <div style="font-weight: bold; flex: 1">Samy K.</div>
+    <div style="font-weight: bold; flex: 1">{{ this.user.name }}</div>
           </div>
     <div id="section-1" style="margin-left: 1rem; flex: 2; display: flex; justify-content: center; align-items: flex-start; flex-direction: column">
       <div style="display:flex; flex-direction: column;">
         <div style="font-weight: bold">Email Address:</div>
-        <div>samy_khalfallah@nyss-support.ca</div>
+        <div>{{ this.user.email }}</div>
       </div>
       <div style="display:flex; flex-direction: column;">
         <div style="font-weight: bold">Phone Number:</div>
-        <div>(418) 555-SAMY</div>
+        <div>{{this.user.tel}}</div>
       </div>
     </div>
     <div id="section-2" style="margin-left: 1rem; flex: 2; display: flex; justify-content: center; align-items: flex-start; flex-direction: column">
       <div style="display:flex; flex-direction: column;">
         <div style="font-weight: bold">Home Address:</div>
-        <div>The One True Samy Island, 4 Rivières, Quebec</div>
+        <div>{{ this.user.address }}</div>
       </div>
       <div style="display:flex; flex-direction: column;">
         <div style="font-weight: bold">Birth Date:</div>
-        <div>2000-01-01</div>
+        <div>{{ this.user.birthDate }}</div>
       </div>
     </div>
       <div v-if="this.$route.path === '/admin'" id="section-3" style="margin-left: 1rem; flex: 2; display: flex; justify-content: center; align-items: flex-start; flex-direction: column">
       <div style="display:flex; flex-direction: column;">
         <div style="font-weight: bold">Company:</div>
-        <div>Réseau de Transport de la Capitale</div>
+        <div>{{ this.user.company }}</div>
       </div>
     </div>
     </div>

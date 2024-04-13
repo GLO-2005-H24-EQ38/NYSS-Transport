@@ -20,6 +20,11 @@ export default {
         <div style="display: flex; justify-content: center; align-items: center;flex-direction: column; margin-bottom: 20px">
      <img src="@/assets/NYSS-Blue.png" alt="logo" style="width: auto; height: 100px; margin-bottom: 20px">
         <qrcode-vue :value="QRValue" size="250" level="Q"></qrcode-vue>
+          <img
+      class="qrcode__image"
+      src="@/assets/qrlogo.png"
+      alt="Chen Fengyuan"
+    />
       <div style="margin-top: 1rem">{{ QRValue }}</div>
 <!--          <div style="display: flex; justify-content: center; align-items: center; margin-top: 1rem">-->
 <!--            <button class="btn btn-primary btn-block" data-bs-dismiss="modal">Redeem Now</button>-->
@@ -53,6 +58,17 @@ export default {
   justify-content: center;
   align-items: center;
   z-index: 1050;
+}
+.qrcode__image {
+  border-radius: 2rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.25);
+  height: 12%;
+  left: 50%;
+  overflow: hidden;
+  position: absolute;
+  top: 54%;
+  transform: translate(-50%, -50%);
+  width: auto;
 }
 
 .modal-content {
