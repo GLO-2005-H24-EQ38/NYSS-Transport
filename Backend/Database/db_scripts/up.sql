@@ -25,7 +25,7 @@ CREATE TABLE company (
 );
 
 CREATE TABLE access (
-    id integer,
+    id varchar(100),
     name varchar(100) NOT NULL ,
     price float NOT NULL ,
     company varchar(100),
@@ -54,14 +54,14 @@ CREATE TABLE admin(
 );
 
 CREATE TABLE ticket(
-    access integer,
+    access varchar(100),
     passes integer NOT NULL,
     PRIMARY KEY (access),
     FOREIGN KEY (access) REFERENCES access (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE subscription (
-    access integer,
+    access varchar(100),
     PRIMARY KEY (access),
     FOREIGN KEY (access) REFERENCES access (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
@@ -71,7 +71,7 @@ CREATE TABLE transaction (
     transactionNumber integer NOT NULL,
     creditCard BIGINT NOT NULL,
     user varchar(100) NOT NULL,
-    accessId integer NOT NULL ,
+    accessId varchar(100) NOT NULL ,
     transactionDate DATE NOT NULL ,
     expirationDate DATE NOT NULL ,
     PRIMARY KEY (accessNumber),
@@ -81,7 +81,7 @@ CREATE TABLE transaction (
 );
 
 CREATE TABLE suspendedAccess (
-    access integer,
+    access varchar(100),
     deletionDate DATE NOT NULL,
     PRIMARY KEY (access),
     FOREIGN KEY (access) REFERENCES access (id) ON UPDATE CASCADE ON DELETE CASCADE

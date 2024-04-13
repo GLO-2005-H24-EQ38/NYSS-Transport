@@ -79,7 +79,7 @@ BEGIN
 END //
 
 CREATE FUNCTION AddAccess(
-    p_access_id integer,
+    p_access_id VARCHAR(100),
     p_access_name VARCHAR(100),
     p_price FLOAT,
     p_company_name VARCHAR(100),

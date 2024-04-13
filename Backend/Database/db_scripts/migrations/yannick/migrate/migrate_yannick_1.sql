@@ -64,7 +64,7 @@ END //
 DELIMITER ;
 
 DELIMITER //
-CREATE PROCEDURE DeleteAccess(IN p_access_id INT)
+CREATE PROCEDURE DeleteAccess(IN p_access_id varchar(100))
 BEGIN
     DECLARE accessDuration INT;
     DECLARE deleteDate DATE;
