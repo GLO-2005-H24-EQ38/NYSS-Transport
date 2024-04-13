@@ -1,6 +1,24 @@
 <script>
+import {AddPaymentMethod} from "@/Objects.js";
+import {addPaymentMethod} from "@/api/payment.js";
+
 export default {
   name: "PaymentMethodForm",
+  data() {
+    return {
+      cardNumber: '',
+      holder: '',
+      expirationDate: '',
+    }
+  },
+  methods: {
+   async addCard() {
+      const paymentMethod = new AddPaymentMethod(parseInt(this.cardNumber), this.holder, this.expirationDate);
+      const res = await addPaymentMethod(paymentMethod);
+      console.log(res);
+      window.location.reload();
+    }
+  }
 }
 </script>
 <template>
@@ -13,22 +31,22 @@ export default {
       </div>
       <div class="modal-body">
         <div id="paymentMethod">
-        <form>
+        <form @submit.prevent="addCard">
           <div id="CardNumber">
             <label for="CardNumber">Card Number</label>
-            <input type="text" class="form-control" placeholder="1234 45678 9012 3456" aria-label="Username"
-                   aria-describedby="basic-addon1">
+            <input type="number" class="form-control" placeholder="1234 45678 9012 3456" aria-label="Username"
+                   v-model="cardNumber" aria-describedby="basic-addon1">
           </div>
           <div style="display: flex; flex-direction: row; margin-top: 1rem" >
             <div id="CardHolder" style="flex: 2; margin-left: 0.25rem">
               <label for="CardHolder">Card Holder Name:</label>
               <input type="text" class="form-control" placeholder="Elon Musk" aria-label="Username"
-                     aria-describedby="basic-addon1">
+                     v-model="holder" aria-describedby="basic-addon1">
             </div>
             <div id="ExpirationDate" style="flex:1; margin-left: 0.25rem;">
               <label for="ExpirationDate">Exp. Date</label>
               <input type="text" class="form-control" placeholder="01/23" aria-label="Username"
-                     aria-describedby="basic-addon1">
+                  v-model="expirationDate"   aria-describedby="basic-addon1">
             </div>
             <div id="CVV" style="flex: 1; margin-left: 0.25rem;">
               <label for="CVV">CVV</label>
@@ -37,7 +55,7 @@ export default {
             </div>
           </div>
           <div style="display: flex; justify-content: flex-end; margin-top: 1rem">
-            <button class="btn btn-primary">Add Card</button>
+            <button type="submit" class="btn btn-primary">Add Card</button>
           </div>
         </form>
       </div>

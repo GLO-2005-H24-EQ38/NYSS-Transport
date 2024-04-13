@@ -24,6 +24,12 @@ export class Admin {
         this.adminCode = adminCode;
 
     }
+}
 
-
+export class AddPaymentMethod {
+    constructor(cardNumber, holder, expirationDate) {
+        this.cardNumber = cardNumber;
+        this.expirationDate = expirationDate;
+        this.holder = holder;
+    }
 }

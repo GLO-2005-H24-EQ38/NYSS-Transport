@@ -1,5 +1,5 @@
 <script>
-import {Admin, Commuter} from "@/Users.js";
+import {Admin, Commuter} from "@/Objects.js";
 import {signUp} from "@/api/signup.js";
 
 export default {

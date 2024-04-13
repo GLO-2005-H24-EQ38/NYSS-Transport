@@ -12,7 +12,6 @@ export default {
     }
   },
   methods: {
-    // TODO A revoir avec userCookie
     async login() {
       if (this.loginOption === 'commuter') {
         const res = await loginCommuter(this.email, this.password);

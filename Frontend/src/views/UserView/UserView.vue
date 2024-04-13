@@ -9,6 +9,7 @@ export default {
   name: "UserView",
   components: {TransactionContainer, PaymentMethod, UserInfo},
   mounted() {
+    console.log(Cookies.get('commuterToken'));
     if (!Cookies.get('commuterToken')){
       this.$router.push('/login');
     }
