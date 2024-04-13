@@ -65,4 +65,14 @@ class AdminService():
         return new_access
 
     def search_created_access(self, search: SearchAccessQuery) -> List[Access]:
+        if search.type not in ["Ticket", "Subscription"]:
+            raise InvalidAdmin(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
+                               RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
         return self._admin_repository.search_created_access(search)
+
+    def get_admin_full_info(self, token: Token) -> AdminFullInfo:
+        if token.value not in self.logged_in_admin:
+            raise InvalidAdmin(ErrorResponseStatus.UNAUTHORIZED, RequestErrorCause.UNAUTHORIZED,
+                               RequestErrorDescription.UNAUTHORIZED_DESCRIPTION)
+        email = self.logged_in_admin[token.value]
+        return self._admin_repository.get_admin_full_info(email)

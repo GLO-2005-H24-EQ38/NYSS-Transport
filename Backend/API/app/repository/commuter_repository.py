@@ -71,3 +71,11 @@ class CommuterRepository:
             return self.database.delete_payment_method(email)
         except IntegrityError:
             return False
+
+    def get_commuter_full_info(self, email) -> CommuterFullInfo:
+        commuter_info =  self.database.get_commuter_full_info(email)
+        if commuter_info:
+            return commuter_info
+        else:
+            raise InvalidCommuter(ErrorResponseStatus.NOT_FOUND, RequestErrorCause.NOT_FOUND,
+                                  RequestErrorDescription.NOT_FOUND_DESCRIPTION)

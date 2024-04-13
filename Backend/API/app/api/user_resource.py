@@ -219,9 +219,10 @@ def get_card_info():
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
 
+
 @app.route("/user", methods=["GET"])
 @cross_origin()
-def get_user():
+def get_commuter():
     try:
         token = request.headers.get("Authorization")
         response = commuter_service.get_commuter_full_info(Token(token))
@@ -231,7 +232,23 @@ def get_user():
         response.status_code = error.error_response_status
         return response
     except TypeError as error:
-        print(error)
+        response = jsonify({"error": str(error)})
+        response.status_code = ErrorResponseStatus.BAD_REQUEST.value
+        return response
+
+
+@app.route("/user/admin", methods=["GET"])
+@cross_origin()
+def get_admin():
+    try:
+        token = request.headers.get("Authorization")
+        response = admin_service.get_admin_full_info(Token(token))
+        return jsonify(response.to_json()), 200
+    except RequestError as error:
+        response = jsonify(error.to_json())
+        response.status_code = error.error_response_status
+        return response
+    except TypeError as error:
         response = jsonify({"error": str(error)})
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
