@@ -11,12 +11,6 @@ class AdminRepository:
 
     def __init__(self, database):
         self.database = database
-        self._access = {
-            "dummy_access_id": Access(accessName="Dummy Access", price=10.0, accessType="Ticket", duration=4,
-                                      company="Dummy Company", numberOfPassage=3),
-            "dummy_access_sub_id": Access(accessName="Dummy Access", price=10.0, accessType="Subscription", duration=4,
-                                          company="Dummy Company")
-        }
 
     def signup_admin(self, new_admin: AdminFullInfo) -> bool:
         """
@@ -38,8 +32,8 @@ class AdminRepository:
         else:
             return None
 
-    def save_access(self, access: Access):
-        self._access[access.id] = access
+    def create_new_access(self, access: Access) -> Access:
+        return self.database.create_access(access)
 
     def get_acess_by_accessId(self, accessId: str) -> Access:
         try:

@@ -43,11 +43,11 @@ class AdminService():
             raise InvalidAdmin(ErrorResponseStatus.UNAUTHORIZED, RequestErrorCause.UNAUTHORIZED,
                                RequestErrorDescription.UNAUTHORIZED_DESCRIPTION)
 
-        if new_access.type not in ["Ticket", "Subscription"]:
+        if new_access.type not in ["ticket", "subscription"]:
             raise InvalidAdmin(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
                                RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
 
-        if new_access.type == "Ticket":
+        if new_access.type == "ticket":
             if new_access.numberOfPassage is None:
                 raise InvalidAdmin(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.MISSING_PARAMETER,
                                    RequestErrorDescription.MISSING_PARAMETER_DESCRIPTION)
@@ -59,10 +59,7 @@ class AdminService():
                                    RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
 
         # Stocker l'accès dans la base de données
-        self._admin_repository.save_access(new_access)
-
-        # Retourner l'accès créé
-        return new_access
+        return self._admin_repository.create_new_access(new_access)
 
     def search_created_access(self, search: SearchAccessQuery) -> List[Access]:
         if search.type not in ["Ticket", "Subscription"]:
