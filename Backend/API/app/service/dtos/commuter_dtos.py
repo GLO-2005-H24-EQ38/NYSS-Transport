@@ -86,7 +86,7 @@ class CreditCard():
 
     def to_json(self):
         return {
-            "cardNumber": self.cardNumber if self.cardNumber else self.last4_card_digits,
+            "cardNumber": self.last4_card_digits if self.last4_card_digits else self.cardNumber,
             "holder": self.holder,
             "expirationDate": self.expirationDate,
         }

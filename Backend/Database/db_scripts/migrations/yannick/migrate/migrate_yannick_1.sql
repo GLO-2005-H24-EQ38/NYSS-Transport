@@ -102,7 +102,7 @@ BEGIN
     WHERE user = p_email
     INTO credit_card_number, credit_card_holder, credit_card_expiration;
 
-    SET credit_card_info = CONCAT('{cardNumber: ', credit_card_number, ', holder: ', credit_card_holder, ', expirationDate: ', credit_card_expiration, '}');
+    SET credit_card_info = CONCAT('{"cardNumber": "', credit_card_number, '", "holder": "', credit_card_holder, '", "expirationDate": "', credit_card_expiration, '"}');
 
     RETURN credit_card_info;
 END //
