@@ -1,6 +1,7 @@
 <script>
 import {AddPaymentMethod} from "@/Objects.js";
 import {addPaymentMethod} from "@/api/payment.js";
+import $ from 'bootstrap/js/dist/modal.js';
 
 export default {
   name: "PaymentMethodForm",
@@ -16,19 +17,23 @@ export default {
   methods: {
    async addCard() {
       const paymentMethod = new AddPaymentMethod(parseInt(this.cardNumber), this.holder, this.expirationDate);
-      const res = await addPaymentMethod(paymentMethod);
-      console.log(res);
-      this.$emit('close');
+      const res = await addPaymentMethod(paymentMethod)
+
+      if (  "Successfully added payment method" === res.message ) {
+
+        this.$emit('close');
+      }
+
     }
   }
 }
 </script>
 <template>
-  <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+  <div class="modal fade" id="paymentMethodModal" aria-hidden="true" aria-labelledby="paymentMethodModalLabel" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-body" style="display: flex; justify-content: space-between">
-        <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Add Card</h1>
+        <h1 class="modal-title fs-5" id="paymentMethodModalLabel">Add Card</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -57,7 +62,7 @@ export default {
             </div>
           </div>
           <div style="display: flex; justify-content: flex-end; margin-top: 1rem">
-            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="addCard">Add Card</button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal"  @click="addCard">Add Card</button>
           </div>
         </div>
       </div>
@@ -65,7 +70,7 @@ export default {
     </div>
   </div>
 </div>
-  <div data-bs-target="#exampleModalToggle" data-bs-toggle="modal" class="addPayment" style="display: flex; justify-content: center; flex-direction: column; align-items: center;">
+  <div data-bs-target="#paymentMethodModal" data-bs-toggle="modal" class="addPayment" style="display: flex; justify-content: center; flex-direction: column; align-items: center;">
     <div style="font-size: 2rem"><i class="bi bi-plus-circle"></i></div>
     <div href="#" >Add Payment Method</div>
 </div>
