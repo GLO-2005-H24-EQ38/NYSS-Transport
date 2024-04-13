@@ -1,6 +1,7 @@
 import Cookies from "js-cookie";
+import { URL_API } from '/src/api/url.js'
 export const addPaymentMethod = async (paymentMethod) => {
-    const response = await fetch('http://localhost:8080/user/payment', {
+    const response = await fetch( URL_API +'user/payment', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -13,7 +14,7 @@ export const addPaymentMethod = async (paymentMethod) => {
 }
 
 export const getPaymentMethod = async () => {
-    const response = await fetch('http://localhost:8080/user/payment', {
+    const response = await fetch( URL_API + 'user/payment', {
         method: 'GET',
         headers: {
             'Authorization': Cookies.get('commuterToken')
@@ -28,7 +29,7 @@ export const getPaymentMethod = async () => {
 }
 
 export const deletePaymentMethod = async () => {
-    const response = await fetch('http://localhost:8080/user/payment', {
+    const response = await fetch( URL_API + 'user/payment', {
         method: 'DELETE',
         headers: {
             'Authorization': Cookies.get('commuterToken')

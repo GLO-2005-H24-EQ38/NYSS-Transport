@@ -1,7 +1,9 @@
+import { URL_API } from '/src/api/url.js';
+
 export const loginCommuter = async (email, password) => {
     const errorMsg = document.getElementById("error");
     errorMsg.innerText = "";
-    const response = await fetch('http://localhost:8080/user/login', {
+    const response = await fetch(URL_API + 'user/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -22,7 +24,7 @@ export const loginCommuter = async (email, password) => {
 
 export const loginAdmin = async (email, password, adminCode) => {
     const errorMsg = document.getElementById("error");
-    const response = await fetch('http://localhost:8080/user/login', {
+    const response = await fetch( URL_API + 'user/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

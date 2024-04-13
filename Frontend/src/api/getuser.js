@@ -1,13 +1,14 @@
 import Cookies from "js-cookie";
+import { URL_API } from '/src/api/url.js'
 
 export const getUser = async () => {
     let token, fetchURL;
     if (Cookies.get('commuterToken') === undefined || Cookies.get('commuterToken') === null) {
-        fetchURL = 'http://localhost:8080/user/admin';
+        fetchURL = URL_API +'user/admin';
         token = Cookies.get('adminToken');
     }
     else {
-        fetchURL = 'http://localhost:8080/user';
+        fetchURL = URL_API + 'user';
         token = Cookies.get('commuterToken');
     }
     const response = await fetch(fetchURL, {

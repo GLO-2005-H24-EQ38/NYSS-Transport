@@ -1,7 +1,7 @@
-export const URL = 'http://localhost:8080/';
+import { URL_API } from '/src/api/url.js'
 
 export const signUp = async (user) => {
-  const response = await fetch(URL + "user/signup", {
+  const response = await fetch(URL_API + "user/signup", {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
