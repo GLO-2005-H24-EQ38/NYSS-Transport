@@ -103,20 +103,16 @@ BEGIN
         INSERT INTO subscription (access) VALUES (p_access_id);
     END IF;
 
-    SET access_created = '';
-
-    SELECT GROUP_CONCAT(
-        CONCAT(
-            '{"accessId": "', p_access_id, '",',
-            '"accessName": "', p_access_name, '",',
-            '"price": "'p_price,'",',
-            '"accessType": "', p_access_type, '",',
-            '"duration": "', p_duration, '",',
-            '"company": "', p_company_name, '"',
-            IF(p_access_type = 'ticket', CONCAT(',"numberOfPassage": "', p_numberOfPassage), '",'),
-            '}'
-        ) SEPARATOR ','
-    ) INTO access_created;
+    SET access_created = CONCAT(
+    '{"accessId": "', p_access_id, '",',
+    '"accessName": "', p_access_name, '",',
+    '"price": "', p_price, '",',
+    '"accessType": "', p_access_type, '",',
+    '"duration": "', p_duration, '",',
+    '"company": "', p_company_name, '"',
+    IF(p_access_type = 'ticket', CONCAT(',"numberOfPassage": "', p_numberOfPassage, '"'), ''),
+    '}'
+);
 
     RETURN access_created;
 END //
