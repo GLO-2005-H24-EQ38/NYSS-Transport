@@ -25,11 +25,17 @@ DECLARE access_duration INT;
 -- Declare variables for credit card details
 DECLARE credit_card_number BIGINT;
 
+-- Check if access is not suspended
+IF ( SELECT suspended FROM access WHERE id = p_access_id AND suspended = TRUE) THEN
+    SIGNAL SQLSTATE '45000'
+    SET MESSAGE_TEXT = 'Access is suspended';
+END IF;
+
 
 -- Retrieve access details
 SELECT A.name, A.price, A.type, A.duration, A.company
 FROM access A
-WHERE A.id = p_access_id
+WHERE A.id = p_access_id AND suspended = FALSE
 INTO access_name, access_price, access_type, access_duration, access_company;
 
 -- generate access number
@@ -63,7 +69,7 @@ BEGIN
     DECLARE accessDuration INT;
     DECLARE deleteDate DATE;
 
-    IF (SELECT id FROM access WHERE id = p_access_id) IS NULL THEN
+    IF NOT EXISTS (SELECT * FROM access WHERE id = p_access_id) THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Access does not exist';
     END IF;
@@ -80,6 +86,28 @@ END //
 DELIMITER ;
 
 
+-- function to return credit card information
+DROP FUNCTION IF EXISTS GetCreditCard;
+DELIMITER //
+CREATE FUNCTION GetCreditCard(p_email VARCHAR(100))
+RETURNS VARCHAR(10000) DETERMINISTIC
+BEGIN
+    DECLARE credit_card_number BIGINT;
+    DECLARE credit_card_holder VARCHAR(100);
+    DECLARE credit_card_expiration VARCHAR(5);
+    DECLARE credit_card_info VARCHAR(10000);
+
+    SELECT creditCard, holderName, expirationDate
+    FROM commuter JOIN creditCard ON commuter.creditCard = creditCard.number
+    WHERE user = p_email
+    INTO credit_card_number, credit_card_holder, credit_card_expiration;
+
+    SET credit_card_info = CONCAT('{cardNumber: ', credit_card_number, ', holder: ', credit_card_holder, ', expirationDate: ', credit_card_expiration, '}');
+
+    RETURN credit_card_info;
+END //
+
+
 -- example of a transaction with credit card present
 SET @transaction_number = 1;
 SET @p_email = 'user1@example.com';
@@ -91,4 +119,5 @@ SET @result = BuyAccess(1, @transaction_number, @p_email, 1);
 -- SET @result = BuyAccess(1, @transaction_number, @p_email, 1);
 
 CALL DeleteAccess(1);
+
 
