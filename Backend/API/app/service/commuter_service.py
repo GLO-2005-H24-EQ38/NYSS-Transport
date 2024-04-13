@@ -115,3 +115,13 @@ class CommuterService():
         card_info = self._commuter_repository.get_payment_info(email)
 
         return card_info
+
+    def get_commuter_full_info(self, token: Token) -> CommuterFullInfo:
+        if token.value not in self._logged_in_commuter:
+            raise InvalidCommuter(ErrorResponseStatus.UNAUTHORIZED, RequestErrorCause.UNAUTHORIZED,
+                                  RequestErrorDescription.UNAUTHORIZED_DESCRIPTION)
+
+        email = self._logged_in_commuter[token.value]
+        user_info = self._commuter_repository.get_commuter_full_info(email)
+
+        return user_info
