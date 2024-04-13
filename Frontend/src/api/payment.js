@@ -31,5 +31,4 @@ export const deletePaymentMethod = async () => {
         }
     });
     console.log(response);
-    return await response.json();
 }
