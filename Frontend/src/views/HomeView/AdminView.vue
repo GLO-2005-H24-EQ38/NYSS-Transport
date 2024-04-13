@@ -3,26 +3,20 @@ import UserInfo from "@/components/CommuterProfile/UserInfo.vue";
 import AccessManager from "@/components/Access/Admin/AccessManager.vue";
 import AdminAccessContainer from "@/components/Access/Admin/AdminAccessContainer.vue";
 import AdminAccessUnit from "@/components/Access/Admin/AdminAccessUnit.vue";
-import {tokensList} from "@/api/login.js";
+import Cookies from "js-cookie";
 
 export default {
   name: "AdminView",
   components: {AdminAccessUnit, AdminAccessContainer, AccessManager, UserInfo},
   data() {
-    // TODO A revoir avec userCookie
     return {
-      tokens: tokensList
     }
   },
-  // TODO A revoir avec userCookie
   mounted() {
-    if (this.tokens.length === 0) {
+    if (!Cookies.get('adminToken')) {
       this.$router.push('/login');
     }
   },
-  unmounted() {
-    this.tokens = [];
-  }
 }
 </script>
 

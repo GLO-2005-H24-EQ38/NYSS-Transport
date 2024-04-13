@@ -1,25 +1,20 @@
 <script>
 import AccessContainer from "@/components/Access/Communter/AccessContainer.vue";
-import {tokensList} from "@/api/login.js";
+import Cookies from "js-cookie";
 
 export default {
   name: "HomeView",
   components: {AccessContainer},
   data() {
     return {
-          // TODO A revoir avec userCookie
-      tokens: tokensList
+
     }
   },
-  // TODO A revoir avec userCookie
   mounted() {
-    if (this.tokens.length === 0) {
+    if (!Cookies.get('commuterToken')) {
       this.$router.push('/login');
     }
   },
-  unmounted() {
-    this.tokens = [];
-  }
 }
 </script>
 

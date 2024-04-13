@@ -28,21 +28,16 @@ export default {
     async createAccount() {
       if (this.signUpOption === 'commuter') {
         const commuter = new Commuter(this.name, this.email, this.address, this.tel, this.password, this.dateOfBirth)
-        if(await signUp(commuter)) {
-          const token = await signUp(commuter);
-          console.log(token);
-        } else {
+        if(!await signUp(commuter)) {
           console.error('Failed to Sign Up Commuter')
         }
       } else {
         const admin = new Admin(this.name, this.email, this.address, this.tel, this.password, this.dateOfBirth, this.adminCode, this.company)
-        if(await signUp(admin)) {
-          const token = await signUp(admin);
-          console.log(token);
-        } else {
+        if(!await signUp(admin)) {
           console.error('Failed to Sign Up Admin')
         }
       }
+      this.$router.push('/login');
     }
   }
 }

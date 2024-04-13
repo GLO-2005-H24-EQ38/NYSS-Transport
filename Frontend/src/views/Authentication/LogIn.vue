@@ -1,6 +1,6 @@
 <script>
-import {loginAdmin, loginCommuter, tokensList} from "@/api/login.js";
-
+import {loginAdmin, loginCommuter} from "@/api/login.js";
+import Cookies from 'js-cookie';
 export default {
   name: "LogIn",
   data() {
@@ -18,13 +18,16 @@ export default {
         const res = await loginCommuter(this.email, this.password);
         console.log("Login Commuter")
         if(res.token)
-          tokensList.push(res.token);
+          Cookies.set('commuterToken', res.token, { expires: 7});
+          Cookies.remove('adminToken');
+
           this.$router.push('/');
       } else {
         const res = await loginAdmin(this.email, this.password, this.adminCode);
         console.log("Login Admin")
         if(res.token)
-          tokensList.push(res.token);
+          Cookies.set('adminToken', res.token, { expires: 7 });
+          Cookies.remove('commuterToken');
           this.$router.push('/admin');
       }
     }

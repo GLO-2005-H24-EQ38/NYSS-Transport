@@ -2,12 +2,17 @@
 import PaymentMethod from "@/components/CommuterProfile/PaymentMethod.vue";
 
 import UserInfo from "@/components/CommuterProfile/UserInfo.vue";
-import AccessCard from "@/components/Access/Communter/AccessCard.vue";
 import TransactionContainer from "@/components/CommuterProfile/TransactionContainer.vue";
+import Cookies  from "js-cookie";
 
 export default {
   name: "UserView",
-  components: {TransactionContainer, AccessCard, PaymentMethod, UserInfo}
+  components: {TransactionContainer, PaymentMethod, UserInfo},
+  mounted() {
+    if (!Cookies.get('commuterToken')){
+      this.$router.push('/login');
+    }
+  }
 }
 </script>
 
