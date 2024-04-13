@@ -31,11 +31,11 @@ export default {
       </div>
     </div>
     <div class="nav-container" style="flex:1; justify-content: right">
-      <div class="nav-options" v-if="this.$route.path !== '/admin'"
+      <div class="nav-options" v-if="this.$route.path === '/' || this.$route.path === '/user'"
            @click="this.$router.push('/')">
         Home
       </div>
-      <div class="nav-options" v-if="this.$route.path !== '/admin'"
+      <div class="nav-options" v-if="this.$route.path === '/' || this.$route.path === '/user'"
            @click="this.$router.push('/user')" >
         Profile
       </div>

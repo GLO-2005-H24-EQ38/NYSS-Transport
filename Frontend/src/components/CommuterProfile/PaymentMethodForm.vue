@@ -1,7 +1,7 @@
 <script>
 import {AddPaymentMethod} from "@/Objects.js";
 import {addPaymentMethod} from "@/api/payment.js";
-import $ from 'bootstrap/js/dist/modal.js';
+
 
 export default {
   name: "PaymentMethodForm",
@@ -55,8 +55,8 @@ export default {
               <input type="text" class="form-control" placeholder="01/23" aria-label="Username"
                   v-model="expirationDate"   aria-describedby="basic-addon1">
             </div>
-            <div id="CVV" style="flex: 1; margin-left: 0.25rem;">
-              <label for="CVV">CVV</label>
+            <div id="CVC" style="flex: 1; margin-left: 0.25rem;">
+              <label for="CVC">CVC</label>
               <input type="password" class="form-control" placeholder="123" aria-label="Username"
                      aria-describedby="basic-addon1">
             </div>
