@@ -35,15 +35,9 @@ class CommuterRepository:
         """
         Add or update payment method for the commuter with the given email.
         """
-        commuter_data = self.database.get(email)
-        if commuter_data:
-            if commuter_data['credit_card'] is None:
-                commuter_data['credit_card'] = credit_card
-            else:
-                print("Replacing existing credit card information")
-                commuter_data['credit_card'] = credit_card
-            return True
-        else:
+        try:
+            return self.database.add_payment_method(email, credit_card)
+        except IntegrityError:
             return False
 
     def get_payment_method(self, email) -> str | None:

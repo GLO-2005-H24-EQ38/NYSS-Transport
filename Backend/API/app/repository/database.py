@@ -3,7 +3,7 @@ import pymysql
 from dotenv import load_dotenv
 
 from app.service.dtos.admin_dtos import Admin, AdminFullInfo
-from app.service.dtos.commuter_dtos import Commuter, CommuterFullInfo
+from app.service.dtos.commuter_dtos import Commuter, CommuterFullInfo, CreditCard
 from app.service.exceptions import InvalidCommuter, RequestErrorDescription, RequestErrorCause, ErrorResponseStatus, \
     InvalidAdmin
 
@@ -76,3 +76,9 @@ class Database:
         else:
             raise InvalidAdmin(ErrorResponseStatus.UNAUTHORIZED, RequestErrorCause.UNAUTHORIZED,
                                RequestErrorDescription.UNAUTHORIZED_DESCRIPTION)
+
+    def add_payment_method(self, email: str, credit_card: CreditCard) -> bool:
+        request = f"CALL addCreditcard(%s, %s, %s, %s)"
+        self.cursor.execute(request, (credit_card.holder, credit_card.cardNumber, credit_card.expirationDate, email))
+
+        return True
