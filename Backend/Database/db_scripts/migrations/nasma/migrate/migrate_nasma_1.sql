@@ -109,11 +109,11 @@ BEGIN
         CONCAT(
             '{"accessId": "', p_access_id, '",',
             '"accessName": "', p_access_name, '",',
-            '"price": ', p_price, ',',
+            '"price": "'p_price,'",',
             '"accessType": "', p_access_type, '",',
-            '"duration": ', p_duration, ',',
+            '"duration": "', p_duration, '",',
             '"company": "', p_company_name, '"',
-            IF(p_access_type = 'ticket', CONCAT(',"numberOfPassage": ', p_numberOfPassage), ''),
+            IF(p_access_type = 'ticket', CONCAT(',"numberOfPassage": "', p_numberOfPassage), '",'),
             '}'
         ) SEPARATOR ','
     ) INTO access_created;
