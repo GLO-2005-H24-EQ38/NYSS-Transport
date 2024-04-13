@@ -19,8 +19,12 @@ export const getPaymentMethod = async () => {
             'Authorization': Cookies.get('commuterToken')
         }
     });
-    console.log(response);
-    return await response.json();
+    if (response.status === 200) {
+        return await response.json();
+    }
+    else {
+        return 0;
+    }
 }
 
 export const deletePaymentMethod = async () => {

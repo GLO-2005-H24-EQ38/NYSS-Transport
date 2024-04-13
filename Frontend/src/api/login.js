@@ -1,4 +1,3 @@
-export var tokensList = [];
 export const loginCommuter = async (email, password) => {
     const errorMsg = document.getElementById("error");
     errorMsg.innerText = "";
@@ -16,7 +15,6 @@ export const loginCommuter = async (email, password) => {
     } else {
         errorMsg.innerText = "Login Successful";
         errorMsg.style.color = "green";
-        tokensList.push(token);
     }
     console.log(token);
     return token;
