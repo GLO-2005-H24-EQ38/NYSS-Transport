@@ -126,14 +126,14 @@ DELIMITER ;
 
 -- TODO remove them eventually (sample data to check my methods)
  -- Inserting sample data into the company table
- INSERT INTO company (name) VALUES ('Company XYZ');
- INSERT INTO company (name) VALUES ('Company ABC');
+ INSERT INTO company (name) VALUES ('RTC');
+ INSERT INTO company (name) VALUES ('STM');
 
  -- Inserting sample data into the access table
- INSERT INTO access (id, name, price, company, type, duration) VALUES (1,'Access 1', 20.00, 'Company XYZ', 'ticket', 3);
- INSERT INTO access (id,name, price, company, type, duration) VALUES (2,'Access 2', 30.00, 'Company XYZ', 'subscription', 5);
- INSERT INTO access (id,name, price, company, type, duration) VALUES (3,'Access 3', 40.00, 'Company ABC', 'ticket', 7);
- INSERT INTO access (id,name, price, company, type, duration) VALUES (4,'Access 4', 50.00, 'Company ABC', 'subscription', 8);
+ INSERT INTO access (id, name, price, company, type, duration) VALUES (1,'Access 1', 20.00, 'RTC', 'ticket', 3);
+ INSERT INTO access (id,name, price, company, type, duration) VALUES (2,'Access 2', 30.00, 'RTC', 'subscription', 5);
+ INSERT INTO access (id,name, price, company, type, duration) VALUES (3,'Access 3', 40.00, 'STM', 'ticket', 7);
+ INSERT INTO access (id,name, price, company, type, duration) VALUES (4,'Access 4', 50.00, 'STM', 'subscription', 8);
 
  -- Inserting sample data into the user table
  INSERT INTO user (email, name, password, address, birthday, phone, role)
@@ -146,12 +146,12 @@ DELIMITER ;
         (9876543210987654, 'Admin One', '11/24');
 
  -- Inserting sample data into the company table
- INSERT INTO company (name) VALUES ('Company A'), ('Company B');
+ INSERT INTO company (name) VALUES ('RTC'), ('STM');
 
  -- Inserting sample data into the access table
  INSERT INTO access (id, name, price, company, type, duration)
- VALUES (5, 'Access One', 10.00, 'Company A', 'ticket', 30),
-        (6, 'Access Two', 20.00, 'Company B', 'subscription', 14);
+ VALUES (5, 'Access 5', 10.00, 'RTC', 'ticket', 30),
+        (6, 'Access 6', 20.00, 'STM', 'subscription', 14);
 
  -- Inserting sample data into the commuter table
  INSERT INTO commuter (user, creditCard)
@@ -159,7 +159,7 @@ DELIMITER ;
 
  -- Inserting sample data into the admin table
  INSERT INTO admin (user, code, company)
- VALUES ('admin@example.com', 1234, 'Company A');
+ VALUES ('admin@example.com', 1234, 'RTC');
 
  -- Inserting sample data into the ticket table
  INSERT INTO ticket (access, passes)

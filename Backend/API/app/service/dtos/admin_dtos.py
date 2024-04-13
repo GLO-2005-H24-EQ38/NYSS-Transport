@@ -113,7 +113,8 @@ class AdminFullInfo(Admin):
             "email": self.email,
             "address": self.address,
             "tel": self.tel,
-            "dateOfBirth": self.date_of_birth
+            "dateOfBirth": self.date_of_birth,
+            "company": self.company
         }
 
 
