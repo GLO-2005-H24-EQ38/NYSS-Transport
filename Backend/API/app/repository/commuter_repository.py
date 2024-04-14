@@ -47,6 +47,7 @@ class CommuterRepository:
         Retrieve payment information of a commuter based on email.
         """
         payment_info = self.database.get_card_info(email)
+        print(payment_info)
         if payment_info:
             return payment_info
         else:
