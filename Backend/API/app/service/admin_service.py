@@ -116,4 +116,7 @@ class AdminService():
         return token.value in self.logged_in_admin
 
     def get_companies_names(self):
+        """
+         Retrieves all the companies.
+         """
         return self._admin_repository.get_companies_names()
