@@ -59,7 +59,7 @@ class CommuterRepository:
         return commuter_data['bought_access']
 
     def search_access(self, search: SearchAccessQuery) -> List[Access]:
-        return self.database.search_access(search)
+        return self.database.commuter_search_access(search)
 
     def delete_payment_method(self, email) -> bool:
         """

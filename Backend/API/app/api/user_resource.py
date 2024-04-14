@@ -72,7 +72,7 @@ def login():
         return response
 
 
-@app.route("/user/admin/access", methods=["POST"])
+@app.route("/admin/access", methods=["POST"])
 @cross_origin()
 def create_access():
     try:
@@ -127,10 +127,10 @@ def buy_access():
         response = jsonify(error.to_json())
         response.status_code = error.error_response_status
         return response
-    # except TypeError as error:
-    #     response = jsonify({"error": str(error)})
-    #     response.status_code = ErrorResponseStatus.BAD_REQUEST.value
-    #     return response
+    except TypeError as error:
+        response = jsonify({"error": str(error)})
+        response.status_code = ErrorResponseStatus.BAD_REQUEST.value
+        return response
 
 
 @app.route("/user/access", methods=["GET"])
@@ -170,12 +170,32 @@ def delete_payment_method():
 
 @app.route("/user/access/search", methods=["POST"])
 @cross_origin()
-def search_access():
+def commuter_access_search():
     try:
         token = request.headers.get("Authorization")
         data = request.get_json()
         search_query = SearchAccessQuery(**data)
         found_access = commuter_service.search_access(search_query, Token(token))
+
+        response = [access.to_json() for access in found_access]
+
+        return jsonify(response), 200
+    except RequestError as error:
+        response = jsonify(error.to_json())
+        response.status_code = error.error_response_status
+        return response
+    except TypeError as error:
+        response = jsonify({"error": str(error)})
+        response.status_code = ErrorResponseStatus.BAD_REQUEST.value
+        return response
+
+
+@app.route("/admin/access/search", methods=["GET"])
+@cross_origin()
+def admin_access_search():
+    try:
+        token = request.headers.get("Authorization")
+        found_access = admin_service.search_created_access(Token(token))
 
         response = [access.to_json() for access in found_access]
 
@@ -224,7 +244,7 @@ def get_commuter():
         return response
 
 
-@app.route("/user/admin", methods=["GET"])
+@app.route("/admin", methods=["GET"])
 @cross_origin()
 def get_admin():
     try:

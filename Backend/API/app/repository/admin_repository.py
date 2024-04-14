@@ -35,16 +35,8 @@ class AdminRepository:
     def create_new_access(self, access: Access) -> Access:
         return self.database.create_access(access)
 
-    def get_acess_by_accessId(self, accessId: str) -> Access:
-        try:
-            access = self.database.get_access(accessId)
-            return access
-        except KeyError:
-            raise InvalidCommuter(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
-                                  RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
-
-    def search_created_access(self, search: SearchAccessQuery):
-        return self.database.search_access(search)
+    def search_created_access(self, email: str):
+        return self.database.admin_search_access(email)
 
     def get_admin_full_info(self, email: str) -> AdminFullInfo:
         admin_info = self.database.fetch_admin_full_info(email)
