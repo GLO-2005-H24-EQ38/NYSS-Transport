@@ -16,7 +16,7 @@ class CommuterRepository:
 
     def signup_commuter(self, new_commuter: CommuterFullInfo) -> bool:
         """
-        Add a new commuter to the database.
+        Add a new commuter.
         """
         try:
             return self.database.register_commuter(new_commuter)

@@ -14,7 +14,7 @@ class AdminRepository:
 
     def signup_admin(self, new_admin: AdminFullInfo) -> bool:
         """
-        Add a new admin to the database.
+        Add a new admin.
         """
         try:
             return self.database.register_admin(new_admin)
