@@ -1,16 +1,31 @@
 <script>
-import AccessCard from "@/components/Access/Communter/AccessCard.vue";
-import Transaction from "@/components/CommuterProfile/TransactionCard.vue";
+import AccessCard from '@/components/Access/Communter/AccessCard.vue'
+import Transaction from '@/components/CommuterProfile/TransactionCard.vue'
+import { getTransactions } from '@/api/transactions.js'
 
 export default {
-  name: "TransactionContainer",
-  components: {Transaction}
+  name: 'TransactionContainer',
+  components: { Transaction },
+  data() {
+    return {
+      transactions: []
+    }
+  },
+  methods: {
+    async fetchTransactions() {
+      this.transactions = await getTransactions()
+
+    }
+  },
+  mounted() {
+    this.fetchTransactions()
+  }
 }
 </script>
 
 <template>
-    <div class="transaction-container">
-    <Transaction v-for="index in 8" :key="index" />
+  <div class="transaction-container">
+    <Transaction v-for="transaction in this.transactions " :key="transaction.transactionNumber"  :transaction="transaction"/>
   </div>
 
 </template>

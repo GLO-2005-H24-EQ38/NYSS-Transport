@@ -2,7 +2,7 @@
 import PaymentMethod from '@/components/CommuterProfile/PaymentMethod.vue'
 import { Modal } from 'bootstrap'
 import { BuyAccessQuery } from '@/Objects.js'
-import { buyAccess } from '@/api/access.js'
+import { buyAccess } from '@/api/transactions.js'
 
 
 export default {

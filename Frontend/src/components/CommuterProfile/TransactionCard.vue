@@ -4,15 +4,28 @@ import QRCodeTicket from "@/components/CommuterProfile/QRCodeTicket.vue";
 export default {
   name: "TransactionCard",
   components: {QRCodeTicket},
+  props: {
+    transaction: {
+      type: Object,
+      required: true,
+    },
+  },
   data() {
     return {
-      accessNumber: "415875942154",
-      transactionNumber: "217000548",
-      expDate: "01/07/2024",
-      transactionDate: "01/05/2024",
-      QRValue: this.accessNumber,
+      accessNumber: "",
+      transactionNumber: "",
+      expDate: "",
+      transactionDate: "",
+      QRValue: null,
       showQRCode: false,
     }
+  },mounted() {
+    console.log(this.transaction)
+    this.accessNumber = this.transaction.accessNumber
+    this.transactionNumber = this.transaction.transactionNumber
+    this.expDate = this.transaction.expirationDate
+    this.transactionDate = this.transaction.transactionDate
+    this.QRValue = [this.accessNumber, this.transactionNumber, this.expDate, this.transactionDate]
   }
 }
 </script>
