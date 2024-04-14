@@ -89,21 +89,25 @@ CREATE TABLE suspendedAccess (
 
 
 DELIMITER //
-
+-- Trigger to check expiration date before inserting a new credit card
 CREATE TRIGGER checkExpirationDateBeforeInsert
 BEFORE INSERT ON creditCard
 FOR EACH ROW
 BEGIN
+    -- Declare variables
     DECLARE current_month INT;
     DECLARE current_year INT;
     DECLARE card_month INT;
     DECLARE card_year INT;
 
+    -- Extract current month and year
     SET current_month = MONTH(CURDATE());
     SET current_year = YEAR(CURDATE());
+    -- Extract month and year from the new credit card's expiration date
     SET card_month = SUBSTRING(NEW.expirationDate, 1, 2);
     SET card_year = SUBSTRING(NEW.expirationDate, 4, 2);
 
+    -- Check if the expiration date is in the future
     IF (card_year < RIGHT(YEAR(NOW()), 2)) OR
        (card_year = RIGHT(YEAR(NOW()), 2) AND card_month < MONTH(NOW())) THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Expiration date must be in the future';
@@ -114,24 +118,30 @@ DELIMITER ;
 
 DELIMITER //
 
+-- Event to delete suspended accesses daily
 CREATE EVENT deleteSuspendedAccess
 ON SCHEDULE  EVERY 1 DAY STARTS CURDATE() DO
 BEGIN
+    -- Declare variables
     DECLARE accessId INT;
     DECLARE complete integer DEFAULT FALSE;
     DECLARE cur CURSOR FOR SELECT access FROM suspendedAccess WHERE deletionDate <= CURDATE();
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET complete = TRUE;
 
     OPEN  cur;
+    -- Loop through suspended accesses and delete them
     deleteAccesses :LOOP
         FETCH cur INTO accessId;
+        -- Check if all accesses are processed
         IF (complete) THEN
             LEAVE deleteAccesses;
         END IF;
 
+        -- Delete the access
         DELETE FROM access WHERE id = accessId;
 
     end loop deleteAccesses;
+    -- Close cursor
     CLOSE cur;
 END//
 
