@@ -6,10 +6,9 @@ from typing import List
 
 import pymysql
 from dotenv import load_dotenv
-from pymysql import OperationalError
 
 from app.service.dtos.admin_dtos import Admin, AdminFullInfo, Access
-from app.service.dtos.commuter_dtos import Commuter, CommuterFullInfo, CreditCard, SearchAccessQuery, BoughtAccess
+from app.service.dtos.commuter_dtos import Commuter, CommuterFullInfo, CreditCard, SearchAccessQuery
 from app.service.exceptions import InvalidCommuter, RequestErrorDescription, RequestErrorCause, ErrorResponseStatus, \
     InvalidAdmin
 
@@ -107,10 +106,30 @@ class Database:
         else:
             return None
 
-    def search_access(self, search: SearchAccessQuery):
+    def commuter_search_access(self, search: SearchAccessQuery) -> List[Access]:
         request, parameters = search.searchQuery()
 
         self.cursor.execute(request, parameters)
+        result = self.cursor.fetchall()
+
+        access_list = []
+        for access in result:
+            access_list.append(Access(
+                accesId=access[0],
+                accessName=access[1],
+                price=access[2],
+                company=access[3],
+                accessType=access[4],
+                duration=access[5],
+                numberOfPassage=access[6] if access[4] == "ticket" else None
+            ))
+
+        return access_list
+
+    def admin_search_access(self, email: str) -> List[Access]:
+        request = "SELECT * FROM access WHERE company = (SELECT company FROM admin WHERE user = %s)"
+
+        self.cursor.execute(request, email)
         result = self.cursor.fetchall()
 
         access_list = []
@@ -188,38 +207,13 @@ class Database:
                 accessType=result["accessType"],
                 duration=result["duration"],
                 company=result["company"],
-                numberOfPassage=result.get("numberOfPassage") if result["accessType"] == "ticket" else None
+                numberOfPassage=result["numberOfPassage"] if result["accessType"] == "ticket" else None
             )
         else:
             raise InvalidAdmin(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
                                RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
 
-    def buy_access(self, email, transaction) -> List[BoughtAccess]:
 
-        try:
-            request = "SELECT BuyAccess(%s, %s, %s)"
-            self.cursor.execute(request, (transaction.quantity, email, transaction.accessId))
-            result = self.cursor.fetchall()
-
-            if result and result[0][0]:
-                result = json.loads(result[0][0])
-                bought_access_list = []
-                for access in result:
-                    bought_access_list.append(BoughtAccess(
-                        accessNumber=access["accessNumber"],
-                        price=access["price"],
-                        name=access["name"],
-                        accessType=access["accessType"],
-                        transactionDate=access["transactionDate"],
-                        expirationDate=access["expirationDate"],
-                        transactionNumber=access["transactionNumber"],
-                        company=access["company"],
-                        numberOfPassage=access.get("numberOfPassage") if access["accessType"] == "ticket" else None
-                    ))
-                return bought_access_list
-            else:
-                raise InvalidAdmin(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
-                                   RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
-        except OperationalError as error:
-            raise InvalidAdmin(ErrorResponseStatus.PAYMENT_REQUIRED, RequestErrorCause.PAYMENT_REQUIRED,
-                               RequestErrorDescription.PAYMENT_REQUIRED_DESCRIPTION, str(error))
+if __name__ == '__main__':
+    num = str(Decimal('1234567890'))
+    print(num)
