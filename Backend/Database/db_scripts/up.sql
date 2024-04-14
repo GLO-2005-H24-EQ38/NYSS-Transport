@@ -68,7 +68,7 @@ CREATE TABLE subscription (
 
 CREATE TABLE transaction (
     accessNumber VARCHAR(36),
-    transactionNumber integer NOT NULL,
+    transactionNumber BIGINT NOT NULL,
     creditCard BIGINT NOT NULL,
     user varchar(100) NOT NULL,
     accessId varchar(100) NOT NULL ,

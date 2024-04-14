@@ -118,18 +118,19 @@ def buy_access():
         cvc = request.headers.get("cvc")
         data = request.get_json()
         transaction = Transaction(**data)
-        response = commuter_service.buy_access(Token(token), cvc, transaction)
 
+        response = commuter_service.buy_access(Token(token), int(cvc), transaction)
         bought_access_json = [bought_access.to_json() for bought_access in response]
+
         return jsonify(bought_access_json), 200
     except RequestError as error:
         response = jsonify(error.to_json())
         response.status_code = error.error_response_status
         return response
-    except TypeError as error:
-        response = jsonify({"error": str(error)})
-        response.status_code = ErrorResponseStatus.BAD_REQUEST.value
-        return response
+    # except TypeError as error:
+    #     response = jsonify({"error": str(error)})
+    #     response.status_code = ErrorResponseStatus.BAD_REQUEST.value
+    #     return response
 
 
 @app.route("/user/access", methods=["GET"])

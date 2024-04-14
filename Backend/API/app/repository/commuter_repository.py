@@ -4,7 +4,8 @@ from pymysql import IntegrityError
 
 from app.repository.database import Database
 from app.service.dtos.admin_dtos import Access
-from app.service.dtos.commuter_dtos import Commuter, CommuterFullInfo, CreditCard, BoughtAccess, SearchAccessQuery
+from app.service.dtos.commuter_dtos import Commuter, CommuterFullInfo, CreditCard, BoughtAccess, SearchAccessQuery, \
+    Transaction
 from app.service.exceptions import ErrorResponseStatus, RequestErrorCause, RequestErrorDescription, InvalidCommuter
 
 
@@ -43,7 +44,6 @@ class CommuterRepository:
             return False
 
     def get_payment_info(self, email) -> CreditCard | None:
-
         payment_info = self.database.get_card_info(email)
         if payment_info:
             return payment_info
@@ -51,10 +51,8 @@ class CommuterRepository:
             raise InvalidCommuter(ErrorResponseStatus.NOT_FOUND, RequestErrorCause.NOT_FOUND,
                                   RequestErrorDescription.NOT_FOUND_DESCRIPTION)
 
-    def add_bought_access(self, email, bought_access: List[BoughtAccess]):
-        commuter_data = self.database.get(email)
-        if commuter_data:
-            commuter_data['bought_access'].extend(bought_access)
+    def buy_access(self, email, transaction: Transaction) -> List[BoughtAccess]:
+        return self.database.buy_access(email, transaction)
 
     def get_bought_access(self, email) -> List[BoughtAccess]:
         commuter_data = self.database.get(email)
@@ -73,9 +71,17 @@ class CommuterRepository:
             return False
 
     def get_commuter_full_info(self, email) -> CommuterFullInfo:
-        commuter_info =  self.database.get_commuter_full_info(email)
+        commuter_info = self.database.get_commuter_full_info(email)
         if commuter_info:
             return commuter_info
+        else:
+            raise InvalidCommuter(ErrorResponseStatus.NOT_FOUND, RequestErrorCause.NOT_FOUND,
+                                  RequestErrorDescription.NOT_FOUND_DESCRIPTION)
+
+    def get_acess_by_accessId(self, accessId: str) -> Access:
+        access = self.database.get_access(accessId)
+        if access:
+            return access
         else:
             raise InvalidCommuter(ErrorResponseStatus.NOT_FOUND, RequestErrorCause.NOT_FOUND,
                                   RequestErrorDescription.NOT_FOUND_DESCRIPTION)
