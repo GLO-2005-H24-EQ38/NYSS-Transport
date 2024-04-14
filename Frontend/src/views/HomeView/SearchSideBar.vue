@@ -84,6 +84,7 @@ export default {
             <select v-model="accessType">
               <option value="Ticket">Ticket</option>
               <option value="Subscription">Subscription</option>
+              <option value="">None</option>
             </select>
           </div>
         </div>
