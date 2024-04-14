@@ -52,7 +52,7 @@ class Database:
 
     def register_commuter(self, commuter: CommuterFullInfo) -> bool:
         """
-            Register a new commuter in the database.
+        Register a new commuter in the database.
         """
         request = f"CALL RegisterCommuter(%s, %s, %s, %s, %s, %s)"
         self.cursor.execute(request, (
@@ -62,7 +62,7 @@ class Database:
 
     def fetch_commuter(self, email: str) -> Commuter:
         """
-            Fetch commuter details from the database
+        Fetch commuter details from the database
         """
         request = "SELECT email, password FROM user WHERE email = %s"
         self.cursor.execute(request, (email,))
@@ -76,7 +76,7 @@ class Database:
 
     def register_admin(self, admin: AdminFullInfo) -> bool:
         """
-            Register a new admin in the database.
+        Register a new admin in the database.
         """
         request = f"CALL RegisterAdmin(%s, %s, %s, %s, %s, %s, %s, %s)"
         self.cursor.execute(request, (
@@ -87,7 +87,7 @@ class Database:
 
     def fetch_admin(self, email: str) -> Admin:
         """
-            Fetch commuter details from the database.
+        Fetch commuter details from the database.
         """
         request = "SELECT email, password, code FROM user JOIN admin WHERE email = %s AND user = email"
         self.cursor.execute(request, (email,))
@@ -101,7 +101,7 @@ class Database:
 
     def add_payment_method(self, email: str, credit_card: CreditCard) -> bool:
         """
-            Add a payment method (credit card) for a commuter.
+        Add a payment method (credit card) for a commuter in the database.
         """
         request = f"CALL addCreditcard(%s, %s, %s, %s)"
         self.cursor.execute(request, (credit_card.holder, credit_card.cardNumber, credit_card.expirationDate, email))
@@ -110,7 +110,7 @@ class Database:
 
     def delete_payment_method(self, email: str) -> bool:
         """
-            Delete a payment method (credit card) of a commuter.
+        Delete a payment method (credit card) for a commuter in the database.
         """
         request = f"CALL deleteCreditcard(%s)"
         self.cursor.execute(request, email)
@@ -118,7 +118,7 @@ class Database:
 
     def get_card_info(self, email: str) -> CreditCard | None:
         """
-            Retrieve credit card information of a commuter.
+        Retrieve credit card information of a commuter from the database.
         """
         request = "SELECT GetCreditCard(%s);"
         self.cursor.execute(request, email)
@@ -133,7 +133,7 @@ class Database:
 
     def commuter_search_access(self, search: SearchAccessQuery) -> List[Access]:
         """
-            Search for access options available for a commuter.
+        Search for access available for a commuter in the database.
         """
         request, parameters = search.searchQuery()
 
@@ -156,7 +156,7 @@ class Database:
 
     def admin_search_access(self, email: str) -> List[Access]:
         """
-            Search for access options available for an admin.
+        Search for access for an admin in the database.
         """
         request = (
             "SELECT access.*, suspendedAccess.deletionDate FROM access LEFT JOIN suspendedAccess ON access.id = suspendedAccess.access "
@@ -184,7 +184,7 @@ class Database:
 
     def fetch_commuter_full_info(self, email: str) -> CommuterFullInfo | None:
         """
-            Retrieve all the information of a commuter.
+        Retrieve all the information of a commuter from the database.
         """
         request = "SELECT * FROM user WHERE email = %s and role = 'commuter'"
         self.cursor.execute(request, email)
@@ -205,7 +205,7 @@ class Database:
 
     def fetch_admin_full_info(self, email: str) -> AdminFullInfo | None:
         """
-            Retrieve all the information of an admin.
+        Retrieve all the information of an admin from the database.
         """
         request = "SELECT email, name, password, address, birthday, phone, code, company FROM user JOIN admin WHERE email = %s AND user = email"
         self.cursor.execute(request, email)
@@ -228,7 +228,7 @@ class Database:
 
     def admin_create_access(self, access: Access) -> Access:
         """
-            Create a new access by admin.
+        Create new access by admin in the database.
         """
         request = "SELECT AddAccess(%s, %s, %s, %s, %s, %s, %s)"
         self.cursor.execute(request, (
@@ -252,7 +252,7 @@ class Database:
 
     def admin_suspend_access(self, access_id: str):
         """
-            Suspend access by admin.
+        Suspend access by admin in the database.
         """
         request = "CALL DeleteAccess(%s)"
         # try:
@@ -263,7 +263,7 @@ class Database:
 
     def buy_access(self, email, transaction) -> List[BoughtAccess]:
         """
-            Buy access by commuter.
+        Buy access by commuter in the database.
         """
         try:
             request = "SELECT BuyAccess(%s, %s, %s)"
@@ -299,7 +299,7 @@ class Database:
 
     def fetch_commuter_bought_access(self, email) -> List[BoughtAccess]:
         """
-            Retrieve all the access a commuter bought.
+        Retrieve all the access a commuter bought from the database.
         """
         request = "SELECT GetAccessBought(%s);"
         self.cursor.execute(request, email)

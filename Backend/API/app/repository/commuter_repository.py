@@ -43,6 +43,9 @@ class CommuterRepository:
             return False
 
     def get_payment_info(self, email) -> CreditCard | None:
+        """
+        Retrieve payment information of a commuter based on email.
+        """
         payment_info = self.database.get_card_info(email)
         if payment_info:
             return payment_info
@@ -51,17 +54,26 @@ class CommuterRepository:
                                   RequestErrorDescription.NOT_FOUND_DESCRIPTION)
 
     def buy_access(self, email, transaction: Transaction) -> List[BoughtAccess]:
+        """
+        Buy access by a commuter with the given email.
+        """
         return self.database.buy_access(email, transaction)
 
     def get_bought_access(self, email) -> List[BoughtAccess]:
+        """
+            Retrieve all bought access of a commuter based on email.
+        """
         return self.database.fetch_commuter_bought_access(email)
 
     def search_access(self, search: SearchAccessQuery) -> List[Access]:
+        """
+        Search for access for a commuter.
+        """
         return self.database.commuter_search_access(search)
 
     def delete_payment_method(self, email) -> bool:
         """
-        Add or update payment method for the commuter with the given email.
+            Delete payment method for the commuter with the given email.
         """
         try:
             return self.database.delete_payment_method(email)
@@ -69,6 +81,9 @@ class CommuterRepository:
             return False
 
     def get_commuter_full_info(self, email) -> CommuterFullInfo:
+        """
+            Retrieve all the information of a commuter based on email.
+        """
         commuter_info = self.database.fetch_commuter_full_info(email)
         if commuter_info:
             return commuter_info
@@ -77,6 +92,9 @@ class CommuterRepository:
                                   RequestErrorDescription.NOT_FOUND_DESCRIPTION)
 
     def get_acess_by_accessId(self, accessId: str) -> Access:
+        """
+            Retrieve all the information of access based on its access id.
+        """
         access = self.database.get_access(accessId)
         if access:
             return access
