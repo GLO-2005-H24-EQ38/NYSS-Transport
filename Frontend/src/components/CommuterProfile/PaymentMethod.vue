@@ -63,20 +63,18 @@ export default {
 </script>
 
 <template>
-  <div>
-    <div v-if="paymentExists" class="PaymentMethod"
-         style="display: flex; justify-content: flex-start; align-items: start; flex-direction: column">
-      <div style="display: flex; align-items: start; flex-direction: column">
-        <div style="display:flex; justify-content:center; align-items: center; font-weight: bold"><i
+    <div v-if="paymentExists" class="PaymentMethod">
+      <div class="paymentContainer" style="display: flex; align-items: start; flex-direction: row">
+        <div class="info" style="flex:3; display:flex;font-weight: bold; flex-direction: row"><i
             :class="icon"
-            style="margin-right:0.5rem; font-size:24px; color: #01356a"></i>Credit
-          Card ending in ···· {{ cardNumber.substring(1) }}
+            style="margin-right:0.5rem; font-size:24px; color: #01356a"></i>
+          ···· {{ cardNumber.substring(1)}} {{ ','  }}
+          <div style="display:flex; font-weight: bold">Exp. Date: {{ expDate }}
         </div>
-        <div style="display:flex; justify-content:flex-start; align-items: center; font-weight: bold">Exp. Date: {{ expDate }}
         </div>
-      </div>
-      <div style="width: 100%;display: flex; justify-content: flex-end;">
+        <div class="removeBtn" style="flex:1 ; width: 100%;display: flex; justify-content: flex-end;">
         <button :hidden="buyingAccess" class="btn btn-danger" @click="removeCard">Remove Card</button>
+      </div>
       </div>
     </div>
     <div v-else class="PaymentMethod">
@@ -85,16 +83,10 @@ export default {
         <button class="btn btn-primary" @click="this.$router.push('/user'); " style="background: #01356a">Go add Card</button>
       </div>
     </div>
-  </div>
 
 
 </template>
 
 <style scoped>
-.PaymentMethod {
-  background-color: #f1f1f1;
-  padding: 1rem;
-  margin: 0.5rem;
-  border-radius: 20px;
-}
+
 </style>

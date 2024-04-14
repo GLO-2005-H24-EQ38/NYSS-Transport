@@ -70,9 +70,8 @@ export default {
     </div>
   </div>
 </div>
-  <div data-bs-target="#paymentMethodModal" data-bs-toggle="modal" class="addPayment" style="display: flex; justify-content: center; flex-direction: column; align-items: center;">
-    <div style="font-size: 2rem"><i class="bi bi-plus-circle"></i></div>
-    <div href="#" >Add Payment Method</div>
+  <div data-bs-target="#paymentMethodModal" data-bs-toggle="modal" class="addPayment">
+    <a href="#" >Add Payment Method</a>
 </div>
 
 

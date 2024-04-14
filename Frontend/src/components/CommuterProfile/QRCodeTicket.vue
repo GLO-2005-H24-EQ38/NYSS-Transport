@@ -63,7 +63,7 @@ export default {
       </div>
     </div>
   </div>
-  <div class="btn btn-secondary" style="display: flex; justify-content: center; align-items: center" href="#"
+  <div class="btn btn-secondary" style="display: flex; justify-content: center; align-items: center; height: 3.25rem" href="#"
        data-bs-target="#qrCodeTicket" data-bs-toggle="modal">Show QR Code
   </div>
   <!--    <div class="modal-background">-->

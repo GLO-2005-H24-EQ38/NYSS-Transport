@@ -6,9 +6,9 @@ export default {
   components: {QRCodeTicket},
   data() {
     return {
-      accessNumber: "40001",
+      accessNumber: "415875942154",
       transactionNumber: "217000548",
-      expDate: "01/07/24",
+      expDate: "01/07/2024",
       transactionDate: "01/05/2024",
       QRValue: this.accessNumber,
       showQRCode: false,
@@ -18,27 +18,61 @@ export default {
 </script>
 
 <template>
-  <div class="access-card" style="position: relative">
-    <div class="expirationDate" style="display: flex; justify-content: center">
-         Expires on {{ expDate }}
+<!--  <div class="access-card" style="position: relative">-->
+<!--    <div class="expirationDate" style="display: flex; justify-content: center">-->
+<!--         Expires on {{ expDate }}-->
+<!--        </div>-->
+<!--    <img-->
+<!--        style="object-fit: contain"-->
+<!--        src="@/assets/stm_logo.png"-->
+<!--        alt="stm"/>-->
+<!--    <div class="card-body">-->
+<!--      <div class="card-title" style="display: flex; flex-direction: row">-->
+<!--        <div style="flex: 1">-->
+<!--         Access N.# : {{ accessNumber }}-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div style="display: flex; flex-direction: row">-->
+<!--        <div class="card-text" style="flex:1">Type: Ticket</div>-->
+<!--        <div class="card-text" style="flex:1; justify-content: flex-end; display: flex">Purchased : {{ transactionDate }}</div>-->
+<!--      </div>-->
+<!--      <div class="card-text">Transaction N.#: {{ transactionNumber }}</div>-->
+<!--    </div>-->
+<!--    <QRCodeTicket />-->
+<!--  </div>-->
+    <div class="access-card" style="position: relative">
+    <div class="expirationDate" style="display: flex; justify-content: center; flex-direction: row">
+      {{ 'Ticket' }} {{ "•" }}
         </div>
-    <img
-        style="object-fit: contain"
-        src="@/assets/stm_logo.png"
-        alt="stm"/>
+      <div class="expirationDate2" style="display: flex; justify-content: center; flex-direction: row">
+      {{ expDate }}
+        </div>
+<!--    <img-->
+<!--        style="object-fit: contain"-->
+<!--        src="@/assets/stm_logo.png"-->
+<!--        alt="stm"/>-->
     <div class="card-body">
-      <div class="card-title" style="display: flex; flex-direction: row">
+      <div class="card-title" style="display: flex; flex-direction: column">
         <div style="flex: 1">
-         Access N.# : {{ accessNumber }}
+         Access n.
+        </div>
+        <div style="flex: 1; font-size: 1.70rem; color: black">
+         {{ accessNumber }}
         </div>
       </div>
       <div style="display: flex; flex-direction: row">
-        <div class="card-text" style="flex:1">Type: Ticket</div>
-        <div class="card-text" style="flex:1; justify-content: flex-end; display: flex">Purchased : {{ transactionDate }}</div>
+        <div class="card-text" style="flex:1; justify-content: flex-start; display: flex">Purchased : {{ transactionDate }}</div>
       </div>
-      <div class="card-text">Transaction N.#: {{ transactionNumber }}</div>
+      <hr>
+      <div class="card-text">Transaction #</div>
+      <div class="card-text" style="margin-bottom: 1rem">{{ transactionNumber }}</div>
     </div>
+<!--      <div class="invalid">Invalid</div>-->
     <QRCodeTicket />
+      <img
+          class="logoPosition"
+        src="@/assets/rtc_logo.jpg"
+        alt="stm"/>
   </div>
 </template>
 
@@ -55,8 +89,7 @@ export default {
 
 .access-card img {
   transition: ease-in-out 0.25s;
-  width: 60%;
-  height: 7rem;
+  width: 35%;
   object-fit: contain;
 }
 
@@ -73,21 +106,59 @@ export default {
 }
 
 .expirationDate {
-  background-color: darkgreen;
+  padding: 1px;
   border: none;
+  position: absolute;
+  top: 5%;
+  border-top-right-radius: 0.5rem;
+  right: 25%;
+  font-size: small;
+  color: darkgray;
+  font-weight: bold;
+}
+
+.expirationDate2 {
+  padding: 1px;
+  border: none;
+  position: absolute;
+  top: 5%;
+  border-top-right-radius: 0.5rem;
+  right: 5%;
+  color: forestgreen;
+  font-size: small;
+  font-weight: bold;
+}
+
+.invalid {
+  border: none;
+  position: absolute;
+  top: 60%;
+  background-color: darkred;
+  padding: 0.5rem 1rem;
+  right: 5%;
   color: white;
+  font-size: small;
+  font-weight: bold;
+}
+
+.logoPosition {
+  padding: 1px;
+  border: none;
+  position: absolute;
+  top: 20%;
+
+  border-top-right-radius: 0.5rem;
+  right: 5%;
 }
 
 .card-title {
-  font-size: 1.25rem;
-  font-weight: bold;
-  color: #000000;
+  font-size: 1rem;
+  color: darkgray;
 }
 
 .card-text {
   font-size: 1rem;
-  color: #666;
-  flex-grow: 1;
+  color: darkgray;
 }
 
 .access-card:hover {
