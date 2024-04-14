@@ -2,6 +2,7 @@ import re
 import uuid
 from abc import ABC
 
+import random
 import bcrypt
 
 from app.service.exceptions import *
@@ -79,6 +80,7 @@ class AdminFullInfo(Admin):
 
     def __init__(self, name, password, address, email, tel, dateOfBirth, adminCode, company):
         super().__init__(email, password, adminCode)
+        self.__validate_code(adminCode)
         self.__check_missing_fields(name, address, tel, dateOfBirth, company)
         self.__validate_date_of_birth(dateOfBirth)
         self.__validate_phone_number(tel)
@@ -106,6 +108,23 @@ class AdminFullInfo(Admin):
         elif not re.match(AdminFullInfo.PHONE_NUMBER_REGEX, tel):
             raise RequestError(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
                                RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION, "tel")
+
+    def __validate_code(self, code):
+        try:
+            # Extract the random string and checksum from the code
+            random_string = code[:-1]
+            provided_checksum = int(code[-1])
+
+            # Calculate checksum
+            calculated_checksum = sum(ord(char) for char in random_string) % 10
+
+            # Check if the provided checksum matches the calculated checksum
+            if provided_checksum != calculated_checksum:
+                raise InvalidAdmin(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
+                                   RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION, "adminCode")
+        except BaseException:
+            raise RequestError(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
+                               RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION, "adminCode")
 
     def to_json(self):
         return {
@@ -149,3 +168,30 @@ class Access:
         if self.outOfSale:
             access_json["deletionDate"] = self.outOfSaleDate
         return access_json
+
+
+def generate_code():
+    """generate a random code for admin registration, with a checksum at the end.
+    this way the only to create an admin is to have the correct code provided by the issuer (NYSS developers)."""
+
+    # Generate a random 5-character alphanumeric string
+    random_string = ''.join(random.choices('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', k=6))
+
+    # Calculate checksum
+    checksum = sum(ord(char) for char in random_string) % 10
+
+    # Append checksum to the string
+    code = random_string + str(checksum)
+
+    return code
+
+
+if __name__ == '__main__':
+    # Example usage
+    generated_code = generate_code()
+    print("Generated code:", generated_code)
+
+    admin = AdminFullInfo("John Doe", "password", "123 Main St", "ssd@ss.com",
+                          "1234567890", "1990-01-01", "generated_code",
+                          "company")
+    print(admin.admin_code)

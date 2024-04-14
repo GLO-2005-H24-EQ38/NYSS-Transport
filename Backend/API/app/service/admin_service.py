@@ -51,9 +51,7 @@ class AdminService():
         Creates a new access in the system.
         """
         # Confirm that the commuter is logged in
-        if token.value not in self.logged_in_admin:
-            raise InvalidAdmin(ErrorResponseStatus.UNAUTHORIZED, RequestErrorCause.UNAUTHORIZED,
-                               RequestErrorDescription.UNAUTHORIZED_DESCRIPTION)
+        self.check_user_validity(token)
 
         # Verify that the access type is only ticket and subscription
         if new_access.type not in ["ticket", "subscription"]:
@@ -79,9 +77,7 @@ class AdminService():
         Retrieves the full information of an admin.
         """
         # Confirm that the commuter is logged in
-        if token.value not in self.logged_in_admin:
-            raise InvalidAdmin(ErrorResponseStatus.UNAUTHORIZED, RequestErrorCause.UNAUTHORIZED,
-                               RequestErrorDescription.UNAUTHORIZED_DESCRIPTION)
+        self.check_user_validity(token)
 
         # Retrieve the email based on the token
         email = self.logged_in_admin[token.value]
@@ -93,9 +89,8 @@ class AdminService():
         Searches all created access from the admin's company.
         """
         # Confirm that the commuter is logged in
-        if token.value not in self.logged_in_admin:
-            raise InvalidAdmin(ErrorResponseStatus.UNAUTHORIZED, RequestErrorCause.UNAUTHORIZED,
-                               RequestErrorDescription.UNAUTHORIZED_DESCRIPTION)
+        self.check_user_validity(token)
+
         return self._admin_repository.search_created_access(self.logged_in_admin[token.value])
 
     def suspend_access(self, access_id: str, token: Token):
@@ -103,11 +98,14 @@ class AdminService():
         Suspends an access from the company.
         """
         # Confirm that the commuter is logged in
+        self.check_user_validity(token)
+        self._admin_repository.suspend_access(access_id)
+        return "Successfully removed access from sale"
+
+    def check_user_validity(self, token):
         if token.value not in self.logged_in_admin:
             raise InvalidAdmin(ErrorResponseStatus.UNAUTHORIZED, RequestErrorCause.UNAUTHORIZED,
                                RequestErrorDescription.UNAUTHORIZED_DESCRIPTION)
-        self._admin_repository.suspend_access(access_id)
-        return "Successfully removed access from sale"
 
     def is_admin_logged_in(self, token: Token) -> bool:
         """
