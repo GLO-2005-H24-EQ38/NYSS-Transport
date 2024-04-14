@@ -6,7 +6,7 @@ from typing import List
 
 import pymysql
 from dotenv import load_dotenv
-from pymysql import OperationalError
+from pymysql import OperationalError, IntegrityError
 
 from app.service.dtos.admin_dtos import Admin, AdminFullInfo, Access
 from app.service.dtos.commuter_dtos import Commuter, CommuterFullInfo, CreditCard, SearchAccessQuery, BoughtAccess
@@ -128,8 +128,11 @@ class Database:
         return access_list
 
     def admin_search_access(self, email: str) -> List[Access]:
+        """request to get all the access created from a company"""
         request = (
-            "SELECT access.*, suspendedAccess.deletionDate FROM access LEFT JOIN suspendedAccess ON access.id = suspendedAccess.access "
+            "SELECT access.*, ticket.passes, suspendedAccess.deletionDate FROM access "
+            "LEFT JOIN ticket ON access.id = ticket.access "
+            "LEFT JOIN suspendedAccess ON access.id = suspendedAccess.access "
             "WHERE access.company = (SELECT company FROM admin WHERE user = %s)")
 
         self.cursor.execute(request, email)
@@ -145,9 +148,9 @@ class Database:
                 company=access[3],
                 accessType=access[4],
                 duration=access[5],
-                numberOfPassage=access[6] if access[4] == "ticket" else None,
-                outOfSale=True if access[7] else False,
-                outOfSaleDate=access[8] if access[7] else None
+                outOfSale=True if access[6] else False,
+                numberOfPassage=access[7] if access[4] == "ticket" else None,
+                deletionDate=access[8].strftime("%Y-%m-%d") if access[6] else None
             ))
 
         return access_list
@@ -213,11 +216,13 @@ class Database:
 
     def admin_suspend_access(self, access_id: str):
         request = "CALL DeleteAccess(%s)"
-        # try:
-        self.cursor.execute(request, access_id)
-        # except OperationalError as error:
-        #     raise InvalidAdmin(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
-        #                        RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION, str(error))
+        try:
+            self.cursor.execute(request, access_id)
+        except IntegrityError:
+            pass  # ignored request because the Access was already suspended
+        except OperationalError as error:
+            raise InvalidAdmin(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
+                               RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION, str(error))
 
     def buy_access(self, email, transaction) -> List[BoughtAccess]:
 
@@ -242,7 +247,8 @@ class Database:
                         transactionNumber=access["transactionNumber"],
                         company=access["company"],
                         outOfSale=True if access["outOfSale"] else False,
-                        outOfSaleDate=access.get("outOfSaleDate") if access["outOfSale"] is True else None,
+                        deletionDate=access.get("outOfSaleDate") if access[
+                                                                        "outOfSale"] is True else None,
                         numberOfPassage=access.get("numberOfPassage") if access["accessType"] == "ticket" else None
                     ))
                 return bought_access_list
@@ -258,6 +264,7 @@ class Database:
         self.cursor.execute(request, email)
         result = self.cursor.fetchall()
 
+        print(result)
         result = json.loads(result[0][0])
 
         bought_access_list = []
@@ -272,7 +279,7 @@ class Database:
                 transactionNumber=access["transactionNumber"],
                 company=access["company"],
                 outOfSale=True if access["outOfSale"] else False,
-                outOfSaleDate=access.get("outOfSaleDate") if access["outOfSale"] is True else None,
+                deletionDate=access.get("deletionDate") if access["outOfSale"] else None,
                 numberOfPassage=access.get("numberOfPassage") if access["accessType"] == "ticket" else None
             ))
 

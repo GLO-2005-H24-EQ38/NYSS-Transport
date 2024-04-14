@@ -112,11 +112,12 @@ BEGIN
             '"accessType": "', a.type, '",',
             '"transactionDate": "', t.transactionDate, '",',
             '"expirationDate": "', t.expirationDate, '",',
-            '"outOfSale": ',
-              EXISTS(SELECT 1 FROM suspendedAccess sus WHERE sus.access = a.id), ',',
-            '"transactionNumber": "', t.transactionNumber,
-             IF(a.type = 'ticket', CONCAT('", "numberOfPassage": "', tk.passes), ''),
-            '", "company": "', a.company, '"',
+            '"outOfSale": ', suspended, ',',
+            '"deletionDate": "',
+                IF(suspended, (SELECT deletionDate FROM suspendedAccess sus WHERE sus.access = a.id), 0), '",',
+            '"transactionNumber": "', t.transactionNumber, '",',
+            IF(a.type = 'ticket', CONCAT('"numberOfPassage": "', tk.passes, '",' ), ''),
+            '"company": "', a.company, '"',
             '}'
         ) SEPARATOR ','
     ) INTO access_bought_info

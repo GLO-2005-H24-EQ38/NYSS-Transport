@@ -107,7 +107,7 @@ class Transaction():
 class BoughtAccess():
     def __init__(self, name, price, accessType, company, accessNumber, expirationDate,
                  transactionDate, transactionNumber, numberOfPassage=None,
-                 outOfSale=False, outOfSaleDate=None):
+                 outOfSale=False, deletionDate=None):
         self.accessNumber = accessNumber
         self.price = float(price)
         self.accessName = name
@@ -118,7 +118,7 @@ class BoughtAccess():
         self.company = company
         self.numberOfPassage = numberOfPassage
         self.outOfSale = outOfSale
-        self.outOfSaleDate = outOfSaleDate
+        self.outOfSaleDate = deletionDate
 
     def to_json(self):
         access_json = {
@@ -135,7 +135,7 @@ class BoughtAccess():
         if self.numberOfPassage is not None:
             access_json["numberOfPassage"] = self.numberOfPassage
         if self.outOfSale:
-            access_json["outOfSaleDate"] = self.outOfSaleDate
+            access_json["deletionDate"] = self.outOfSaleDate
         return access_json
 
 
