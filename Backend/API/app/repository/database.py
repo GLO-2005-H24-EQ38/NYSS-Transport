@@ -36,6 +36,9 @@ class Database:
         return cls.instance
 
     def _open_sql_connection(self):
+        """
+            Open SQL connection using pymysql
+        """
         self.connection = pymysql.connect(
             host=self.host,
             port=self.port,
@@ -48,6 +51,9 @@ class Database:
         self.cursor = self.connection.cursor()
 
     def register_commuter(self, commuter: CommuterFullInfo) -> bool:
+        """
+            Register a new commuter in the database.
+        """
         request = f"CALL RegisterCommuter(%s, %s, %s, %s, %s, %s)"
         self.cursor.execute(request, (
             commuter.email, commuter.name, commuter.password, commuter.address, commuter.date_of_birth, commuter.tel))
@@ -55,6 +61,9 @@ class Database:
         return True
 
     def fetch_commuter(self, email: str) -> Commuter:
+        """
+            Fetch commuter details from the database
+        """
         request = "SELECT email, password FROM user WHERE email = %s"
         self.cursor.execute(request, (email,))
         result = self.cursor.fetchall()
@@ -66,6 +75,9 @@ class Database:
                                   RequestErrorDescription.NOT_FOUND_DESCRIPTION)
 
     def register_admin(self, admin: AdminFullInfo) -> bool:
+        """
+            Register a new admin in the database.
+        """
         request = f"CALL RegisterAdmin(%s, %s, %s, %s, %s, %s, %s, %s)"
         self.cursor.execute(request, (
             admin.email, admin.name, admin.password, admin.address, admin.date_of_birth, admin.tel,
@@ -74,6 +86,9 @@ class Database:
         return True
 
     def fetch_admin(self, email: str) -> Admin:
+        """
+            Fetch commuter details from the database.
+        """
         request = "SELECT email, password, code FROM user JOIN admin WHERE email = %s AND user = email"
         self.cursor.execute(request, (email,))
         result = self.cursor.fetchall()
@@ -85,17 +100,26 @@ class Database:
                                RequestErrorDescription.NOT_FOUND_DESCRIPTION)
 
     def add_payment_method(self, email: str, credit_card: CreditCard) -> bool:
+        """
+            Add a payment method (credit card) for a commuter.
+        """
         request = f"CALL addCreditcard(%s, %s, %s, %s)"
         self.cursor.execute(request, (credit_card.holder, credit_card.cardNumber, credit_card.expirationDate, email))
 
         return True
 
     def delete_payment_method(self, email: str) -> bool:
+        """
+            Delete a payment method (credit card) of a commuter.
+        """
         request = f"CALL deleteCreditcard(%s)"
         self.cursor.execute(request, email)
         return True
 
     def get_card_info(self, email: str) -> CreditCard | None:
+        """
+            Retrieve credit card information of a commuter.
+        """
         request = "SELECT GetCreditCard(%s);"
         self.cursor.execute(request, email)
         result = self.cursor.fetchall()
@@ -108,6 +132,9 @@ class Database:
             return None
 
     def commuter_search_access(self, search: SearchAccessQuery) -> List[Access]:
+        """
+            Search for access options available for a commuter.
+        """
         request, parameters = search.searchQuery()
 
         self.cursor.execute(request, parameters)
@@ -128,6 +155,9 @@ class Database:
         return access_list
 
     def admin_search_access(self, email: str) -> List[Access]:
+        """
+            Search for access options available for an admin.
+        """
         request = (
             "SELECT access.*, suspendedAccess.deletionDate FROM access LEFT JOIN suspendedAccess ON access.id = suspendedAccess.access "
             "WHERE access.company = (SELECT company FROM admin WHERE user = %s)")
@@ -152,7 +182,10 @@ class Database:
 
         return access_list
 
-    def get_commuter_full_info(self, email: str) -> CommuterFullInfo | None:
+    def fetch_commuter_full_info(self, email: str) -> CommuterFullInfo | None:
+        """
+            Retrieve all the information of a commuter.
+        """
         request = "SELECT * FROM user WHERE email = %s and role = 'commuter'"
         self.cursor.execute(request, email)
         result = self.cursor.fetchall()
@@ -171,6 +204,9 @@ class Database:
             return None
 
     def fetch_admin_full_info(self, email: str) -> AdminFullInfo | None:
+        """
+            Retrieve all the information of an admin.
+        """
         request = "SELECT email, name, password, address, birthday, phone, code, company FROM user JOIN admin WHERE email = %s AND user = email"
         self.cursor.execute(request, email)
         result = self.cursor.fetchall()
@@ -190,7 +226,10 @@ class Database:
         else:
             return None
 
-    def create_access(self, access: Access) -> Access:
+    def admin_create_access(self, access: Access) -> Access:
+        """
+            Create a new access by admin.
+        """
         request = "SELECT AddAccess(%s, %s, %s, %s, %s, %s, %s)"
         self.cursor.execute(request, (
             access.id, access.name, access.price, access.company, access.type, access.duration, access.numberOfPassage))
@@ -212,6 +251,9 @@ class Database:
                                RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
 
     def admin_suspend_access(self, access_id: str):
+        """
+            Suspend access by admin.
+        """
         request = "CALL DeleteAccess(%s)"
         # try:
         self.cursor.execute(request, access_id)
@@ -220,7 +262,9 @@ class Database:
         #                        RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION, str(error))
 
     def buy_access(self, email, transaction) -> List[BoughtAccess]:
-
+        """
+            Buy access by commuter.
+        """
         try:
             request = "SELECT BuyAccess(%s, %s, %s)"
             self.cursor.execute(request, (transaction.quantity, email, transaction.accessId))
@@ -253,7 +297,10 @@ class Database:
             raise InvalidAdmin(ErrorResponseStatus.PAYMENT_REQUIRED, RequestErrorCause.PAYMENT_REQUIRED,
                                RequestErrorDescription.PAYMENT_REQUIRED_DESCRIPTION, str(error))
 
-    def get_commuter_bought_access(self, email) -> List[BoughtAccess]:
+    def fetch_commuter_bought_access(self, email) -> List[BoughtAccess]:
+        """
+            Retrieve all the access a commuter bought.
+        """
         request = "SELECT GetAccessBought(%s);"
         self.cursor.execute(request, email)
         result = self.cursor.fetchall()

@@ -54,7 +54,7 @@ class CommuterRepository:
         return self.database.buy_access(email, transaction)
 
     def get_bought_access(self, email) -> List[BoughtAccess]:
-        return self.database.get_commuter_bought_access(email)
+        return self.database.fetch_commuter_bought_access(email)
 
     def search_access(self, search: SearchAccessQuery) -> List[Access]:
         return self.database.commuter_search_access(search)
@@ -69,7 +69,7 @@ class CommuterRepository:
             return False
 
     def get_commuter_full_info(self, email) -> CommuterFullInfo:
-        commuter_info = self.database.get_commuter_full_info(email)
+        commuter_info = self.database.fetch_commuter_full_info(email)
         if commuter_info:
             return commuter_info
         else:

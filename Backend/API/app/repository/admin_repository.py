@@ -33,7 +33,7 @@ class AdminRepository:
             return None
 
     def create_new_access(self, access: Access) -> Access:
-        return self.database.create_access(access)
+        return self.database.admin_create_access(access)
 
     def search_created_access(self, email: str):
         return self.database.admin_search_access(email)
