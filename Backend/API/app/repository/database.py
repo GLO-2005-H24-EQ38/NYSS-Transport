@@ -309,22 +309,23 @@ class Database:
         self.cursor.execute(request, email)
         result = self.cursor.fetchall()
 
-        result = json.loads(result[0][0])
-
         bought_access_list = []
-        for access in result:
-            bought_access_list.append(BoughtAccess(
-                accessNumber=access["accessNumber"],
-                price=access["price"],
-                name=access["name"],
-                accessType=access["accessType"],
-                transactionDate=access["transactionDate"],
-                expirationDate=access["expirationDate"],
-                transactionNumber=access["transactionNumber"],
-                company=access["company"],
-                outOfSale=True if access["outOfSale"] else False,
-                deletionDate=access.get("deletionDate") if access["outOfSale"] else None,
-                numberOfPassage=access.get("numberOfPassage") if access["accessType"] == "ticket" else None
-            ))
 
+        if result[0][0]:
+            result = json.loads(result[0][0].strip("'"))
+            for access in result:
+                bought_access_list.append(BoughtAccess(
+                    accessNumber=access["accessNumber"],
+                    price=access["price"],
+                    name=access["name"],
+                    accessType=access["accessType"],
+                    transactionDate=access["transactionDate"],
+                    expirationDate=access["expirationDate"],
+                    transactionNumber=access["transactionNumber"],
+                    company=access["company"],
+                    outOfSale=True if access["outOfSale"] else False,
+                    deletionDate=access.get("deletionDate") if access["outOfSale"] else None,
+                    numberOfPassage=access.get("numberOfPassage") if access["accessType"] == "ticket" else None
+                ))
         return bought_access_list
+
