@@ -48,3 +48,18 @@ export const addAccess = async (query) => {
     });
     return await response.json();
 }
+
+export const buyAccess = async (cvc,query) => {
+    const response = await fetch(URL_API + 'user/access/checkout', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': Cookies.get('commuterToken'),
+            'cvc': cvc
+        },
+        body: JSON.stringify(query)
+    });
+    await response.json()
+
+    return response;
+}

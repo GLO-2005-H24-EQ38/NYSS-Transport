@@ -40,7 +40,7 @@ BEGIN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'User does not exist';
     END IF;
 
-    SELECT creditCard INTO oldCardNumber FROM commuter WHERE user = userEmail;
+    SELECT creditCard  FROM commuter WHERE user = userEmail INTO oldCardNumber;
     UPDATE commuter SET creditCard = NULL WHERE user = userEmail;
 
     IF NOT EXISTS (SELECT * FROM commuter WHERE creditCard = oldCardNumber) THEN

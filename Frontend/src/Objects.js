@@ -44,3 +44,12 @@ export class SearchAccessQuery {
     }
 
 }
+
+export class BuyAccessQuery {
+
+    constructor(accessId,quantity) {
+        this.accessId = accessId;
+        this.quantity = quantity;
+    }
+
+}

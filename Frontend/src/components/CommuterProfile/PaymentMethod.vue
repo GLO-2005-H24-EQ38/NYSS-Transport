@@ -5,6 +5,14 @@ import {deletePaymentMethod, getPaymentMethod} from "@/api/payment.js";
 export default {
   name: "paymentMethod",
   components: {PaymentMethodForm},
+  props:{
+     buyingAccess:{
+       type: Boolean,
+       default: false
+     }
+
+  },
+
   data() {
     return {
       paymentExists: false,
@@ -68,11 +76,14 @@ export default {
         </div>
       </div>
       <div style="width: 100%;display: flex; justify-content: flex-end;">
-        <button class="btn btn-danger" @click="removeCard">Remove Card</button>
+        <button :hidden="buyingAccess" class="btn btn-danger" @click="removeCard">Remove Card</button>
       </div>
     </div>
     <div v-else class="PaymentMethod">
-      <PaymentMethodForm v-if="paymentExists === false" @close="getCard" :paymentcallback="getCard"/>
+      <PaymentMethodForm v-if="paymentExists === false && buyingAccess === false" @close="getCard" :paymentcallback="getCard"/>
+      <div v-if="buyingAccess" style="display: flex; justify-content: center">
+        <button class="btn btn-primary" @click="this.$router.push('/user'); " style="background: #01356a">Go add Card</button>
+      </div>
     </div>
   </div>
 

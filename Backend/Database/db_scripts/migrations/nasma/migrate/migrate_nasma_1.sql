@@ -124,9 +124,9 @@ DELIMITER ;
  INSERT INTO company (name) VALUES ('STM');
 
  -- Inserting sample data into the access table
- INSERT INTO access (id, name, price, company, type, duration) VALUES (1,'Access 1', 20.00, 'Company XYZ', 'ticket', 3);
- INSERT INTO access (id,name, price, company, type, duration) VALUES (2,'Access 2', 30.00, 'Company XYZ', 'subscription', 5);
- INSERT INTO access (id,name, price, company, type, duration) VALUES (4,'Access 4', 50.00, 'Company ABC', 'subscription', 8);
+ INSERT INTO access (id, name, price, company, type, duration) VALUES (1,'Access 1', 20.00, 'STM', 'ticket', 3);
+ INSERT INTO access (id,name, price, company, type, duration) VALUES (2,'Access 2', 30.00, 'RTC', 'subscription', 5);
+ INSERT INTO access (id,name, price, company, type, duration) VALUES (4,'Access 4', 50.00, 'STM', 'subscription', 8);
 
  -- Inserting sample data into the user table
  INSERT INTO user (email, name, password, address, birthday, phone, role)
