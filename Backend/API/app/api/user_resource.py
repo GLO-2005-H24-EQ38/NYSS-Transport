@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, make_response
 from flask_cors import cross_origin
 
 from app.repository.admin_repository import AdminRepository
@@ -124,6 +124,7 @@ def suspend_access(accessId):
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
 
+
 @app.route("/user/payment", methods=["POST"])
 @cross_origin()
 def add_payment_method():
@@ -196,6 +197,7 @@ def get_wallet():
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
 
+
 @app.route("/user/payment", methods=["DELETE"])
 @cross_origin()
 def delete_payment_method():
@@ -215,6 +217,7 @@ def delete_payment_method():
         response = jsonify({"error": str(error)})
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
+
 
 @app.route("/user/access/search", methods=["POST"])
 @cross_origin()
@@ -241,6 +244,7 @@ def commuter_access_search():
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
 
+
 @app.route("/admin/access/search", methods=["GET"])
 @cross_origin()
 def admin_access_search():
@@ -264,6 +268,7 @@ def admin_access_search():
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
 
+
 @app.route("/user/payment", methods=["GET"])
 @cross_origin()
 def get_card_info():
@@ -283,6 +288,7 @@ def get_card_info():
         response = jsonify({"error": str(error)})
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
+
 
 @app.route("/user", methods=["GET"])
 @cross_origin()
@@ -304,6 +310,7 @@ def get_commuter():
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
 
+
 @app.route("/admin", methods=["GET"])
 @cross_origin()
 def get_admin():
@@ -323,6 +330,29 @@ def get_admin():
         response = jsonify({"error": str(error)})
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
+
+
+@app.route("/admin/online", methods=["GET"])
+@cross_origin()
+def is_admin_online():
+    token = request.headers.get("Authorization")
+    is_online = admin_service.is_admin_logged_in(Token(token))
+    if is_online:
+        return make_response("", 200)
+    else:
+        return make_response("", 401)
+
+
+@app.route("/commuter/online", methods=["GET"])
+@cross_origin()
+def is_commuter_online():
+    token = request.headers.get("Authorization")
+    is_online = commuter_service.is_commuter_logged_in(Token(token))
+    if is_online:
+        return make_response("", 200)
+    else:
+        return make_response("", 401)
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8080, debug=True)
