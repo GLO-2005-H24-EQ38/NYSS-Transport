@@ -1,36 +1,13 @@
 <script>
-import {getUser} from "@/api/getuser.js";
 
 export default {
   name: "UserInfo",
-  data() {
-    return {
-      user: {
-        name: '',
-        email: '',
-        tel: '',
-        address: '',
-        birthDate: '',
-        company: '',
-      }
+  props: {
+    user: {
+      type: Object,
+      required: true
     }
   },
-  methods: {
-    async getUserInfo() {
-      const res = await getUser();
-      console.log('=------------------->', res);
-      this.user.name = res.name;
-      this.user.address = res.address;
-      this.user.email = res.email;
-      this.user.tel = res.tel;
-      this.user.birthDate = res.dateOfBirth;
-      return res
-    }
-  },
-  mounted() {
-    console.log('=------------------->', this.getUserInfo());
-    this.getUserInfo()
-  }
 }
 </script>
 

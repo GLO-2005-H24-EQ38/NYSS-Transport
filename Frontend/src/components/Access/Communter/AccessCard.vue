@@ -131,7 +131,7 @@ export default {
   align-items: center;
 }
 
-.registerVisitButton {
+.expirationDate {
   transition: ease-in-out 0.25s;
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
   background-color: #ffffff;

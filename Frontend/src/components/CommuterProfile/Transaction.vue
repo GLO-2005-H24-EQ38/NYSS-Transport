@@ -20,6 +20,9 @@ export default {
 
 <template>
   <div class="access-card" style="position: relative">
+    <div class="expirationDate" style="display: flex; justify-content: center">
+         Expires on {{ expDate }}
+        </div>
     <img
         style="object-fit: contain"
         src="@/assets/stm_logo.png"
@@ -30,9 +33,6 @@ export default {
          Access N.# : {{ accessNumber }}
         </div>
       </div>
-      <div class="registerVisitButton">
-         Expires on {{ expDate }}
-        </div>
       <div style="display: flex; flex-direction: row">
         <div class="card-text" style="flex:1">Type: Ticket</div>
         <div class="card-text" style="flex:1; justify-content: flex-end; display: flex">Purchased : {{ transactionDate }}</div>
@@ -73,14 +73,9 @@ export default {
 
 }
 
-.registerVisitButton {
-  background-color: #01356a;
-  padding: 1px;
+.expirationDate {
+  background-color: darkgreen;
   border: none;
-  position: absolute;
-  top: -115%;
-  border-top-right-radius: 0.5rem;
-  left: 67%;
   color: white;
 }
 

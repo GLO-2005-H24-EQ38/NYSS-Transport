@@ -18,8 +18,6 @@ export const getAllAccess = async () => {
     }
 }
 
-
-
 export const searchAccess = async (SearchAccessQuery) => {
     const response = await fetch(URL_API + 'user/access/search', {
         method: 'POST',
@@ -35,4 +33,16 @@ export const searchAccess = async (SearchAccessQuery) => {
     else {
         return 0;
     }
+}
+
+export const addAccess = async (query) => {
+    const response = await fetch(URL_API + 'user/admin/access', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': Cookies.get('adminToken')
+        },
+        body: JSON.stringify(query)
+    });
+    return await response.json();
 }
