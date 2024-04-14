@@ -107,7 +107,7 @@ class Transaction():
 class BoughtAccess():
     def __init__(self, name, price, accessType, company, accessNumber, expirationDate,
                  transactionDate, transactionNumber, numberOfPassage=None,
-                 outOfSale=False, outOfSaleDate=None):
+                 outOfSale=False, deletionDate=None):
         self.accessNumber = accessNumber
         self.price = float(price)
         self.accessName = name
@@ -118,7 +118,7 @@ class BoughtAccess():
         self.company = company
         self.numberOfPassage = numberOfPassage
         self.outOfSale = outOfSale
-        self.outOfSaleDate = outOfSaleDate
+        self.outOfSaleDate = deletionDate
 
     def to_json(self):
         access_json = {
@@ -135,7 +135,7 @@ class BoughtAccess():
         if self.numberOfPassage is not None:
             access_json["numberOfPassage"] = self.numberOfPassage
         if self.outOfSale:
-            access_json["outOfSaleDate"] = self.outOfSaleDate
+            access_json["deletionDate"] = self.outOfSaleDate
         return access_json
 
 
@@ -150,7 +150,8 @@ class SearchAccessQuery():
         """Fuzzy search for access in the database.
         Search mode are accessName, accessType, company, price"""
 
-        query = "SELECT * FROM access a WHERE 1=1 AND NOT EXISTS(SELECT 1 FROM suspendedAccess s WHERE s.access = a.id)"
+        query = ("SELECT access.*, ticket.passes  FROM access LEFT JOIN ticket ON access.id = ticket.access"
+                 " WHERE NOT EXISTS(SELECT 1 FROM suspendedAccess s WHERE s.access = access.id)")
 
         parameters = []
 
