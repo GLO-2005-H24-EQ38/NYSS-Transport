@@ -3,6 +3,7 @@ import UserInfo from "@/components/CommuterProfile/UserInfo.vue";
 import AdminAccessContainer from "@/components/Access/Admin/AdminAccessContainer.vue";
 import AddAccess from "@/components/Access/Admin/AddAccess.vue";
 import {getUser} from "@/api/getuser.js";
+import Cookies from "js-cookie";
 
 export default {
   name: "AdminView",
@@ -33,6 +34,10 @@ export default {
     }
   },
   mounted() {
+    console.log(Cookies.get('adminToken'));
+    if (!Cookies.get('adminToken')){
+      this.$router.push('/login');
+    }
     console.log('=------------------->', this.getUserInfo());
     this.getUserInfo();
   },
