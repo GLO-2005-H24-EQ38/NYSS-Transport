@@ -343,7 +343,7 @@ def is_admin_online():
         return make_response("", 401)
 
 
-@app.route("/commuter/online", methods=["GET"])
+@app.route("/user/online", methods=["GET"])
 @cross_origin()
 def is_commuter_online():
     token = request.headers.get("Authorization")
