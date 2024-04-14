@@ -128,10 +128,13 @@ class Database:
         return access_list
 
     def admin_search_access(self, email: str) -> List[Access]:
-        request = "SELECT * FROM access WHERE company = (SELECT company FROM admin WHERE user = %s)"
+        request = (
+            "SELECT access.*, suspendedAccess.deletionDate FROM access LEFT JOIN suspendedAccess ON access.id = suspendedAccess.access "
+            "WHERE access.company = (SELECT company FROM admin WHERE user = %s)")
 
         self.cursor.execute(request, email)
         result = self.cursor.fetchall()
+        print(result)
 
         access_list = []
         for access in result:
@@ -142,7 +145,9 @@ class Database:
                 company=access[3],
                 accessType=access[4],
                 duration=access[5],
-                numberOfPassage=access[6] if access[4] == "ticket" else None
+                numberOfPassage=access[6] if access[4] == "ticket" else None,
+                outOfSale=True if access[7] else False,
+                outOfSaleDate=access[8] if access[7] else None
             ))
 
         return access_list
@@ -206,6 +211,14 @@ class Database:
             raise InvalidAdmin(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
                                RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
 
+    def admin_suspend_access(self, access_id: str):
+        request = "CALL DeleteAccess(%s)"
+        # try:
+        self.cursor.execute(request, access_id)
+        # except OperationalError as error:
+        #     raise InvalidAdmin(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
+        #                        RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION, str(error))
+
     def buy_access(self, email, transaction) -> List[BoughtAccess]:
 
         try:
@@ -214,7 +227,9 @@ class Database:
             result = self.cursor.fetchall()
 
             if result:
+                print(result)
                 result = json.loads(result[0][0])
+
                 bought_access_list = []
                 for access in result:
                     bought_access_list.append(BoughtAccess(
@@ -226,6 +241,8 @@ class Database:
                         expirationDate=access["expirationDate"],
                         transactionNumber=access["transactionNumber"],
                         company=access["company"],
+                        outOfSale=True if access["outOfSale"] else False,
+                        outOfSaleDate=access.get("outOfSaleDate") if access["outOfSale"] is True else None,
                         numberOfPassage=access.get("numberOfPassage") if access["accessType"] == "ticket" else None
                     ))
                 return bought_access_list
@@ -254,6 +271,8 @@ class Database:
                 expirationDate=access["expirationDate"],
                 transactionNumber=access["transactionNumber"],
                 company=access["company"],
+                outOfSale=True if access["outOfSale"] else False,
+                outOfSaleDate=access.get("outOfSaleDate") if access["outOfSale"] is True else None,
                 numberOfPassage=access.get("numberOfPassage") if access["accessType"] == "ticket" else None
             ))
 

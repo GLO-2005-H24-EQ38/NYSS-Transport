@@ -122,13 +122,16 @@ class Access:
     TICKET = "ticket"
     SUBSCRIPTION = "subscription"
 
-    def __init__(self, accessName, price, accessType, duration, company, accesId=None, numberOfPassage=None):
+    def __init__(self, accessName, price, accessType, duration, company, accesId=None, numberOfPassage=None,
+                 outOfSale=False, outOfSaleDate=None):
         self.id = uuid.uuid4().hex[:8] if accesId is None else accesId
         self.name = accessName
         self.price = float(price)
         self.type = accessType
         self.duration = int(duration)
         self.company = company
+        self.outOfSale = outOfSale
+        self.outOfSaleDate = outOfSaleDate
         self.numberOfPassage = int(numberOfPassage) if numberOfPassage is not None else None
 
     def to_json(self):
@@ -139,10 +142,10 @@ class Access:
             "accessType": self.type,
             "duration": self.duration,
             "company": self.company,
+            "outOfSale": self.outOfSale,
         }
         if self.numberOfPassage is not None:
             access_json["numberOfPassage"] = self.numberOfPassage
+        if self.outOfSale:
+            access_json["outOfSaleDate"] = self.outOfSaleDate
         return access_json
-
-
-

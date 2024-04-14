@@ -91,6 +91,24 @@ def create_access():
         return response
 
 
+@app.route("/admin/access/<accessId>", methods=["DELETE"])
+@cross_origin()
+def suspend_access(accessId):
+    try:
+        token = request.headers.get("Authorization")
+        print("access_id : ", accessId)
+        response = admin_service.suspend_access(accessId, Token(token))
+        return jsonify(response), 204
+    except RequestError as error:
+        response = jsonify(error.to_json())
+        response.status_code = error.error_response_status
+        return response
+    except TypeError as error:
+        response = jsonify({"error": str(error)})
+        response.status_code = ErrorResponseStatus.BAD_REQUEST.value
+        return response
+
+
 @app.route("/user/payment", methods=["POST"])
 @cross_origin()
 def add_payment_method():

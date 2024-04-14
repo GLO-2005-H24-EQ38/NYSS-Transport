@@ -1,56 +1,18 @@
-DROP FUNCTION IF EXISTS SearchAccess;
 DROP FUNCTION IF EXISTS RetrieveWallet;
 DROP FUNCTION IF EXISTS AddAccess;
 
 DELIMITER //
 
-CREATE FUNCTION SearchAccess (
-    p_company_name VARCHAR(100),
-    p_access_name VARCHAR(100),
-    p_access_type FLOAT,
-    p_numberOfPassage integer
-)
-RETURNS VARCHAR(10000) DETERMINISTIC
-BEGIN
-    DECLARE p_access_list VARCHAR(10000);
-
-    -- Initialize the access list as a JSON array
-    SET p_access_list = '';
-
-    -- Concatenate access details to the access list
-    SELECT GROUP_CONCAT(
-        CONCAT(
-            '{"accessId": "', a.id, '",',
-            '"accessName": "', a.name, '",',
-            '"price": ', a.price, ',',
-            '"accessType": "', a.type, '",',
-            '"duration": ', a.duration, ',',
-            '"company": "', a.company, '"',
-            IF(a.type = 'ticket', CONCAT(',"numberOfPassage": ', t.passes), ''),
-            '}'
-        ) SEPARATOR ','
-    ) INTO p_access_list
-    FROM access a
-    LEFT JOIN ticket t ON a.id = t.access
-    WHERE (p_company_name IS NULL OR a.company = p_company_name)
-        AND (p_access_name IS NULL OR a.name = p_access_name)
-        AND (p_access_type IS NULL OR a.type = p_access_type)
-        AND (p_numberOfPassage IS NULL OR t.passes = p_numberOfPassage);
-
-    -- Finalize the JSON array
-    SET p_access_list = CONCAT('[',p_access_list, ']');
-
-    RETURN p_access_list;
-END //
-
+-- Function to retrieve the wallet (all the bought access) of a commuter
 CREATE FUNCTION RetrieveWallet(
     p_email VARCHAR(100)
 )
 RETURNS VARCHAR(10000) DETERMINISTIC
 BEGIN
+    -- Declare variable for wallet info
     DECLARE wallet_info VARCHAR(10000);
 
-    -- Initialize the wallet_info
+    -- Initialize the wallet_info JSON array
     SET wallet_info = '';
 
     -- Retrieve access information for the user
@@ -61,6 +23,8 @@ BEGIN
             '"accessType": "', a.type, '",',
             '"transactionDate": ', t.transactionDate, ',',
             '"expirationDate": ', t.expirationDate, ',',
+            '"outOfSale": ',
+              IF(EXISTS(SELECT 1 FROM suspendedAccess sus WHERE sus.access = a.id), 'true', 'false'), ',',
             '"transactionNumber": "', t.transactionNumber, '"',
             '"company": "', a.company, '"',
             IF(a.type = 'ticket', CONCAT(',"numberOfPassage": ', tk.passes), ''),
@@ -78,6 +42,7 @@ BEGIN
     RETURN wallet_info;
 END //
 
+-- Function to add an access
 CREATE FUNCTION AddAccess(
     p_access_id VARCHAR(100),
     p_access_name VARCHAR(100),
@@ -88,21 +53,24 @@ CREATE FUNCTION AddAccess(
     p_numberOfPassage integer
 ) RETURNS VARCHAR(10000) DETERMINISTIC
 BEGIN
+    -- Declare variable for access info
     DECLARE access_created VARCHAR(10000);
-    -- Insertion de la compagnie si elle n'existe pas déjà
+
+    -- Insert the company if it does not exist
     INSERT IGNORE INTO company (name) VALUES (p_company_name);
 
-    -- Insertion dans la table access
+    -- Insertion into the table access
     INSERT INTO access (id, name, price, company, type, duration)
     VALUES (p_access_id, p_access_name, p_price, p_company_name, p_access_type, p_duration);
 
-     -- Insertion dans la table appropriée en fonction du type d'accès
+    -- Insertion into the appropriate table based on the access type
     IF p_access_type = 'ticket' THEN
         INSERT INTO ticket (access, passes) VALUES (p_access_id, p_numberOfPassage);
     ELSEIF p_access_type = 'subscription' THEN
         INSERT INTO subscription (access) VALUES (p_access_id);
     END IF;
 
+    -- Set the JSON array for an added access
     SET access_created = CONCAT(
     '{"accessId": "', p_access_id, '",',
     '"accessName": "', p_access_name, '",',
