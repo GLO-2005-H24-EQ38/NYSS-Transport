@@ -96,7 +96,6 @@ class Transaction():
     def __init__(self, accessId, quantity):
         self.accessId = accessId
         self.quantity = self.__validate_quantity(int(quantity))
-        self.transactionNumber = uuid.uuid4().hex[:8]
 
     def __validate_quantity(self, quantity):
         if not (0 < quantity):
