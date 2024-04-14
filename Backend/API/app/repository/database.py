@@ -8,7 +8,7 @@ import pymysql
 from dotenv import load_dotenv
 
 from app.service.dtos.admin_dtos import Admin, AdminFullInfo, Access
-from app.service.dtos.commuter_dtos import Commuter, CommuterFullInfo, CreditCard, SearchAccessQuery
+from app.service.dtos.commuter_dtos import Commuter, CommuterFullInfo, CreditCard, SearchAccessQuery, BoughtAccess
 from app.service.exceptions import InvalidCommuter, RequestErrorDescription, RequestErrorCause, ErrorResponseStatus, \
     InvalidAdmin
 
@@ -189,6 +189,30 @@ class Database:
                 company=result["company"],
                 numberOfPassage=result["numberOfPassage"] if result["accessType"] == "ticket" else None
             )
+        else:
+            raise InvalidAdmin(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
+                               RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
+
+    def buy_access(self, email, transaction) -> List[BoughtAccess]:
+        request = "SELECT BuyAccess(%s, %s, %s, %s)"
+        self.cursor.execute(request, (transaction.quantity, transaction.transactionNumber, email, transaction.accessId))
+        result = self.cursor.fetchall()
+        if result:
+            result = json.loads(result[0][0])
+            bought_access_list = []
+            for access in result:
+                bought_access_list.append(BoughtAccess(
+                accessNumber= access["access_number"],
+                price=access["price"],
+                name=access["name"],
+                accessType=access["type"],
+                transactionDate=access["transaction_date"],
+                expirationDate=access["expiration_date"],
+                transactionNumber=access["transaction_number"],
+                company=access["company"],
+                numberOfPassage=access["numberOfPassage"] if access["type"] == "ticket" else None
+            ))
+            return bought_access_list
         else:
             raise InvalidAdmin(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
                                RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION)

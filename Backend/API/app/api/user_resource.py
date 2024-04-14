@@ -119,7 +119,6 @@ def buy_access():
         data = request.get_json()
         transaction = Transaction(**data)
         response = commuter_service.buy_access(Token(token), cvc, transaction)
-
         bought_access_json = [bought_access.to_json() for bought_access in response]
         return jsonify(bought_access_json), 200
     except RequestError as error:

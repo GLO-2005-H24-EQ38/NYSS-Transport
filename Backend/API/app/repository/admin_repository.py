@@ -37,7 +37,7 @@ class AdminRepository:
 
     def get_acess_by_accessId(self, accessId: str) -> Access:
         try:
-            access = self._access[accessId]
+            access = self.database.get_access(accessId)
             return access
         except KeyError:
             raise InvalidCommuter(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
