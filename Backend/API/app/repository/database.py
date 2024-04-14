@@ -153,8 +153,6 @@ class Database:
         result = self.cursor.fetchall()
 
         if result:
-            print(result)
-            print(result[0][4].strftime("%Y-%m-%d"))
             commuter = CommuterFullInfo(
                 email=result[0][0],
                 name=result[0][1],
@@ -192,10 +190,9 @@ class Database:
         self.cursor.execute(request, (
             access.id, access.name, access.price, access.company, access.type, access.duration, access.numberOfPassage))
         result = self.cursor.fetchall()
-        print("the result: ", result)
+
         if result:
             result = json.loads(result[0][0])
-            print(result)
             return Access(
                 accesId=result["accessId"],
                 accessName=result["accessName"],
@@ -217,7 +214,6 @@ class Database:
             result = self.cursor.fetchall()
 
             if result:
-                print(result[0][0])
                 result = json.loads(result[0][0])
                 bought_access_list = []
                 for access in result:
@@ -244,9 +240,8 @@ class Database:
         request = "SELECT GetAccessBought(%s);"
         self.cursor.execute(request, email)
         result = self.cursor.fetchall()
-        print(result[0][0])
+
         result = json.loads(result[0][0])
-        print('\n\n\n', result)
 
         bought_access_list = []
         for access in result:

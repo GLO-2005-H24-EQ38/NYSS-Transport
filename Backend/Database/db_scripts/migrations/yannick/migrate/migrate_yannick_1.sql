@@ -8,7 +8,7 @@ DELIMITER //
 CREATE FUNCTION BuyAccess(
     quantity INT,
     p_email VARCHAR(100),
-    p_access_id INT
+    p_access_id VARCHAR(100)
 )
 RETURNS VARCHAR(10000) DETERMINISTIC
 BEGIN
@@ -176,7 +176,7 @@ END //
 
 
 -- example of a transaction with credit card present
-SELECT BuyAccess(3, 'Rando@rand.ran', 1);
+SET @transaction_number = SELECT BuyAccess(1, 'user1@example.com', 2);
 
 -- example of a transaction with missing credit card (should fail and throw an error)
 -- SET @transaction_number = 2;

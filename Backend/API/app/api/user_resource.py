@@ -127,10 +127,10 @@ def buy_access():
         response = jsonify(error.to_json())
         response.status_code = error.error_response_status
         return response
-    # except TypeError as error:
-    #     response = jsonify({"error": str(error)})
-    #     response.status_code = ErrorResponseStatus.BAD_REQUEST.value
-    #     return response
+    except TypeError as error:
+        response = jsonify({"error": str(error)})
+        response.status_code = ErrorResponseStatus.BAD_REQUEST.value
+        return response
 
 
 @app.route("/user/access", methods=["GET"])
