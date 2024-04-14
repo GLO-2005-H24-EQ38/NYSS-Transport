@@ -1,6 +1,7 @@
 <script>
 import stmLogo from '@/assets/stm_logo.png';
 import rtcLogo from '@/assets/rtc_logo.jpg';
+import samyLogo from '@/assets/samy.jpeg';
 
 export default {
   name: "AccessCard",
@@ -34,11 +35,15 @@ export default {
       } else if (this.access.company === 'RTC') {
         this.logo = rtcLogo;
       } else {
-        this.logo = stmLogo;
+        this.logo = samyLogo;
       }
     }
   },
   created() {
+    if (this.access)
+      this.getLogo();
+  },
+  updated() {
     if (this.access)
       this.getLogo();
   }

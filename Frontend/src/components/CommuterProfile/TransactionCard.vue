@@ -1,10 +1,9 @@
 <script>
-import QrcodeVue from "qrcode.vue";
 import QRCodeTicket from "@/components/CommuterProfile/QRCodeTicket.vue";
 
 export default {
-  name: "Transaction",
-  components: {QRCodeTicket, QrcodeVue},
+  name: "TransactionCard",
+  components: {QRCodeTicket},
   data() {
     return {
       accessNumber: "40001",
