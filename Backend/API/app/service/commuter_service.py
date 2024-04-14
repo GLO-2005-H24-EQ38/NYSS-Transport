@@ -112,3 +112,6 @@ class CommuterService():
         user_info = self._commuter_repository.get_commuter_full_info(email)
 
         return user_info
+
+    def is_commuter_logged_in(self, token: Token) -> bool:
+        return token.value in self._logged_in_commuter
