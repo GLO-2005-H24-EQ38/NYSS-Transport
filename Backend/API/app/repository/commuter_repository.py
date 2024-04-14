@@ -10,10 +10,9 @@ from app.service.exceptions import ErrorResponseStatus, RequestErrorCause, Reque
 
 
 class CommuterRepository:
-    def __init__(self, database: Database, access: dict = {}):
+    def __init__(self, database: Database):
 
         self.database = database
-        self.access = access
 
     def signup_commuter(self, new_commuter: CommuterFullInfo) -> bool:
         """
@@ -55,8 +54,7 @@ class CommuterRepository:
         return self.database.buy_access(email, transaction)
 
     def get_bought_access(self, email) -> List[BoughtAccess]:
-        commuter_data = self.database.get(email)
-        return commuter_data['bought_access']
+        return self.database.get_commuter_bought_access(email)
 
     def search_access(self, search: SearchAccessQuery) -> List[Access]:
         return self.database.commuter_search_access(search)

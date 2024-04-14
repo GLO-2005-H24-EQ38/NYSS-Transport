@@ -1,11 +1,14 @@
 DROP FUNCTION IF EXISTS BuyAccess;
 DROP PROCEDURE IF EXISTS DeleteAccess;
+DROP FUNCTION IF EXISTS GetAccessBought;
+DROP FUNCTION IF EXISTS GetCreditCard;
+
 
 DELIMITER //
 CREATE FUNCTION BuyAccess(
     quantity INT,
     p_email VARCHAR(100),
-    p_access_id INT
+    p_access_id VARCHAR(100)
 )
 RETURNS VARCHAR(10000) DETERMINISTIC
 BEGIN
@@ -88,7 +91,44 @@ END //
 
 DELIMITER ;
 
-SELECT BuyAccess(3, 'Rando@rand.ran', 1);
+
+-- Function to get access bought by a user
+DELIMITER //
+CREATE FUNCTION GetAccessBought(p_email VARCHAR(100))
+RETURNS VARCHAR(10000) DETERMINISTIC
+BEGIN
+    DECLARE access_bought_info VARCHAR(10000);
+
+    -- Initialize the access_bought_info
+    SET access_bought_info = '';
+
+    -- Retrieve access information for the user
+    SELECT GROUP_CONCAT(
+        CONCAT(
+            '{"accessNumber": "', t.accessNumber, '",',
+            '"price": "', a.price, '",',
+            '"name": "', a.name, '",',
+            '"accessType": "', a.type, '",',
+            '"transactionDate": "', t.transactionDate, '",',
+            '"expirationDate": "', t.expirationDate, '",',
+            '"transactionNumber": "', t.transactionNumber,
+             IF(a.type = 'ticket', CONCAT('", "numberOfPassage": "', tk.passes), ''),
+            '", "company": "', a.company, '"',
+            '}'
+        ) SEPARATOR ','
+    ) INTO access_bought_info
+    FROM transaction t
+    JOIN access a ON t.accessId = a.id      -- join to get access details
+    LEFT JOIN ticket tk ON a.id = tk.access -- join left to handle tickets since ticket have additional information
+    WHERE t.user = p_email;
+
+    -- Finalize the JSON array
+    SET access_bought_info = CONCAT('[', access_bought_info, ']');
+
+    RETURN access_bought_info;
+END //
+DELIMITER ;
+
 
 
 DELIMITER //
@@ -115,7 +155,6 @@ DELIMITER ;
 
 
 -- function to return credit card information
-DROP FUNCTION IF EXISTS GetCreditCard;
 DELIMITER //
 CREATE FUNCTION GetCreditCard(p_email VARCHAR(100))
 RETURNS VARCHAR(10000) DETERMINISTIC
@@ -137,9 +176,7 @@ END //
 
 
 -- example of a transaction with credit card present
-SET @transaction_number = 1;
-SET @p_email = 'user1@example.com';
-SET @result = BuyAccess(1, @transaction_number, @p_email, 1);
+SET @transaction_number = SELECT BuyAccess(1, 'user1@example.com', 2);
 
 -- example of a transaction with missing credit card (should fail and throw an error)
 -- SET @transaction_number = 2;

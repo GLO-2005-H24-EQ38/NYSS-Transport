@@ -139,6 +139,7 @@ def get_wallet():
     try:
         token = request.headers.get("Authorization")
         response = commuter_service.get_wallet(Token(token))
+
         bought_access_json = [bought_access.to_json() for bought_access in response]
         return jsonify(bought_access_json), 200
     except RequestError as error:
