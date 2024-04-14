@@ -59,3 +59,10 @@ class AdminRepository:
         Suspend access based on its id.
         """
         self.database.admin_suspend_access(access_id)
+
+
+    def get_companies_names(self):
+        """
+        Retrieve all the companies names.
+        """
+        return self.database.fetch_companies_names()

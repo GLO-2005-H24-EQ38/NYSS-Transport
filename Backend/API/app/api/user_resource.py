@@ -354,5 +354,12 @@ def is_commuter_online():
         return make_response("", 401)
 
 
+@app.route("/admin/company", methods=["GET"])
+@cross_origin()
+def get_company():
+    company = admin_service.get_companies_names()
+    return jsonify(company), 200
+
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8080, debug=True)
