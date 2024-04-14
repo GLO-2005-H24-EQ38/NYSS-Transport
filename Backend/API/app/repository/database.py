@@ -6,9 +6,10 @@ from typing import List
 
 import pymysql
 from dotenv import load_dotenv
+from pymysql import OperationalError
 
 from app.service.dtos.admin_dtos import Admin, AdminFullInfo, Access
-from app.service.dtos.commuter_dtos import Commuter, CommuterFullInfo, CreditCard, SearchAccessQuery
+from app.service.dtos.commuter_dtos import Commuter, CommuterFullInfo, CreditCard, SearchAccessQuery, BoughtAccess
 from app.service.exceptions import InvalidCommuter, RequestErrorDescription, RequestErrorCause, ErrorResponseStatus, \
     InvalidAdmin
 
@@ -106,10 +107,30 @@ class Database:
         else:
             return None
 
-    def search_access(self, search: SearchAccessQuery):
+    def commuter_search_access(self, search: SearchAccessQuery) -> List[Access]:
         request, parameters = search.searchQuery()
 
         self.cursor.execute(request, parameters)
+        result = self.cursor.fetchall()
+
+        access_list = []
+        for access in result:
+            access_list.append(Access(
+                accesId=access[0],
+                accessName=access[1],
+                price=access[2],
+                company=access[3],
+                accessType=access[4],
+                duration=access[5],
+                numberOfPassage=access[6] if access[4] == "ticket" else None
+            ))
+
+        return access_list
+
+    def admin_search_access(self, email: str) -> List[Access]:
+        request = "SELECT * FROM access WHERE company = (SELECT company FROM admin WHERE user = %s)"
+
+        self.cursor.execute(request, email)
         result = self.cursor.fetchall()
 
         access_list = []
@@ -132,8 +153,6 @@ class Database:
         result = self.cursor.fetchall()
 
         if result:
-            print(result)
-            print(result[0][4].strftime("%Y-%m-%d"))
             commuter = CommuterFullInfo(
                 email=result[0][0],
                 name=result[0][1],
@@ -166,20 +185,14 @@ class Database:
         else:
             return None
 
-    def close(self):
-        self.cursor.close()
-        self.connection.close()
-        print("Database connection closed")
-
     def create_access(self, access: Access) -> Access:
         request = "SELECT AddAccess(%s, %s, %s, %s, %s, %s, %s)"
         self.cursor.execute(request, (
             access.id, access.name, access.price, access.company, access.type, access.duration, access.numberOfPassage))
         result = self.cursor.fetchall()
-        print("the result: ", result)
+
         if result:
             result = json.loads(result[0][0])
-            print(result)
             return Access(
                 accesId=result["accessId"],
                 accessName=result["accessName"],
@@ -193,7 +206,55 @@ class Database:
             raise InvalidAdmin(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
                                RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
 
+    def buy_access(self, email, transaction) -> List[BoughtAccess]:
 
-if __name__ == '__main__':
-    num = str(Decimal('1234567890'))
-    print(num)
+        try:
+            request = "SELECT BuyAccess(%s, %s, %s)"
+            self.cursor.execute(request, (transaction.quantity, email, transaction.accessId))
+            result = self.cursor.fetchall()
+
+            if result:
+                result = json.loads(result[0][0])
+                bought_access_list = []
+                for access in result:
+                    bought_access_list.append(BoughtAccess(
+                        accessNumber=access["accessNumber"],
+                        price=access["price"],
+                        name=access["name"],
+                        accessType=access["accessType"],
+                        transactionDate=access["transactionDate"],
+                        expirationDate=access["expirationDate"],
+                        transactionNumber=access["transactionNumber"],
+                        company=access["company"],
+                        numberOfPassage=access.get("numberOfPassage") if access["accessType"] == "ticket" else None
+                    ))
+                return bought_access_list
+            else:
+                raise InvalidAdmin(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
+                                   RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
+        except OperationalError as error:
+            raise InvalidAdmin(ErrorResponseStatus.PAYMENT_REQUIRED, RequestErrorCause.PAYMENT_REQUIRED,
+                               RequestErrorDescription.PAYMENT_REQUIRED_DESCRIPTION, str(error))
+
+    def get_commuter_bought_access(self, email) -> List[BoughtAccess]:
+        request = "SELECT GetAccessBought(%s);"
+        self.cursor.execute(request, email)
+        result = self.cursor.fetchall()
+
+        result = json.loads(result[0][0])
+
+        bought_access_list = []
+        for access in result:
+            bought_access_list.append(BoughtAccess(
+                accessNumber=access["accessNumber"],
+                price=access["price"],
+                name=access["name"],
+                accessType=access["accessType"],
+                transactionDate=access["transactionDate"],
+                expirationDate=access["expirationDate"],
+                transactionNumber=access["transactionNumber"],
+                company=access["company"],
+                numberOfPassage=access.get("numberOfPassage") if access["accessType"] == "ticket" else None
+            ))
+
+        return bought_access_list

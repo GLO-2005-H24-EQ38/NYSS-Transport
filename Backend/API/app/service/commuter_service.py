@@ -58,23 +58,10 @@ class CommuterService():
                                   RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
 
         email = self._logged_in_commuter[token.value]
-        if self._commuter_repository.get_payment_info(email) is None:
-            raise InvalidCommuter(ErrorResponseStatus.PAYMENT_REQUIRED, RequestErrorCause.PAYMENT_REQUIRED,
-                                  RequestErrorDescription.PAYMENT_REQUIRED_DESCRIPTION)
 
-        # TODO 	Est-ce qu'on code ceci: le cvc doit confirmer que la carte de credit est valide avant d'entamer le paiement.
+        bought_access_list = self._commuter_repository.buy_access(email, transaction)
 
-        access = self._admin_repository.get_acess_by_accessId(transaction.accessId)
-
-        duration_days = access.duration
-        current_date = datetime.now().date()
-        expiration_date = current_date + timedelta(days=duration_days)
-        expiration_date_str = expiration_date.strftime("%Y/%m/%d")
-
-        bought_access = generate_bought_access_list(access, expiration_date_str, transaction.quantity)
-        self._commuter_repository.add_bought_access(email, bought_access)
-
-        return bought_access
+        return bought_access_list
 
     def get_wallet(self, token: Token) -> List[BoughtAccess]:
         if token.value not in self._logged_in_commuter:

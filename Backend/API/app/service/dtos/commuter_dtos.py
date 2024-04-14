@@ -105,20 +105,22 @@ class Transaction():
 
 
 class BoughtAccess():
-    def __init__(self, access: Access, expirationDate: str, transactionNumber: str):
-        self.accessNumber = uuid.uuid4().hex
-        self.accessName = access.name
-        self.accessType = self.__validate_access_type(access.type)
-        self.transactionDate = datetime.now().strftime("%Y/%m/%d")
-        self.expirationDate = self.__validate_date_format(expirationDate)
+    def __init__(self, name, price, accessType, company, accessNumber, expirationDate,
+                 transactionDate, transactionNumber, numberOfPassage=None):
+        self.accessNumber = accessNumber
+        self.price = float(price)
+        self.accessName = name
+        self.accessType = accessType
+        self.transactionDate = transactionDate
+        self.expirationDate = expirationDate
         self.transactionNumber = transactionNumber
-        self.company = access.company
-        self.numberOfPassage = int(access.numberOfPassage) if access.numberOfPassage is not None else None
+        self.company = company
+        self.numberOfPassage = numberOfPassage
 
     def to_json(self):
-        print("-----converting into JSON----")
         access_json = {
             "accessNumber": self.accessNumber,
+            "price": self.price,
             "accessName": self.accessName,
             "accessType": self.accessType,
             "transactionDate": self.transactionDate,
@@ -129,20 +131,6 @@ class BoughtAccess():
         if self.numberOfPassage is not None:
             access_json["numberOfPassage"] = self.numberOfPassage
         return access_json
-
-    def __validate_date_format(self, date_string):
-        pattern = r"\d{4}/\d{2}/\d{2}"
-        if re.match(pattern, date_string):
-            return date_string
-        else:
-            raise InvalidCommuter(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
-                                  RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
-
-    def __validate_access_type(self, access_type):
-        if access_type not in ["ticket", "subscription"]:
-            raise InvalidCommuter(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
-                                  RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
-        return access_type
 
 
 class SearchAccessQuery():
