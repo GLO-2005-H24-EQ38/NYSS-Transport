@@ -60,6 +60,7 @@ export default {
             <select style="width: 100%" v-model="accessType">
               <option value="Ticket">Ticket</option>
               <option value="Subscription">Subscription</option>
+              <option value="">None</option>
             </select>
           </div>
           <button @click="search">Search</button>

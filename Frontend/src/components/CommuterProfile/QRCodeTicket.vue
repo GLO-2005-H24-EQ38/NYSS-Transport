@@ -26,10 +26,10 @@ export default {
               <hr>
 
             <div id="details">
-              <div style="display: flex; justify-content:center;"><strong style="font-size: 2rem">Ticket Name
+              <div style="display: flex; justify-content:center;"><strong style="font-size: 2rem">Two-Day Subcription Pass
               </strong></div>
-              <div>
-                 <qrcode-vue :value="QRValue" size="250" level="Q"></qrcode-vue>
+              <div class="qrCode" style="position: relative; display: flex; justify-content: center">
+                 <qrcode-vue background="#ffffff" :value="QRValue" size="200" level="Q"></qrcode-vue>
                 <img
                   class="qrcode__image"
                   src="@/assets/qrlogo.png"
@@ -44,13 +44,7 @@ export default {
               <div style="display: flex; justify-content:center;"><strong style="font-size: 1.5rem">Customer
                 Name</strong></div>
               <div style="display: flex; justify-content:center; font-size: 1.25rem; margin-bottom: 1.25rem;">Date of Purchase</div>
-
               <div style="display: flex; justify-content:center; color: darkgray; font-size: 1.25rem">Ticket Number</div>
-              <img
-                  class="qrcode__image"
-                  src="@/assets/qrlogo.png"
-                  alt="nyss"
-              />
               <div style="display: flex; justify-content:center; font-size: 1.25rem">{{ QRValue }}</div>
               <!--          <div style="display: flex; justify-content: center; align-items: center; margin-top: 1rem">-->
               <!--            <button class="btn btn-primary btn-block" data-bs-dismiss="modal">Redeem Now</button>-->
@@ -66,15 +60,6 @@ export default {
   <div class="btn btn-secondary" style="display: flex; justify-content: center; align-items: center; height: 3.25rem" href="#"
        data-bs-target="#qrCodeTicket" data-bs-toggle="modal">Show QR Code
   </div>
-  <!--    <div class="modal-background">-->
-  <!--    <div class="modal-content">-->
-  <!--      <div style="display: flex; justify-content: center; align-items: center;flex-direction: column; margin-bottom: 20px">-->
-  <!--     <img src="@/assets/NYSS-Blue.png" alt="logo" style="auto; height: 100px; margin-bottom: 20px">-->
-  <!--        <qrcode-vue :value="QRValue" size="250" level="Q"></qrcode-vue>-->
-  <!--      <div style="margin-top: 1rem">{{ QRValue }}</div>-->
-  <!--      </div>-->
-  <!--    </div>-->
-  <!--    </div>-->
 </template>
 
 <style scoped>
@@ -91,17 +76,18 @@ export default {
   z-index: 1050;
 }
 
-.qrcode__image {
+.qrCode .qrcode__image {
   border-radius: 5rem;
   border-color: white;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.25);
-  height: 10%;
+  height: 30%;
   left: 50%;
   overflow: hidden;
   position: absolute;
-  top: 39%;
+  top: 50%;
   transform: translate(-50%, -50%);
   width: auto;
+  border-width: thick;
+  border-style: solid;
 }
 
 .modal-content {
@@ -119,5 +105,15 @@ export default {
 #details {
   border-radius: 0.5rem;
   border-color: darkgray;
+}
+
+.btn-secondary {
+  background-color: #01356a;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #0368cc;
+  color: white;
 }
 </style>
