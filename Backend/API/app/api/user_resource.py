@@ -401,6 +401,9 @@ def is_commuter_online():
 @app.route("/admin/company", methods=["GET"])
 @cross_origin()
 def get_company():
+    """
+    Endpoint for retrieving all the companies.
+    """
     company = admin_service.get_companies_names()
     return jsonify(company), 200
 
