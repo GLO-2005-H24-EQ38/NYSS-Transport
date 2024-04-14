@@ -7,35 +7,38 @@ export default {
   name: "HomeView",
   components: {SearchSideBar, AccessContainer},
   data() {
-    return {
-
-    }
+    return {}
   },
   mounted() {
     if (!Cookies.get('commuterToken')) {
       this.$router.push('/login');
     }
-    document.querySelector('.access-container').style.overflow = 'auto';
-    document.body.style.overflow = 'hidden';
   },
 }
 </script>
 
 <template>
-  <div style="display: flex; flex-direction: row">
-    <div id="justBeforeBar" style="flex:1; display: flex; justify-content: center;   background-color: #f3f3f3;">
-            <SearchSideBar />
+  <div>
+    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop"
+            aria-controls="staticBackdrop">
+      Search Here
+    </button>
+
+    <div class="offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop"
+         aria-labelledby="staticBackdropLabel">
+      <div class="offcanvas-header">
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <div>
+          <SearchSideBar />
+        </div>
+      </div>
     </div>
-    <div class="access-container" style="flex:5; overflow: auto;">
-          <AccessContainer/>
-    </div>
+    <AccessContainer/>
   </div>
 </template>
 
 <style scoped>
-.access-container {
-  height: 100vh;
-  overflow-y: auto;
-}
 
 </style>
