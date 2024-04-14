@@ -91,14 +91,3 @@ class CommuterRepository:
         else:
             raise InvalidCommuter(ErrorResponseStatus.NOT_FOUND, RequestErrorCause.NOT_FOUND,
                                   RequestErrorDescription.NOT_FOUND_DESCRIPTION)
-
-    def get_acess_by_accessId(self, accessId: str) -> Access:
-        """
-        Retrieve all the information of access based on its access id.
-        """
-        access = self.database.get_access(accessId)
-        if access:
-            return access
-        else:
-            raise InvalidCommuter(ErrorResponseStatus.NOT_FOUND, RequestErrorCause.NOT_FOUND,
-                                  RequestErrorDescription.NOT_FOUND_DESCRIPTION)

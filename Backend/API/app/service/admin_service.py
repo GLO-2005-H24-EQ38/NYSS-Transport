@@ -13,10 +13,16 @@ from app.service.exceptions import InvalidAdmin
 class AdminService():
 
     def __init__(self, admin_repository: AdminRepository):
+        """
+        Initializes the AdminService with the necessary repository.
+        """
         self._admin_repository = admin_repository
         self.logged_in_admin = {}
 
     def signup_admin(self, new_admin: AdminFullInfo) -> str:
+        """
+        Signs up a new admin and adds them to the system.
+        """
         new_admin.secure_password()
         new_admin.secure_admin_code()
         if self._admin_repository.signup_admin(new_admin):
@@ -26,6 +32,9 @@ class AdminService():
                                   RequestErrorDescription.ALREADY_EXISTS_DESCRIPTION)
 
     def login_admin(self, admin: Admin) -> Token:
+        """
+        Logs in an admin and generates a token for authentication.
+        """
         admin_saved_info = self._admin_repository.get_admin_info(admin.email)
 
         if admin_saved_info and admin_saved_info.verify_password(admin.password) and admin_saved_info.verify_admin_code(
@@ -38,43 +47,62 @@ class AdminService():
                                RequestErrorDescription.UNAUTHORIZED_DESCRIPTION)
 
     def create_access(self, new_access: Access, token: Token) -> Access:
-        # Vérifier si l'utilisateur est authentifié en tant qu'admin
+        """
+        Creates a new access in the system.
+        """
+        # Confirm that the commuter is logged in
         if token.value not in self.logged_in_admin:
             raise InvalidAdmin(ErrorResponseStatus.UNAUTHORIZED, RequestErrorCause.UNAUTHORIZED,
                                RequestErrorDescription.UNAUTHORIZED_DESCRIPTION)
 
+        # Verify that the access type is only ticket and subscription
         if new_access.type not in ["ticket", "subscription"]:
             raise InvalidAdmin(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
                                RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
 
+        # Verify that numberOfPassage is present if it's a ticket
         if new_access.type == "ticket":
             if new_access.numberOfPassage is None:
                 raise InvalidAdmin(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.MISSING_PARAMETER,
                                    RequestErrorDescription.MISSING_PARAMETER_DESCRIPTION)
         else:
-            # Si ce n'est pas un "Ticket", vérifie que numberOfPassage n'est pas défini
+            # If it's not a ticket, verify that numberOfPassage is not defined
             if new_access.numberOfPassage is not None:
                 print(new_access.numberOfPassage)
                 raise InvalidAdmin(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
                                    RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
 
-        # Stocker l'accès dans la base de données
         return self._admin_repository.create_new_access(new_access)
 
     def get_admin_full_info(self, token: Token) -> AdminFullInfo:
+        """
+        Retrieves the full information of an admin.
+        """
+        # Confirm that the commuter is logged in
         if token.value not in self.logged_in_admin:
             raise InvalidAdmin(ErrorResponseStatus.UNAUTHORIZED, RequestErrorCause.UNAUTHORIZED,
                                RequestErrorDescription.UNAUTHORIZED_DESCRIPTION)
+
+        # Retrieve the email based on the token
         email = self.logged_in_admin[token.value]
+
         return self._admin_repository.get_admin_full_info(email)
 
     def search_created_access(self, token: Token) -> List[Access]:
+        """
+        Searches all created access from the admin's company.
+        """
+        # Confirm that the commuter is logged in
         if token.value not in self.logged_in_admin:
             raise InvalidAdmin(ErrorResponseStatus.UNAUTHORIZED, RequestErrorCause.UNAUTHORIZED,
                                RequestErrorDescription.UNAUTHORIZED_DESCRIPTION)
         return self._admin_repository.search_created_access(self.logged_in_admin[token.value])
 
     def suspend_access(self, access_id: str, token: Token):
+        """
+        Suspends an access from the company.
+        """
+        # Confirm that the commuter is logged in
         if token.value not in self.logged_in_admin:
             raise InvalidAdmin(ErrorResponseStatus.UNAUTHORIZED, RequestErrorCause.UNAUTHORIZED,
                                RequestErrorDescription.UNAUTHORIZED_DESCRIPTION)
@@ -82,6 +110,9 @@ class AdminService():
         return "Successfully removed access from sale"
 
     def is_admin_logged_in(self, token: Token) -> bool:
+        """
+        Confirms if the admin is logged in.
+        """
         return token.value in self.logged_in_admin
 
     def get_companies_names(self):

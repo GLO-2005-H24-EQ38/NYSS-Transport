@@ -27,6 +27,9 @@ CREATED = 201
 @app.route("/user/signup", methods=["POST"])
 @cross_origin()
 def signup():
+    """
+    Endpoint for user signup. It can register both commuters and admins.
+    """
     try:
         data = request.get_json()
         if "adminCode" in data:
@@ -56,6 +59,9 @@ def signup():
 @app.route("/user/login", methods=["POST"])
 @cross_origin()
 def login():
+    """
+    Endpoint for user login. It authenticates both commuters and admins.
+    """
     try:
         data = request.get_json()
         if "adminCode" in data:
@@ -83,6 +89,9 @@ def login():
 @app.route("/admin/access", methods=["POST"])
 @cross_origin()
 def create_access():
+    """
+    Endpoint for creating a new access by an admin.
+    """
     try:
         token = request.headers.get("Authorization")
         data = request.get_json()
@@ -106,6 +115,9 @@ def create_access():
 @app.route("/admin/access/<accessId>", methods=["DELETE"])
 @cross_origin()
 def suspend_access(accessId):
+    """
+    Endpoint for suspending an access by an admin.
+    """
     try:
         token = request.headers.get("Authorization")
         print("access_id : ", accessId)
@@ -128,6 +140,9 @@ def suspend_access(accessId):
 @app.route("/user/payment", methods=["POST"])
 @cross_origin()
 def add_payment_method():
+    """
+    Endpoint for adding a payment method for a commuter.
+    """
     try:
         token = request.headers.get("Authorization")
         data = request.get_json()
@@ -151,6 +166,9 @@ def add_payment_method():
 @app.route("/user/access/checkout", methods=["POST"])
 @cross_origin()
 def buy_access():
+    """
+    Endpoint for a commuter to buy access.
+    """
     try:
         token = request.headers.get("Authorization")
         cvc = request.headers.get("cvc")
@@ -178,10 +196,12 @@ def buy_access():
 @app.route("/user/access", methods=["GET"])
 @cross_origin()
 def get_wallet():
+    """
+    Endpoint for retrieving the wallet of a commuter.
+    """
     try:
         token = request.headers.get("Authorization")
         response = commuter_service.get_wallet(Token(token))
-
         bought_access_json = [bought_access.to_json() for bought_access in response]
         return jsonify(bought_access_json), 200
     except RequestError as error:
@@ -201,10 +221,13 @@ def get_wallet():
 @app.route("/user/payment", methods=["DELETE"])
 @cross_origin()
 def delete_payment_method():
+    """
+    Endpoint for deleting a payment method for a commuter.
+    """
     try:
         token = request.headers.get("Authorization")
-        response = commuter_service.delete_payment_method(Token(token))
-        return jsonify({"message": response}), 204
+        commuter_service.delete_payment_method(Token(token))
+        return make_response("", 204)
     except RequestError as error:
         response = jsonify(error.to_json())
         response.status_code = error.error_response_status
@@ -222,6 +245,9 @@ def delete_payment_method():
 @app.route("/user/access/search", methods=["POST"])
 @cross_origin()
 def commuter_access_search():
+    """
+    Endpoint for a commuter to search for access options.
+    """
     try:
         token = request.headers.get("Authorization")
         data = request.get_json()
@@ -248,6 +274,9 @@ def commuter_access_search():
 @app.route("/admin/access/search", methods=["GET"])
 @cross_origin()
 def admin_access_search():
+    """
+    Endpoint for an admin to search for a created access from his company.
+    """
     try:
         token = request.headers.get("Authorization")
         found_access = admin_service.search_created_access(Token(token))
@@ -272,6 +301,9 @@ def admin_access_search():
 @app.route("/user/payment", methods=["GET"])
 @cross_origin()
 def get_card_info():
+    """
+    Endpoint for retrieving payment card information for a commuter.
+    """
     try:
         token = request.headers.get("Authorization")
         response = commuter_service.get_card_info(Token(token))
@@ -293,6 +325,9 @@ def get_card_info():
 @app.route("/user", methods=["GET"])
 @cross_origin()
 def get_commuter():
+    """
+    Endpoint for retrieving full information about a commuter.
+    """
     try:
         token = request.headers.get("Authorization")
         response = commuter_service.get_commuter_full_info(Token(token))
@@ -314,6 +349,9 @@ def get_commuter():
 @app.route("/admin", methods=["GET"])
 @cross_origin()
 def get_admin():
+    """
+    Endpoint for retrieving full information about an admin.
+    """
     try:
         token = request.headers.get("Authorization")
         response = admin_service.get_admin_full_info(Token(token))
@@ -335,6 +373,9 @@ def get_admin():
 @app.route("/admin/online", methods=["GET"])
 @cross_origin()
 def is_admin_online():
+    """
+    Endpoint to check if an admin is currently logged in.
+    """
     token = request.headers.get("Authorization")
     is_online = admin_service.is_admin_logged_in(Token(token))
     if is_online:
@@ -346,6 +387,9 @@ def is_admin_online():
 @app.route("/user/online", methods=["GET"])
 @cross_origin()
 def is_commuter_online():
+    """
+    Endpoint to check if a commuter is currently logged in.
+    """
     token = request.headers.get("Authorization")
     is_online = commuter_service.is_commuter_logged_in(Token(token))
     if is_online:

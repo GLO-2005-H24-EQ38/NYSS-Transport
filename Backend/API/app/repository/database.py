@@ -105,7 +105,6 @@ class Database:
         """
         request = f"CALL addCreditcard(%s, %s, %s, %s)"
         self.cursor.execute(request, (credit_card.holder, credit_card.cardNumber, credit_card.expirationDate, email))
-
         return True
 
     def delete_payment_method(self, email: str) -> bool:
@@ -150,7 +149,6 @@ class Database:
                 duration=access[5],
                 numberOfPassage=access[7] if access[4] == "ticket" else None
             ))
-
         return access_list
 
     def admin_search_access(self, email: str) -> List[Access]:
@@ -180,7 +178,6 @@ class Database:
                 numberOfPassage=access[7] if access[4] == "ticket" else None,
                 deletionDate=access[8].strftime("%Y-%m-%d") if access[6] else None
             ))
-
         return access_list
 
     def fetch_commuter_full_info(self, email: str) -> CommuterFullInfo | None:
