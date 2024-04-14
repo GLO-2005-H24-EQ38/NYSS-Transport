@@ -123,8 +123,7 @@ class Database:
         request = "SELECT GetCreditCard(%s);"
         self.cursor.execute(request, email)
         result = self.cursor.fetchall()
-
-        if result:
+        if result[0][0]:
             result = json.loads(result[0][0])
             last4_card_digits = result["cardNumber"][:1] + result["cardNumber"][-4:]
             return CreditCard(last4_card_digits=last4_card_digits, **result)

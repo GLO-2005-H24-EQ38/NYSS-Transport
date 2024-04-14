@@ -38,18 +38,20 @@ DELIMITER ;
 
 DELIMITER //
 
+-- Procedure to delete a user's credit card from their account
 CREATE PROCEDURE deleteCreditcard ( IN userEmail varchar(100))
 BEGIN
+    -- Declare variable to hold the old card number
     DECLARE oldCardNumber BIGINT;
 
+    -- Check if the user exists
     IF NOT EXISTS (SELECT * FROM commuter WHERE user = userEmail) THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'User does not exist';
     END IF;
 
     -- Retrieve the current credit card number of the user
-    SELECT creditCard  FROM commuter WHERE user = userEmail INTO oldCardNumber;
+    SELECT creditCard FROM commuter WHERE user = userEmail INTO oldCardNumber;
     -- Update the user's credit card information to NULL
-
     UPDATE commuter SET creditCard = NULL WHERE user = userEmail;
 
     -- Check if the old credit card is not associated with any user
