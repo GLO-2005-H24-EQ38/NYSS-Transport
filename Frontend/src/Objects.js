@@ -36,7 +36,7 @@ export class AddPaymentMethod {
 
 export class SearchAccessQuery {
 
-    Constructor(name, accessType, company, price) {
+    constructor(name, accessType, company, price) {
         this.name = name;
         this.accessType = accessType;
         this.company = company;

@@ -14,7 +14,7 @@ export default {
 </script>
 
 <template>
-  <nav class="navbar navbar-dark nav-bar-container" style="height: 10%; padding: 0">
+  <nav class="navbar  sticky-top nav-bar-container" style="height: 10%; padding: 0">
     <div class="nav-container">
       <div class="logo" style="flex: 1">
         <img style="object-fit: contain;  width: 10rem;" src="./assets/NYSS-White.png" />

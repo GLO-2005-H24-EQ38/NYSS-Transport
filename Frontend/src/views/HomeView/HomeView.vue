@@ -1,41 +1,51 @@
 <script>
-import AccessContainer from "@/components/Access/Communter/AccessContainer.vue";
-import Cookies from "js-cookie";
-import SearchSideBar from "@/views/HomeView/SearchSideBar.vue";
+import AccessContainer from '@/components/Access/Communter/AccessContainer.vue'
+import Cookies from 'js-cookie'
+import SearchSideBar from '@/views/HomeView/SearchSideBar.vue'
+import { SearchAccessQuery } from '@/Objects.js'
+import { getAccess, getAllAccess } from '@/api/access.js'
 
 export default {
   name: "HomeView",
   components: {SearchSideBar, AccessContainer},
   data() {
-    return {}
+    return {
+      accesslist: []
+    }
+  },methods: {
+       async getAccessCards(searchQuery)
+      {
+        const query = new SearchAccessQuery(searchQuery.name, searchQuery.accessType, searchQuery.company, searchQuery.price);
+        this.accesslist = await getAccess(query);
+        console.log(this.accesslist);
+
+      },
+      async getAllAccessCards()
+      {
+        this.accesslist = await getAllAccess();
+        console.log(this.accesslist);
+      }
+
   },
   mounted() {
     if (!Cookies.get('commuterToken')) {
       this.$router.push('/login');
     }
+
+    this.getAllAccessCards();
+
+
   },
 }
 </script>
 
 <template>
-  <div>
-    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop"
-            aria-controls="staticBackdrop">
-      Search Here
-    </button>
+<div>
+  <AccessContainer :accessCards="accesslist"/>
 
-    <div class="offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop"
-         aria-labelledby="staticBackdropLabel">
-      <div class="offcanvas-header">
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      </div>
-      <div class="offcanvas-body">
-        <div>
-          <SearchSideBar />
-        </div>
-      </div>
-    </div>
-    <AccessContainer/>
+
+  <SearchSideBar @searchQuery="getAccessCards" />
+
   </div>
 </template>
 

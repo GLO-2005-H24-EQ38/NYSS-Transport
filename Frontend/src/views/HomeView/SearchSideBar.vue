@@ -1,37 +1,55 @@
 <script>
+import { SearchAccessQuery } from '@/Objects.js'
+
 export default {
-  name: "SearchSideBar"
+  name: 'SearchSideBar',
+  data() {
+    return {
+      company: '',
+      price: '',
+      name: '',
+      accessType: ''
+    }
+  },
+  methods: {
+    search() {
+
+      const searchQuery = new SearchAccessQuery(this.name, this.accessType, this.company, this.price);
+
+      this.$emit('searchQuery', searchQuery);
+    }
+  }
+
 }
 </script>
 
 <template>
-  <div class="search-bar" style="display: flex; justify-content: center; align-items: center">
-    <div class="search-container">
-      <div style="font-size: 1.5rem; margin-bottom: 2rem;"><strong>Looking for a specific access ?</strong></div>
+  <nav class="navbar  sticky-bottom " >
+    <div class="nav-container container-fluid">
+
       <div>
         <div style="margin-left: 0.5rem">Search By Company</div>
-        <input type="text" placeholder="RTC" class="search-input">
+        <input type="text" placeholder="RTC" class="search-input" v-model="company">
       </div>
       <div>
         <div style="margin-left: 0.5rem">Search By Price</div>
-        <input type="number" placeholder="5.00" class="search-input">
+        <input type="number" placeholder="5.00" class="search-input" v-model="price">
       </div>
       <div>
         <div style="margin-left: 0.5rem">Search By Access Name</div>
-        <input type="text" placeholder="Access Weekend" class="search-input">
+        <input type="text" placeholder="Access Weekend" class="search-input" v-model="name">
       </div>
       <div>
         <div style="margin-left: 0.5rem">Search By Access Type</div>
-        <select>
+        <select v-model="accessType">
           <option value="Ticket">Ticket</option>
           <option value="Subscription">Subscription</option>
         </select>
       </div>
-      <div style="width: 100%; display: flex; justify-content: center">
-        <button data-bs-dismiss="offcanvas">Search</button>
-      </div>
+        <button @click="search">Search</button>
+
     </div>
-  </div>
+  </nav>
 </template>
 
 <style scoped>
@@ -66,12 +84,15 @@ button:hover {
   transition: ease-in-out 0.25s;
 }
 
-.search-container {
-  padding: 1rem;
-  border-radius: 0.5rem;
+.nav-container {
   display: flex;
+  flex-direction: row;
   justify-content: center;
-  flex-direction: column;
-  margin: 1rem;
+  align-items: center;
+  background-color: #f1f1f1;
+  padding: 1rem;
+  border-radius: 20px;
 }
+
+
 </style>

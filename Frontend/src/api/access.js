@@ -10,6 +10,8 @@ export const getAllAccess = async () => {
         },
         body: JSON.stringify({})
     });
+
+
     if (response.status === 200) {
         return await response.json();
     }
@@ -18,7 +20,7 @@ export const getAllAccess = async () => {
     }
 }
 
-export const searchAccess = async (SearchAccessQuery) => {
+export const getAccess = async (SearchAccessQuery) => {
     const response = await fetch(URL_API + 'user/access/search', {
         method: 'POST',
         headers: {

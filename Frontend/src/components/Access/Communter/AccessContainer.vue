@@ -1,30 +1,18 @@
 <script>
 import AccessCard from "@/components/Access/Communter/AccessCard.vue";
 import {getAllAccess} from "@/api/access.js";
+import { SearchAccessQuery } from '@/Objects.js'
 
 export default {
   name: "Access-Container",
   components: {AccessCard},
-  data() {
-    return {
-      accessCards: [],
+  props: {
+    accessCards: {
+      type: Array,
+      required: true
     }
   },
-  methods: {
-    async getAccessCards() {
-      const res = await getAllAccess();
-      console.log(res);
-      for (let i = 0; i < res.length; i++) {
-        this.accessCards.push(res[i]);
-      }
-      return res;
 
-    }
-  },
-  created() {
-    console.log('=====================================');
-    this.getAccessCards();
-  }
 }
 </script>
 
