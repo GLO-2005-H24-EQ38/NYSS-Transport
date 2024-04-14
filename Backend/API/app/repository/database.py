@@ -122,7 +122,7 @@ class Database:
                 company=access[3],
                 accessType=access[4],
                 duration=access[5],
-                numberOfPassage=access[6] if access[4] == "ticket" else None
+                numberOfPassage=access[7] if access[4] == "ticket" else None
             ))
 
         return access_list
