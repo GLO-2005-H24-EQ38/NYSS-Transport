@@ -147,9 +147,10 @@ class SearchAccessQuery():
         self.price = price
 
     def searchQuery(self):
-        """Fuzzy search for access in the database."""
+        """Fuzzy search for access in the database.
+        Search mode are accessName, accessType, company, price"""
 
-        query = "SELECT * FROM access WHERE 1=1"
+        query = "SELECT * FROM access a WHERE 1=1 AND NOT EXISTS(SELECT 1 FROM suspendedAccess s WHERE sus.access = a.id)"
 
         parameters = []
 
