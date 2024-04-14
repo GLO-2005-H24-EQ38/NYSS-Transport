@@ -214,7 +214,9 @@ class Database:
             result = self.cursor.fetchall()
 
             if result:
+                print(result)
                 result = json.loads(result[0][0])
+
                 bought_access_list = []
                 for access in result:
                     bought_access_list.append(BoughtAccess(
@@ -226,6 +228,8 @@ class Database:
                         expirationDate=access["expirationDate"],
                         transactionNumber=access["transactionNumber"],
                         company=access["company"],
+                        outOfSale=True if access["outOfSale"] else False,
+                        outOfSaleDate=access.get("outOfSaleDate") if access["outOfSale"] is True else None,
                         numberOfPassage=access.get("numberOfPassage") if access["accessType"] == "ticket" else None
                     ))
                 return bought_access_list
@@ -254,6 +258,8 @@ class Database:
                 expirationDate=access["expirationDate"],
                 transactionNumber=access["transactionNumber"],
                 company=access["company"],
+                outOfSale=True if access["outOfSale"] else False,
+                outOfSaleDate=access.get("outOfSaleDate") if access["outOfSale"] is True else None,
                 numberOfPassage=access.get("numberOfPassage") if access["accessType"] == "ticket" else None
             ))
 

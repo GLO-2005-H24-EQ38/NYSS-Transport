@@ -73,7 +73,9 @@ WHILE quantity > 0 DO
         SET access_bought_info = CONCAT(
                 '{"name": "', access_name, '", "price": "', access_price,
                 '", "accessType": "', access_type, '", "company": "', access_company,
-                '", "accessNumber": "', access_number, '", "transactionDate": "', CURDATE(),
+                '", "outOfSale": ',
+                  EXISTS(SELECT 1 FROM suspendedAccess sus WHERE sus.access = p_access_id),
+                ', "accessNumber": "', access_number, '", "transactionDate": "', CURDATE(),
                 IF(access_type = 'ticket', CONCAT('", "numberOfPassage": "', number_of_passage), ''),
                 '", "expirationDate": "', access_expire_date, '", "transactionNumber": "', transaction_number,'"}');
 
@@ -111,6 +113,8 @@ BEGIN
             '"accessType": "', a.type, '",',
             '"transactionDate": "', t.transactionDate, '",',
             '"expirationDate": "', t.expirationDate, '",',
+            '"outOfSale": ',
+              EXISTS(SELECT 1 FROM suspendedAccess sus WHERE sus.access = a.id), ',',
             '"transactionNumber": "', t.transactionNumber,
              IF(a.type = 'ticket', CONCAT('", "numberOfPassage": "', tk.passes), ''),
             '", "company": "', a.company, '"',
@@ -169,7 +173,8 @@ BEGIN
     WHERE user = p_email
     INTO credit_card_number, credit_card_holder, credit_card_expiration;
 
-    SET credit_card_info = CONCAT('{"cardNumber": "', credit_card_number, '", "holder": "', credit_card_holder, '", "expirationDate": "', credit_card_expiration, '"}');
+    SET credit_card_info = CONCAT('{"cardNumber": "', credit_card_number, '", "holder": "', credit_card_holder,
+        '", "expirationDate": "', credit_card_expiration, '"}');
 
     RETURN credit_card_info;
 END //

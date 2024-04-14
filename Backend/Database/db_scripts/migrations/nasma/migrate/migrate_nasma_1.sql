@@ -61,6 +61,8 @@ BEGIN
             '"accessType": "', a.type, '",',
             '"transactionDate": ', t.transactionDate, ',',
             '"expirationDate": ', t.expirationDate, ',',
+            '"outOfSale": ',
+              IF(EXISTS(SELECT 1 FROM suspendedAccess sus WHERE sus.access = a.id), 'true', 'false'), ',',
             '"transactionNumber": "', t.transactionNumber, '"',
             '"company": "', a.company, '"',
             IF(a.type = 'ticket', CONCAT(',"numberOfPassage": ', tk.passes), ''),
