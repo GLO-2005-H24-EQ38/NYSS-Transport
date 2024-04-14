@@ -89,6 +89,10 @@ def create_access():
         response = jsonify({"error": str(error)})
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
+    except ValueError as error:
+        response = jsonify({"error": str(error)})
+        response.status_code = ErrorResponseStatus.BAD_REQUEST.value
+        return response
 
 
 @app.route("/admin/access/<accessId>", methods=["DELETE"])
@@ -107,7 +111,10 @@ def suspend_access(accessId):
         response = jsonify({"error": str(error)})
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
-
+    except ValueError as error:
+        response = jsonify({"error": str(error)})
+        response.status_code = ErrorResponseStatus.BAD_REQUEST.value
+        return response
 
 @app.route("/user/payment", methods=["POST"])
 @cross_origin()
@@ -123,6 +130,10 @@ def add_payment_method():
         response.status_code = error.error_response_status
         return response
     except TypeError as error:
+        response = jsonify({"error": str(error)})
+        response.status_code = ErrorResponseStatus.BAD_REQUEST.value
+        return response
+    except ValueError as error:
         response = jsonify({"error": str(error)})
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
@@ -149,6 +160,10 @@ def buy_access():
         response = jsonify({"error": str(error)})
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
+    except ValueError as error:
+        response = jsonify({"error": str(error)})
+        response.status_code = ErrorResponseStatus.BAD_REQUEST.value
+        return response
 
 
 @app.route("/user/access", methods=["GET"])
@@ -168,7 +183,10 @@ def get_wallet():
         response = jsonify({"error": str(error)})
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
-
+    except ValueError as error:
+        response = jsonify({"error": str(error)})
+        response.status_code = ErrorResponseStatus.BAD_REQUEST.value
+        return response
 
 @app.route("/user/payment", methods=["DELETE"])
 @cross_origin()
@@ -185,7 +203,10 @@ def delete_payment_method():
         response = jsonify({"error": str(error)})
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
-
+    except ValueError as error:
+        response = jsonify({"error": str(error)})
+        response.status_code = ErrorResponseStatus.BAD_REQUEST.value
+        return response
 
 @app.route("/user/access/search", methods=["POST"])
 @cross_origin()
@@ -207,7 +228,10 @@ def commuter_access_search():
         response = jsonify({"error": str(error)})
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
-
+    except ValueError as error:
+        response = jsonify({"error": str(error)})
+        response.status_code = ErrorResponseStatus.BAD_REQUEST.value
+        return response
 
 @app.route("/admin/access/search", methods=["GET"])
 @cross_origin()
@@ -227,7 +251,10 @@ def admin_access_search():
         response = jsonify({"error": str(error)})
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
-
+    except ValueError as error:
+        response = jsonify({"error": str(error)})
+        response.status_code = ErrorResponseStatus.BAD_REQUEST.value
+        return response
 
 @app.route("/user/payment", methods=["GET"])
 @cross_origin()
@@ -244,7 +271,10 @@ def get_card_info():
         response = jsonify({"error": str(error)})
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
-
+    except ValueError as error:
+        response = jsonify({"error": str(error)})
+        response.status_code = ErrorResponseStatus.BAD_REQUEST.value
+        return response
 
 @app.route("/user", methods=["GET"])
 @cross_origin()
@@ -261,7 +291,10 @@ def get_commuter():
         response = jsonify({"error": str(error)})
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
-
+    except ValueError as error:
+        response = jsonify({"error": str(error)})
+        response.status_code = ErrorResponseStatus.BAD_REQUEST.value
+        return response
 
 @app.route("/admin", methods=["GET"])
 @cross_origin()
@@ -278,7 +311,10 @@ def get_admin():
         response = jsonify({"error": str(error)})
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
-
+    except ValueError as error:
+        response = jsonify({"error": str(error)})
+        response.status_code = ErrorResponseStatus.BAD_REQUEST.value
+        return response
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8080, debug=True)
