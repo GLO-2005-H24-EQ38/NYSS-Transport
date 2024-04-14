@@ -80,3 +80,9 @@ class AdminService():
                                RequestErrorDescription.UNAUTHORIZED_DESCRIPTION)
         self._admin_repository.suspend_access(access_id)
         return "Successfully removed access from sale"
+
+    def is_admin_logged_in(self, token: Token) -> bool:
+        return token.value in self.logged_in_admin
+
+    def get_companies_names(self):
+        return self._admin_repository.get_companies_names()

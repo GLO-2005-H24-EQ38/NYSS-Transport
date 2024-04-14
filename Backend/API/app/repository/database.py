@@ -329,3 +329,15 @@ class Database:
                 ))
         return bought_access_list
 
+    def fetch_companies_names(self):
+        """
+        Retrieve all the companies names.
+        """
+        request = "SELECT name FROM company"
+        self.cursor.execute(request)
+        result = self.cursor.fetchall()
+        companies = []
+        for company in result:
+            companies.append(company[0])
+        return companies
+
