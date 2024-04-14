@@ -47,6 +47,10 @@ def signup():
         response = jsonify({"error": str(error)})
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
+    except ValueError as error:
+        response = jsonify({"error": str(error)})
+        response.status_code = ErrorResponseStatus.BAD_REQUEST.value
+        return response
 
 
 @app.route("/user/login", methods=["POST"])
@@ -67,6 +71,10 @@ def login():
         response.status_code = error.error_response_status
         return response
     except TypeError as error:
+        response = jsonify({"error": str(error)})
+        response.status_code = ErrorResponseStatus.BAD_REQUEST.value
+        return response
+    except ValueError as error:
         response = jsonify({"error": str(error)})
         response.status_code = ErrorResponseStatus.BAD_REQUEST.value
         return response
