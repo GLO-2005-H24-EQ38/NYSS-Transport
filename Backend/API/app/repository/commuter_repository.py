@@ -61,7 +61,7 @@ class CommuterRepository:
 
     def get_bought_access(self, email) -> List[BoughtAccess]:
         """
-            Retrieve all bought access of a commuter based on email.
+        Retrieve all bought access of a commuter based on email.
         """
         return self.database.fetch_commuter_bought_access(email)
 
@@ -73,7 +73,7 @@ class CommuterRepository:
 
     def delete_payment_method(self, email) -> bool:
         """
-            Delete payment method for the commuter with the given email.
+        Delete payment method for the commuter with the given email.
         """
         try:
             return self.database.delete_payment_method(email)
@@ -82,7 +82,7 @@ class CommuterRepository:
 
     def get_commuter_full_info(self, email) -> CommuterFullInfo:
         """
-            Retrieve all the information of a commuter based on email.
+        Retrieve all the information of a commuter based on email.
         """
         commuter_info = self.database.fetch_commuter_full_info(email)
         if commuter_info:
@@ -93,7 +93,7 @@ class CommuterRepository:
 
     def get_acess_by_accessId(self, accessId: str) -> Access:
         """
-            Retrieve all the information of access based on its access id.
+        Retrieve all the information of access based on its access id.
         """
         access = self.database.get_access(accessId)
         if access:
