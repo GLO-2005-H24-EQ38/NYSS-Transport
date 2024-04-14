@@ -153,7 +153,7 @@ BEGIN
     SET deleteDate = DATE_ADD(CURDATE(), INTERVAL accessDuration DAY);
 
     -- Insert into suspendedaccess table
-    INSERT INTO suspendedaccess(access,deletionDate) VALUES (p_access_id, deleteDate);
+    INSERT INTO suspendedAccess(access,deletionDate) VALUES (p_access_id, deleteDate);
 
     -- Update access status to suspended
     UPDATE access SET suspended = TRUE WHERE id = p_access_id;

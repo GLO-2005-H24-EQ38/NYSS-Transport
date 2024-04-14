@@ -73,3 +73,10 @@ class AdminService():
             raise InvalidAdmin(ErrorResponseStatus.UNAUTHORIZED, RequestErrorCause.UNAUTHORIZED,
                                RequestErrorDescription.UNAUTHORIZED_DESCRIPTION)
         return self._admin_repository.search_created_access(self.logged_in_admin[token.value])
+
+    def suspend_access(self, access_id: str, token: Token):
+        if token.value not in self.logged_in_admin:
+            raise InvalidAdmin(ErrorResponseStatus.UNAUTHORIZED, RequestErrorCause.UNAUTHORIZED,
+                               RequestErrorDescription.UNAUTHORIZED_DESCRIPTION)
+        self._admin_repository.suspend_access(access_id)
+        return "Successfully removed access from sale"

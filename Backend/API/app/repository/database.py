@@ -211,6 +211,14 @@ class Database:
             raise InvalidAdmin(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
                                RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
 
+    def admin_suspend_access(self, access_id: str):
+        request = "CALL DeleteAccess(%s)"
+        # try:
+        self.cursor.execute(request, access_id)
+        # except OperationalError as error:
+        #     raise InvalidAdmin(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
+        #                        RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION, str(error))
+
     def buy_access(self, email, transaction) -> List[BoughtAccess]:
 
         try:

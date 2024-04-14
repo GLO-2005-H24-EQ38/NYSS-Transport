@@ -150,7 +150,7 @@ class SearchAccessQuery():
         """Fuzzy search for access in the database.
         Search mode are accessName, accessType, company, price"""
 
-        query = "SELECT * FROM access a WHERE 1=1 AND NOT EXISTS(SELECT 1 FROM suspendedAccess s WHERE sus.access = a.id)"
+        query = "SELECT * FROM access a WHERE 1=1 AND NOT EXISTS(SELECT 1 FROM suspendedAccess s WHERE s.access = a.id)"
 
         parameters = []
 

@@ -45,3 +45,6 @@ class AdminRepository:
         else:
             raise InvalidAdmin(ErrorResponseStatus.NOT_FOUND, RequestErrorCause.NOT_FOUND,
                                RequestErrorDescription.NOT_FOUND_DESCRIPTION)
+
+    def suspend_access(self, access_id: str):
+        self.database.admin_suspend_access(access_id)
