@@ -50,7 +50,7 @@ BEGIN
     END IF;
 
     -- Retrieve the current credit card number of the user
-    SELECT creditCard INTO oldCardNumber FROM commuter WHERE user = userEmail;
+    SELECT creditCard FROM commuter WHERE user = userEmail INTO oldCardNumber;
     -- Update the user's credit card information to NULL
     UPDATE commuter SET creditCard = NULL WHERE user = userEmail;
 
