@@ -6,49 +6,47 @@ import { SearchAccessQuery } from '@/Objects.js'
 import { getAccess, getAllAccess } from '@/api/access.js'
 
 export default {
-  name: "HomeView",
-  components: {SearchSideBar, AccessContainer},
+  name: 'HomeView',
+  components: { SearchSideBar, AccessContainer },
   data() {
     return {
       accesslist: []
     }
-  },methods: {
-       async getAccessCards(searchQuery)
-      {
-        const query = new SearchAccessQuery(searchQuery.name, searchQuery.accessType, searchQuery.company, searchQuery.price);
-        this.accesslist = await getAccess(query);
-        console.log(this.accesslist);
+  }, methods: {
+    async getAccessCards(searchQuery) {
+      const query = new SearchAccessQuery(searchQuery.name, searchQuery.accessType, searchQuery.company, searchQuery.price)
+      console.log(query)
+      this.accesslist = await getAccess(query)
+      console.log(this.accesslist)
 
-      },
-      async getAllAccessCards()
-      {
-        this.accesslist = await getAllAccess();
-        console.log(this.accesslist);
-      }
+    },
+    async getAllAccessCards() {
+      this.accesslist = await getAllAccess()
+      console.log(this.accesslist)
+    }
 
   },
   mounted() {
     if (!Cookies.get('commuterToken')) {
-      this.$router.push('/login');
+      this.$router.push('/login')
     }
 
-    this.getAllAccessCards();
+    this.getAllAccessCards()
 
 
-  },
+  }
 }
 </script>
 
 <template>
-<div>
-  <AccessContainer :accessCards="accesslist"/>
-
-
-  <SearchSideBar @searchQuery="getAccessCards" />
-
+  <div >
+    <AccessContainer :accessCards="accesslist" />
+    <SearchSideBar @searchQuery="getAccessCards" />
   </div>
 </template>
 
 <style scoped>
+
+
 
 </style>
