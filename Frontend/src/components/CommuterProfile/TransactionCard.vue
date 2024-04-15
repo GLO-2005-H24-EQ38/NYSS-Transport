@@ -1,92 +1,98 @@
 <script>
-import QRCodeTicket from "@/components/CommuterProfile/QRCodeTicket.vue";
+import QRCodeTicket from '@/components/CommuterProfile/QRCodeTicket.vue'
 
 export default {
-  name: "TransactionCard",
-  components: {QRCodeTicket},
+  name: 'TransactionCard',
+  components: { QRCodeTicket },
   props: {
     transaction: {
       type: Object,
-      required: true,
-    },
+      required: true
+    }
   },
   data() {
     return {
-      accessNumber: "",
-      transactionNumber: "",
-      expDate: "",
-      transactionDate: "",
-      QRValue: null,
-      showQRCode: false,
+      accessNumber: '',
+      transactionNumber: '',
+      expDate: '',
+      transactionDate: '',
+      type: '',
+      QRValue: '',
+      showQRCode: false
     }
-  },
-  mounted() {
+  }, mounted() {
     console.log(this.transaction)
     this.accessNumber = this.transaction.accessNumber
     this.transactionNumber = this.transaction.transactionNumber
     this.expDate = this.transaction.expirationDate
     this.transactionDate = this.transaction.transactionDate
-    this.QRValue = [this.accessNumber, this.transactionNumber, this.expDate, this.transactionDate]
+    this.type = this.transaction.accessType
+    this.QRValue = 'Access N.: ' + this.accessNumber +
+      '\nTransaction N.: ' + this.transactionNumber +
+      '\nExpires on: ' + this.expDate +
+      '\nType: ' + this.type
   }
 }
 </script>
 
 <template>
-<!--  <div class="access-card" style="position: relative">-->
-<!--    <div class="expirationDate" style="display: flex; justify-content: center">-->
-<!--         Expires on {{ expDate }}-->
-<!--        </div>-->
-<!--    <img-->
-<!--        style="object-fit: contain"-->
-<!--        src="@/assets/stm_logo.png"-->
-<!--        alt="stm"/>-->
-<!--    <div class="card-body">-->
-<!--      <div class="card-title" style="display: flex; flex-direction: row">-->
-<!--        <div style="flex: 1">-->
-<!--         Access N.# : {{ accessNumber }}-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div style="display: flex; flex-direction: row">-->
-<!--        <div class="card-text" style="flex:1">Type: Ticket</div>-->
-<!--        <div class="card-text" style="flex:1; justify-content: flex-end; display: flex">Purchased : {{ transactionDate }}</div>-->
-<!--      </div>-->
-<!--      <div class="card-text">Transaction N.#: {{ transactionNumber }}</div>-->
-<!--    </div>-->
-<!--    <QRCodeTicket />-->
-<!--  </div>-->
-    <div class="access-card" style="position: relative">
+  <!--  <div class="access-card" style="position: relative">-->
+  <!--    <div class="expirationDate" style="display: flex; justify-content: center">-->
+  <!--         Expires on {{ expDate }}-->
+  <!--        </div>-->
+  <!--    <img-->
+  <!--        style="object-fit: contain"-->
+  <!--        src="@/assets/stm_logo.png"-->
+  <!--        alt="stm"/>-->
+  <!--    <div class="card-body">-->
+  <!--      <div class="card-title" style="display: flex; flex-direction: row">-->
+  <!--        <div style="flex: 1">-->
+  <!--         Access N.# : {{ accessNumber }}-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--      <div style="display: flex; flex-direction: row">-->
+  <!--        <div class="card-text" style="flex:1">Type: Ticket</div>-->
+  <!--        <div class="card-text" style="flex:1; justify-content: flex-end; display: flex">Purchased : {{ transactionDate }}</div>-->
+  <!--      </div>-->
+  <!--      <div class="card-text">Transaction N.#: {{ transactionNumber }}</div>-->
+  <!--    </div>-->
+  <!--    <QRCodeTicket />-->
+  <!--  </div>-->
+  <div class="access-card" style="position: relative">
     <div class="expirationDate" style="display: flex; justify-content: center; flex-direction: row">
-      {{ 'Ticket' }} {{ "•" }}
-        </div>
-      <div class="expirationDate2" style="display: flex; justify-content: center; flex-direction: row">
-      {{ this.expDate }}
-        </div>
-<!--    <img-->
-<!--        style="object-fit: contain"-->
-<!--        src="@/assets/stm_logo.png"-->
-<!--        alt="stm"/>-->
+      {{ 'Ticket' }} {{ '•' }}
+    </div>
+    <div class="expirationDate2" style="display: flex; justify-content: center; flex-direction: row">
+      {{ expDate }}
+    </div>
+    <!--    <img-->
+    <!--        style="object-fit: contain"-->
+    <!--        src="@/assets/stm_logo.png"-->
+    <!--        alt="stm"/>-->
     <div class="card-body">
       <div class="card-title" style="display: flex; flex-direction: column">
         <div style="flex: 1">
-         Access n.
+          Access n.
         </div>
         <div style="flex: 1; font-size: 1.70rem; color: black">
-         {{ this.accessNumber }}
+          {{ accessNumber }}
         </div>
       </div>
       <div style="display: flex; flex-direction: row">
-        <div class="card-text" style="flex:1; justify-content: flex-start; display: flex">Purchased : {{ this.transactionDate }}</div>
+        <div class="card-text" style="flex:1; justify-content: flex-start; display: flex">Purchased : {{ transactionDate
+          }}
+        </div>
       </div>
       <hr>
       <div class="card-text">Transaction #</div>
       <div class="card-text" style="margin-bottom: 1rem">{{ this.transactionNumber }}</div>
     </div>
-<!--      <div class="invalid">Invalid</div>-->
-    <QRCodeTicket :q-r-value="this.QRValue" />
-      <img
-          class="logoPosition"
-        src="@/assets/rtc_logo.jpg"
-        alt="stm"/>
+    <!--      <div class="invalid">Invalid</div>-->
+    <QRCodeTicket :QRValue="QRValue.toString()" />
+    <img
+      class="logoPosition"
+      src="@/assets/rtc_logo.jpg"
+      alt="stm" />
   </div>
 </template>
 

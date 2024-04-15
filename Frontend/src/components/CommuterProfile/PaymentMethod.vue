@@ -53,12 +53,9 @@ export default {
       await this.getCard()
     }
   },
-  created() {
+  mounted() {
     this.getCard();
   },
-  updated() {
-    this.getCard();
-  }
 }
 </script>
 
