@@ -4,6 +4,7 @@ import Cookies from 'js-cookie'
 import SearchSideBar from '@/views/HomeView/SearchSideBar.vue'
 import { SearchAccessQuery } from '@/Objects.js'
 import { getAccess, getAllAccess } from '@/api/access.js'
+import { checkCommuterOnline } from '@/api/login.js'
 
 export default {
   name: 'HomeView',
@@ -22,15 +23,20 @@ export default {
     },
     async getAllAccessCards() {
       this.accesslist = await getAllAccess()
-      console.log(this.accesslist)
-    }
+    }, async validateToken() {
+      const response = await checkCommuterOnline()
 
+      if (response.status !== 200) {
+        Cookies.remove('commuterToken')
+        this.$router.push('/login')
+      }else {
+        console.log('Token is valid')
+      }
+    }
   },
   mounted() {
-    if (!Cookies.get('commuterToken')) {
-      this.$router.push('/login')
-    }
 
+    this.validateToken();
     this.getAllAccessCards()
 
 

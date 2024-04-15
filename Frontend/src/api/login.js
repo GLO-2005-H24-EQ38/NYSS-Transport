@@ -1,4 +1,5 @@
 import { URL_API } from '/src/api/url.js';
+import Cookies from 'js-cookie'
 
 export const loginCommuter = async (email, password) => {
     const errorMsg = document.getElementById("error");
@@ -41,4 +42,31 @@ export const loginAdmin = async (email, password, adminCode) => {
     const token = await response.json();
     console.log(token);
     return token;
+}
+
+
+export const checkCommuterOnline = async () => {
+    const response = await fetch(URL_API + 'user/online', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': Cookies.get('commuterToken'),
+            'Access-Control-Allow-Origin': '*',
+        }});
+
+    return response;
+}
+
+
+export const checkAdminOnline = async () => {
+    const response = await fetch(URL_API + 'admin/online', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': Cookies.get('commuterToken'),
+            'Access-Control-Allow-Origin': '*',
+        }});
+
+    return response
+
 }
