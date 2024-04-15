@@ -1,7 +1,5 @@
 <script>
 import AccessCard from "@/components/Access/Communter/AccessCard.vue";
-import {getAllAccess} from "@/api/access.js";
-import { SearchAccessQuery } from '@/Objects.js'
 
 export default {
   name: "Access-Container",
@@ -27,7 +25,8 @@ export default {
 .access-cards-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  min-height: 75vh;
+  justify-content: center;
   margin-top: 40px;
 }
 </style>

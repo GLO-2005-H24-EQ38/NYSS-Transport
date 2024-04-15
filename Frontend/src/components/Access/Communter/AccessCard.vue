@@ -56,36 +56,39 @@ export default {
 </script>
 
 <template>
-  <div class="access-card">
-    <img
-        style="object-fit: contain"
-        :src="this.logo"
-        alt="stm"/>
-    <div class="card-body">
-      <div class="card-title" style="display: flex; flex-direction: row">
-        <div style="flex: 1">
-          {{ this.access.accessName }}
+    <div class="access-card" style="position: relative">
+    <div class="expirationDate" style="display: flex; justify-content: center; flex-direction: row">
+      {{  this.access.accessType }}
         </div>
-        <div style="flex: 1; display: flex; justify-content: end; align-items: end">
-          $ {{ this.access.price }}
+    <div class="card-body">
+      <div class="card-title" style="display: flex; flex-direction: column">
+        <div style="flex: 1; padding-top: 2rem; font-size: 1.70rem; color: black">
+         {{ this.access.accessName }}
         </div>
       </div>
-      <div class="card-text">Type: {{ this.access.accessType }}</div>
+      <div style="display: flex; flex-direction: row">
+        <div class="card-text" style="flex:1; justify-content: flex-end; display: flex; margin-top: 3rem">{{ "$" }}{{ this.access.price.toFixed(2) }}</div>
+      </div>
     </div>
-    <div style="margin: 1rem;">
-      <div @click="incrementQuantity()" v-if="!quantity" style="width: 100%" class="btn btn-primary btn-lg btn-block">
+      <div style="margin-top: 1.5rem">
+      <div @click="incrementQuantity()" v-if="!quantity" style="width: 100%" class="btn btn-primary btn-lg btn-block addButton">
         <i class="bi bi-plus-lg"></i>
         Add
       </div>
       <div v-if="quantity" style="width: 100%; display: flex; flex-direction: row">
         <div style="display: flex; flex-direction: row; flex: 3; justify-content: space-evenly; align-items: center">
-         <i class="bi bi-dash-lg btn btn-outline-primary" @click="decrementQuantity"></i>
+         <i class="bi bi-dash-lg btn addButton" @click="decrementQuantity"></i>
           <div style="font-size: large">{{ quantity }}</div>
-          <i class="bi bi-plus-lg btn btn-outline-primary" @click="incrementQuantity"></i>
+          <i class="bi bi-plus-lg btn addButton" @click="incrementQuantity"></i>
         </div>
         <buyAccessPrompt v-if="quantity > 0"  :accessId="this.access.accessId" :quantity="quantity" @close="quantity = 0" />
       </div>
     </div>
+      <img
+          class="logoPosition"
+          style="height: 25%; object-fit: contain"
+        :src="this.logo"
+        alt="stm"/>
   </div>
 </template>
 
@@ -94,17 +97,20 @@ export default {
   transition: ease-in-out 0.25s;
   position: relative;
   width: 23rem;
-  height: 100%;
+  height: 15rem;
   margin: 20px;
   border-radius: 5px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.access-card img {
-  transition: ease-in-out 0.25s;
-  width: 100%;
-  height: 13rem;
-  object-fit: fill;
+
+.logoPosition {
+  padding: 1px;
+  border: none;
+  position: absolute;
+  top: 25%;
+  border-top-right-radius: 0.5rem;
+  right: 3%;
 }
 
 .card-body {
@@ -122,38 +128,39 @@ export default {
 .card-title {
   font-size: 1.25rem;
   font-weight: bold;
+  width: 60%;
   color: #000000;
 }
 
 .card-text {
-  font-size: 1rem;
-  color: #666;
+  color: #000000;
+  font-weight: bold;
+  font-size: 2rem;
   flex-grow: 1;
 }
 
 .addButton {
   cursor: pointer;
-  color: dodgerblue;
+  background-color: #01356a;
+  border-color: transparent;
   display: flex;
+  color: white;
   justify-content: center;
   align-items: center;
 }
 
 .expirationDate {
   transition: ease-in-out 0.25s;
-  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
-  background-color: #ffffff;
+  background-color: #0368cc;
   border: none;
-  border-radius: 25px;
-  padding: 8px;
+  width: 100%;
   position: absolute;
-  bottom: 30%;
-  left: 50%;
-  transform: translate(-50%, 0);
+  color: white;
+  padding: 0.5rem 0.5rem ;
 }
 
 .addButton:hover {
-  background-color: dodgerblue;
+  background-color: #0368cc;
   transition: ease-in-out 0.25s;
   color: white;
   cursor: pointer;

@@ -38,7 +38,7 @@ export const getAccess = async (SearchAccessQuery) => {
 }
 
 export const addAccess = async (query) => {
-    const response = await fetch(URL_API + 'user/admin/access', {
+    const response = await fetch(URL_API + 'admin/access', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -48,6 +48,11 @@ export const addAccess = async (query) => {
         },
         body: JSON.stringify(query)
     });
-    return await response.json();
+    if (response.status === 400) {
+        let error = document.getElementById('errorAddAccess');
+        error.innerText = "Please fill all fields correctly";
+    }
+    await response.json();
+    return response;
 }
 
