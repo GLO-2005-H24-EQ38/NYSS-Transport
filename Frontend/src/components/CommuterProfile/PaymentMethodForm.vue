@@ -29,6 +29,7 @@ export default {
       const res = await addPaymentMethod(paymentMethod)
       if (res.status === 201) {
         this.closeModal();
+        this.$emit('close')
       } else {
         console.error('Error Adding Payment Method')
       }
