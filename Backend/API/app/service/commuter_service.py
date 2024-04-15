@@ -162,3 +162,10 @@ class CommuterService():
         Confirms if the commuter is logged in.
         """
         return token.value in self._logged_in_commuter
+
+    def logout_commuter(self, token: Token):
+        """
+        Logs out a commuter.
+        """
+        if token.value in self._logged_in_commuter:
+            del self._logged_in_commuter[token.value]

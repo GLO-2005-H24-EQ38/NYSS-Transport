@@ -408,5 +408,28 @@ def get_company():
     return jsonify(company), 200
 
 
+@app.route("/admin/logout", methods=["POST"])
+@cross_origin()
+def logout_admin():
+    """
+    Endpoint for logging out an admin.
+    """
+    token = request.headers.get("Authorization")
+    admin_service.logout_admin(Token(token))
+    return make_response("", 204)
+
+
+# api call to logout commuter
+@app.route("/user/logout", methods=["POST"])
+@cross_origin()
+def logout_commuter():
+    """
+    Endpoint for logging out a commuter.
+    """
+    token = request.headers.get("Authorization")
+    commuter_service.logout_commuter(Token(token))
+    return make_response("", 204)
+
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8080, debug=True)

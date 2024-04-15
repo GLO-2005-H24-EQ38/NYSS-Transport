@@ -119,3 +119,10 @@ class AdminService():
          Retrieves all the companies.
          """
         return self._admin_repository.get_companies_names()
+
+    def logout_admin(self, token: Token):
+        """
+        Logs out an admin.
+        """
+        if token.value in self.logged_in_admin:
+            del self.logged_in_admin[token.value]
