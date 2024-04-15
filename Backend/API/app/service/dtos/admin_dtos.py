@@ -188,10 +188,5 @@ def generate_code():
 
 if __name__ == '__main__':
     # Example usage
-    generated_code = generate_code()
+    generated_code = [generate_code() for _ in range(10)]
     print("Generated code:", generated_code)
-
-    admin = AdminFullInfo("John Doe", "password", "123 Main St", "ssd@ss.com",
-                          "1234567890", "1990-01-01", "generated_code",
-                          "company")
-    print(admin.admin_code)
