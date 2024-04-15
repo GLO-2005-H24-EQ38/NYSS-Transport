@@ -1,7 +1,7 @@
-/* procedures to drop if not dropped */
-DROP PROCEDURE IF EXISTS addCreditcard;
 
 /* Drop first due to FOREIGN KEY Constraints */
+DROP EVENT IF EXISTS deleteSuspendedAccess;
+Drop TABLE IF EXISTS suspendedAccess;
 Drop TABLE IF EXISTS transaction;
 DROP TABLE IF EXISTS commuter;
 DROP TABLE IF EXISTS admin;

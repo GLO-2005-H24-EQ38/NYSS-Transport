@@ -1,82 +1,101 @@
-DROP FUNCTION IF EXISTS SearchAccess;
 DROP FUNCTION IF EXISTS RetrieveWallet;
-DROP PROCEDURE IF EXISTS AddAccess;
+DROP FUNCTION IF EXISTS AddAccess;
 
 DELIMITER //
 
-CREATE FUNCTION SearchAccess (
-    p_company_name VARCHAR(100),
-    p_access_name VARCHAR(100),
-    p_price FLOAT
-)
-RETURNS VARCHAR(10000) DETERMINISTIC
-BEGIN
-    DECLARE p_access_list VARCHAR(10000);
-
-    -- Initialize the access list
-    SET p_access_list = '';
-
-    -- Concatenate access details to the access list
-    SELECT GROUP_CONCAT(
-        CONCAT('(', a.id, ', "', a.name, '", ', a.price, ', "', a.type, '", ', a.duration, ')', '\n')
-        SEPARATOR ''
-    ) INTO p_access_list
-    FROM access a
-    WHERE (p_company_name IS NULL OR a.company = p_company_name)
-        AND (p_access_name IS NULL OR a.name = p_access_name)
-        AND (p_price IS NULL OR a.price = p_price);
-
-    RETURN p_access_list;
-END //
-
+-- Function to retrieve the wallet (all the bought access) of a commuter
 CREATE FUNCTION RetrieveWallet(
     p_email VARCHAR(100)
 )
 RETURNS VARCHAR(10000) DETERMINISTIC
 BEGIN
+    -- Declare variable for wallet info
     DECLARE wallet_info VARCHAR(10000);
 
-    -- Initialize the wallet_info
+    -- Initialize the wallet_info JSON array
     SET wallet_info = '';
 
     -- Retrieve access information for the user
     SELECT GROUP_CONCAT(
-        CONCAT('Access: ', a.name, ', Expiration Date: ', t.expirationDate, ', Access Number: ', t.accessNumber, ', Transaction Date: ', t.transactionDate, ', Transaction Number: ', t.transactionNumber, '\n')
-        SEPARATOR ''
+        CONCAT(
+            '{"accessNumber": "', t.accessNumber, '",',
+            '"accessName": "', a.name, '",',
+            '"accessType": "', a.type, '",',
+            '"transactionDate": ', t.transactionDate, ',',
+            '"expirationDate": ', t.expirationDate, ',',
+            '"outOfSale": ', suspended, ',',
+            '"deletionDate": ',
+                IF(suspended, (SELECT deletionDate FROM suspendedAccess sus WHERE sus.access = a.id), 0), ',',
+            '"transactionNumber": "', t.transactionNumber, '",',
+            '"company": "', a.company, '"',
+            IF(a.type = 'ticket', CONCAT(',"numberOfPassage": ', tk.passes), ''),
+            '}'
+        ) SEPARATOR ','
     ) INTO wallet_info
     FROM transaction t
     JOIN access a ON t.accessId = a.id
+    LEFT JOIN ticket tk ON a.id = tk.access
     WHERE t.user = p_email;
+
+    -- Finalize the JSON array
+    SET wallet_info = CONCAT('[', wallet_info, ']');
 
     RETURN wallet_info;
 END //
 
-CREATE PROCEDURE AddAccess(
-    -- TODO Confirmer que l'access_id est donné (généré déjà par l'api)--
-    IN p_access_id integer,
-    IN p_access_name VARCHAR(100),
-    IN p_price FLOAT,
-    IN p_company_name VARCHAR(100),
-    IN p_access_type enum('ticket','subscription'),
-    IN p_duration INT
-)
+-- Function to add an access
+CREATE FUNCTION AddAccess(
+    p_access_id VARCHAR(100),
+    p_access_name VARCHAR(100),
+    p_price FLOAT,
+    p_company_name VARCHAR(100),
+    p_access_type enum('ticket','subscription'),
+    p_duration INT,
+    p_numberOfPassage integer
+) RETURNS VARCHAR(10000) DETERMINISTIC
 BEGIN
-    INSERT INTO company (name) VALUES (p_company_name);
+    -- Declare variable for access info
+    DECLARE access_created VARCHAR(10000);
+
+    -- Insert the company if it does not exist
+    INSERT IGNORE INTO company (name) VALUES (p_company_name);
+
+    -- Insertion into the table access
     INSERT INTO access (id, name, price, company, type, duration)
     VALUES (p_access_id, p_access_name, p_price, p_company_name, p_access_type, p_duration);
+
+    -- Insertion into the appropriate table based on the access type
+    IF p_access_type = 'ticket' THEN
+        INSERT INTO ticket (access, passes) VALUES (p_access_id, p_numberOfPassage);
+    ELSEIF p_access_type = 'subscription' THEN
+        INSERT INTO subscription (access) VALUES (p_access_id);
+    END IF;
+
+    -- Set the JSON array for an added access
+    SET access_created = CONCAT(
+    '{"accessId": "', p_access_id, '",',
+    '"accessName": "', p_access_name, '",',
+    '"price": "', p_price, '",',
+    '"accessType": "', p_access_type, '",',
+    '"duration": "', p_duration, '",',
+    '"company": "', p_company_name, '"',
+    IF(p_access_type = 'ticket', CONCAT(',"numberOfPassage": "', p_numberOfPassage, '"'), ''),
+    '}'
+);
+
+    RETURN access_created;
 END //
 DELIMITER ;
 
 -- TODO remove them eventually (sample data to check my methods)
  -- Inserting sample data into the company table
- INSERT INTO company (name) VALUES ('Company XYZ');
- INSERT INTO company (name) VALUES ('Company ABC');
+ INSERT INTO company (name) VALUES ('RTC');
+ INSERT INTO company (name) VALUES ('STM');
 
  -- Inserting sample data into the access table
- INSERT INTO access (id, name, price, company, type, duration) VALUES (1,'Access 1', 20.00, 'Company XYZ', 'ticket', 3);
- INSERT INTO access (id,name, price, company, type, duration) VALUES (2,'Access 2', 30.00, 'Company XYZ', 'subscription', 5);
- INSERT INTO access (id,name, price, company, type, duration) VALUES (3,'Access 3', 40.00, 'Company ABC', 'ticket', 7);
- INSERT INTO access (id,name, price, company, type, duration) VALUES (4,'Access 4', 50.00, 'Company ABC', 'subscription', 8);
+ INSERT INTO access (id, name, price, company, type, duration) VALUES (1,'Access 1', 20.00, 'STM', 'ticket', 3);
+ INSERT INTO access (id,name, price, company, type, duration) VALUES (2,'Access 2', 30.00, 'RTC', 'subscription', 5);
+ INSERT INTO access (id,name, price, company, type, duration) VALUES (4,'Access 4', 50.00, 'STM', 'subscription', 8);
 
  -- Inserting sample data into the user table
  INSERT INTO user (email, name, password, address, birthday, phone, role)
@@ -88,13 +107,11 @@ DELIMITER ;
  VALUES (1234567890123456, 'User One', '12/25'),
         (9876543210987654, 'Admin One', '11/24');
 
- -- Inserting sample data into the company table
- INSERT INTO company (name) VALUES ('Company A'), ('Company B');
 
  -- Inserting sample data into the access table
  INSERT INTO access (id, name, price, company, type, duration)
- VALUES (5, 'Access One', 10.00, 'Company A', 'ticket', 30),
-        (6, 'Access Two', 20.00, 'Company B', 'subscription', 14);
+ VALUES (5, 'Access 5', 10.00, 'RTC', 'ticket', 30),
+        (6, 'Access 6', 20.00, 'STM', 'subscription', 14);
 
  -- Inserting sample data into the commuter table
  INSERT INTO commuter (user, creditCard)
@@ -102,15 +119,15 @@ DELIMITER ;
 
  -- Inserting sample data into the admin table
  INSERT INTO admin (user, code, company)
- VALUES ('admin@example.com', 1234, 'Company A');
+ VALUES ('admin@example.com', 1234, 'RTC');
 
  -- Inserting sample data into the ticket table
  INSERT INTO ticket (access, passes)
  VALUES (1, 5);
 
  -- Inserting sample data into the subscription table
- INSERT INTO subscription (access, start)
- VALUES (2, '2024-01-01');
+ INSERT INTO subscription (access)
+ VALUES (2), (4), (5);
 
  -- Inserting sample data into the transaction table
  INSERT INTO transaction (accessNumber, transactionNumber, creditCard, user, accessId, transactionDate, expirationDate)
