@@ -4,7 +4,7 @@ import AdminAccessContainer from "@/components/Access/Admin/AdminAccessContainer
 import AddAccess from "@/components/Access/Admin/AddAccess.vue";
 import {getUser} from "@/api/getuser.js";
 import Cookies from "js-cookie";
-import { checkAdminOnline, checkCommuterOnline } from '@/api/login.js'
+import { checkAdminOnline } from '@/api/login.js'
 
 export default {
   name: "AdminView",
@@ -37,7 +37,7 @@ export default {
       const response = await checkAdminOnline()
 
       if (response.status !== 200) {
-        Cookies.remove('AdminToken')
+        Cookies.remove('adminToken')
         this.$router.push('/login')
       }else {
         console.log('Token is valid')

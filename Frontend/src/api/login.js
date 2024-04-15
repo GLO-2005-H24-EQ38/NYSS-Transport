@@ -63,7 +63,7 @@ export const checkAdminOnline = async () => {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': Cookies.get('commuterToken'),
+            'Authorization': Cookies.get('adminToken'),
             'Access-Control-Allow-Origin': '*',
         }});
 
