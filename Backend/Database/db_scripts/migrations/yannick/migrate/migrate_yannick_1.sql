@@ -97,40 +97,45 @@ DELIMITER //
 CREATE FUNCTION GetAccessBought(p_email VARCHAR(100))
 RETURNS TEXT DETERMINISTIC
 BEGIN
-    -- Declare variable to hold bought access details
     DECLARE access_bought_info TEXT;
 
-    -- Initialize the access_bought_info
-    SET access_bought_info = '';
+    -- Set group_concat_max_len to accommodate larger strings
+    SET SESSION group_concat_max_len = 1000000;
 
     -- Retrieve access information for the user
-    SELECT GROUP_CONCAT(
-        CONCAT(
-            '{"accessNumber": "', t.accessNumber, '",',
-            '"price": "', a.price, '",',
-            '"name": "', a.name, '",',
-            '"accessType": "', a.type, '",',
-            '"transactionDate": "', t.transactionDate, '",',
-            '"expirationDate": "', t.expirationDate, '",',
-            '"outOfSale": ', suspended, ',',
-            '"deletionDate": "', IF(suspended, CONCAT('"', (SELECT deletionDate FROM suspendedAccess sus WHERE sus.access = a.id), '"'), '0'), '",',
-            '"transactionNumber": "', t.transactionNumber, '",',
-            IF(a.type = 'ticket', CONCAT('"numberOfPassage": "', tk.passes, '",' ), ''),
-            '"company": "', a.company, '"',
-            '}'
-        ) SEPARATOR ','
+    SELECT CONCAT(
+        '[',
+        GROUP_CONCAT(
+            JSON_OBJECT(
+                'accessNumber', t.accessNumber,
+                'price', a.price,
+                'name', a.name,
+                'accessType', a.type,
+                'transactionDate', t.transactionDate,
+                'expirationDate', t.expirationDate,
+                'outOfSale', a.suspended,
+                'deletionDate', IF(a.suspended, sa.deletionDate, '0'),
+                'numberOfPassage', IF(a.type = 'ticket', tk.passes, '0'),
+                'transactionNumber', t.transactionNumber,
+                'company', a.company
+            )
+            SEPARATOR ','
+        ),
+        ']'
     ) INTO access_bought_info
     FROM transaction t
     JOIN access a ON t.accessId = a.id      -- join to get access details
-    LEFT JOIN ticket tk ON a.id = tk.access -- join left to handle tickets since ticket have additional information
+    LEFT JOIN ticket tk ON a.id = tk.access -- join left to handle tickets since tickets have additional information
+    LEFT JOIN suspendedAccess sa ON a.id = sa.access
     WHERE t.user = p_email;
 
-    -- Finalize the JSON array
-    SET access_bought_info = CONCAT('[', access_bought_info, ']');
+    -- Reset group_concat_max_len to default value
+    SET SESSION group_concat_max_len = 1024;
 
     RETURN access_bought_info;
 END //
 DELIMITER ;
+
 
 DELIMITER //
 -- Procedure to delete access

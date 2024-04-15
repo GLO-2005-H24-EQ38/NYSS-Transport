@@ -80,7 +80,6 @@ class AdminFullInfo(Admin):
 
     def __init__(self, name, password, address, email, tel, dateOfBirth, adminCode, company):
         super().__init__(email, password, adminCode)
-        self.__validate_code(adminCode)
         self.__check_missing_fields(name, address, tel, dateOfBirth, company)
         self.__validate_date_of_birth(dateOfBirth)
         self.__validate_phone_number(tel)
@@ -109,11 +108,11 @@ class AdminFullInfo(Admin):
             raise RequestError(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
                                RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION, "tel")
 
-    def __validate_code(self, code):
+    def validate_code(self):
         try:
             # Extract the random string and checksum from the code
-            random_string = code[:-1]
-            provided_checksum = int(code[-1])
+            random_string = self.admin_code[:-1]
+            provided_checksum = int(self.admin_code[-1])
 
             # Calculate checksum
             calculated_checksum = sum(ord(char) for char in random_string) % 10

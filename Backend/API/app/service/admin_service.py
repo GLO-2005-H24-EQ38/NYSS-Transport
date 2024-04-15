@@ -23,6 +23,7 @@ class AdminService():
         """
         Signs up a new admin and adds them to the system.
         """
+        new_admin.validate_code()
         new_admin.secure_password()
         new_admin.secure_admin_code()
         if self._admin_repository.signup_admin(new_admin):

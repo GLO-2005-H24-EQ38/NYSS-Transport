@@ -102,7 +102,8 @@ class Database:
         self.pool.release(connection)
 
         if result:
-            return Admin(result[0][0], result[0][1], result[0][2])
+            result = result[0]
+            return Admin(result['email'], result['password'], result['code'])
         else:
             raise InvalidAdmin(ErrorResponseStatus.NOT_FOUND, RequestErrorCause.NOT_FOUND,
                                RequestErrorDescription.NOT_FOUND_DESCRIPTION)
@@ -191,15 +192,15 @@ class Database:
         access_list = []
         for access in result:
             access_list.append(Access(
-                accesId=access[0],
-                accessName=access[1],
-                price=access[2],
-                company=access[3],
-                accessType=access[4],
-                duration=access[5],
-                outOfSale=True if access[6] else False,
-                numberOfPassage=access[7] if access[4] == "ticket" else None,
-                deletionDate=access[8].strftime("%Y-%m-%d") if access[6] else None
+                accesId=access['id'],
+                accessName=access['name'],
+                price=access['price'],
+                company=access['company'],
+                accessType=access['type'],
+                duration=access['duration'],
+                outOfSale=True if access['suspended'] else False,
+                numberOfPassage=access['passes'] if access['suspended'] == "ticket" else None,
+                deletionDate=access['deletionDate'].strftime("%Y-%m-%d") if access['suspended'] else None
             ))
         return access_list
 
@@ -240,15 +241,16 @@ class Database:
         self.pool.release(connection)
 
         if result:
+            result = result[0]
             admin = AdminFullInfo(
-                email=result[0][0],
-                name=result[0][1],
-                password=result[0][2],
-                address=result[0][3],
-                dateOfBirth=result[0][4].strftime("%Y-%m-%d"),
-                tel=str(result[0][5]),
-                adminCode=str(result[0][6]),
-                company=result[0][7]
+                email=result['email'],
+                name=result['name'],
+                password=result['password'],
+                address=result['address'],
+                dateOfBirth=result['birthday'].strftime("%Y-%m-%d"),
+                tel=str(result['phone']),
+                adminCode=str(result['code']),
+                company=result['company']
             )
             return admin
         else:
@@ -266,8 +268,12 @@ class Database:
         result = cursor.fetchall()
         self.pool.release(connection)
 
+        result = result[0][
+            (f"AddAccess('{access.id}', '{access.name}', {access.price}e0, '{access.company}',"
+             f" '{access.type}', {access.duration}, {access.numberOfPassage})")]
+
         if result:
-            result = json.loads(result[0][0])
+            result = json.loads(result)
             return Access(
                 accesId=result["accessId"],
                 accessName=result["accessName"],
@@ -383,5 +389,5 @@ class Database:
 
         companies = []
         for company in result:
-            companies.append(company[0])
+            companies.append(company['name'])
         return companies
