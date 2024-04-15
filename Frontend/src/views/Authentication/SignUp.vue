@@ -102,11 +102,15 @@ export default {
         <input type="password" class="form-control" placeholder="Password" aria-label="Password"
                aria-describedby="basic-addon1" v-model="password">
       </div>
-      <div v-if="signUpOption==='admin'" class="input-group mb-3">
+      <div v-if="signUpOption==='admin'" class="mb-3" style="display: flex; flex-direction: row">
           <span class="input-group-text" id="basic-addon1"><i class="bi bi-building-down"></i>
 </span>
-        <input type="text" class="form-control" placeholder="Company Name" aria-label="Company Name"
-               v-model="company" aria-describedby="basic-addon1">
+        <select style="width: 100%" v-model="company">
+          <option value="STM">STM</option>
+          <option value="RTC">RTC</option>
+          <option value="STLevis">STLevis</option>
+
+        </select>
       </div>
       <div v-if="signUpOption==='admin'" class="input-group mb-3">
           <span class="input-group-text" id="basic-addon1"><i class="bi bi-key-fill"></i>
@@ -132,6 +136,9 @@ export default {
 .backgroundQuebec {
   background-image: url("@/assets/quebec-map.png");
   min-height: 100vh;
+}
+select {
+  border: none;
 }
 
 .button {
