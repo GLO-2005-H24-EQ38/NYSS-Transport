@@ -25,7 +25,7 @@ export default {
       }
     }
   },
-  created() {
+  mounted() {
     this.getUserType();
   }
 }
@@ -77,7 +77,7 @@ export default {
         <div style="width: 100%;" v-else>
           <div style="width:100%; display:flex; flex-direction: column;">
             <div style="font-weight: bold">Payment Method:</div>
-            <PaymentMethod/>
+           <PaymentMethod/>
           </div>
         </div>
       </div>
