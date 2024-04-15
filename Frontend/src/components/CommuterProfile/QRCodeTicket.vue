@@ -4,9 +4,18 @@ import QrcodeVue from "qrcode.vue";
 export default {
   name: "QRCodeTicket",
   components: {QrcodeVue},
+  props: {
+    QRValue: {
+      type: String,
+      required: true
+    },
+    commuterName: {
+      type: String,
+      required: true
+    }
+  },
   data() {
     return {
-      QRValue: "40001"
     }
   }
 }
@@ -26,10 +35,10 @@ export default {
               <hr>
 
             <div id="details">
-              <div style="display: flex; justify-content:center;"><strong style="font-size: 2rem">Two-Day Subcription Pass
+              <div style="display: flex; justify-content:center;"><strong style="font-size: 2rem">Monthly Pass
               </strong></div>
               <div class="qrCode" style="position: relative; display: flex; justify-content: center">
-                 <qrcode-vue background="#ffffff" :value="QRValue" size="200" level="Q"></qrcode-vue>
+                 <qrcode-vue background="#ffffff" :value="this.QRValue" size="200" level="Q"></qrcode-vue>
                 <img
                   class="qrcode__image"
                   src="@/assets/qrlogo.png"
@@ -41,11 +50,10 @@ export default {
                 Information
               </div>
               <hr style="display: none">
-              <div style="display: flex; justify-content:center;"><strong style="font-size: 1.5rem">Customer
-                Name</strong></div>
+              <div style="display: flex; justify-content:center;"><strong style="font-size: 1.5rem">{{this.commuterName}}</strong></div>
               <div style="display: flex; justify-content:center; font-size: 1.25rem; margin-bottom: 1.25rem;">Date of Purchase</div>
               <div style="display: flex; justify-content:center; color: darkgray; font-size: 1.25rem">Ticket Number</div>
-              <div style="display: flex; justify-content:center; font-size: 1.25rem">{{ QRValue }}</div>
+              <div style="display: flex; justify-content:center; font-size: 1.25rem">{{ this.QRValue[0] }}</div>
               <!--          <div style="display: flex; justify-content: center; align-items: center; margin-top: 1rem">-->
               <!--            <button class="btn btn-primary btn-block" data-bs-dismiss="modal">Redeem Now</button>-->
               <!--          </div>-->

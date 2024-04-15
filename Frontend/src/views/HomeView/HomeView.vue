@@ -39,7 +39,7 @@ export default {
 </script>
 
 <template>
-  <div >
+  <div>
     <AccessContainer :accessCards="accesslist" />
     <SearchSideBar @searchQuery="getAccessCards" />
   </div>

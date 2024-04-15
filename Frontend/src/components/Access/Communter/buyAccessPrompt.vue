@@ -61,7 +61,7 @@ export default {
 
 <template>
 
-  <button class="btn btn-primary btn-lg btn-block" @click="openModal" style="flex: 1">
+  <button class="btn addButton btn-block" @click="openModal" style="flex: 1">
     Buy
   </button>
 
@@ -73,12 +73,15 @@ export default {
           <button type="button" class="btn-close" @click="closeModal"  aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <PaymentMethod :buyingAccess="true" />
-
-          <div id="CVC" style="flex: 1; margin-left: 0.25rem;">
-            <label for="CVC">CVC</label>
-            <input type="password" class="form-control" placeholder="example: 123" aria-label="Username"
+          <div style="display: flex; flex-direction: row">
+            <PaymentMethod :buyingAccess="true" />
+          <div style="display: flex; justify-content: flex-end; flex:1">
+            <div id="CVC" style="width: 50%; display: flex; flex-direction: row; justify-content: flex-end; align-items: center">
+            <label for="CVC" style="margin-right: 1rem">CVC</label>
+            <input type="password" class="form-control" aria-label="Username"
                    aria-describedby="basic-addon1" v-model="cvc">
+          </div>
+          </div>
           </div>
 
           <div v-if="err" class="alert alert-danger" role="alert">
@@ -95,5 +98,21 @@ export default {
 </template>
 
 <style scoped>
+.addButton {
+  cursor: pointer;
+  background-color: #01356a;
+  border-color: transparent;
+  display: flex;
+  color: white;
+  justify-content: center;
+  align-items: center;
+  margin: 0.5rem;
+}
 
+.addButton:hover {
+  background-color: #0368cc;
+  transition: ease-in-out 0.25s;
+  color: white;
+  cursor: pointer;
+}
 </style>

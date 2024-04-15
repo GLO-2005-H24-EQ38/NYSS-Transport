@@ -63,8 +63,8 @@ export default {
 </script>
 
 <template>
-    <div v-if="paymentExists" class="PaymentMethod">
-      <div class="paymentContainer" style="display: flex; align-items: start; flex-direction: row">
+    <div v-if="paymentExists" class="PaymentMethod" style="display: flex; align-items: center">
+      <div class="paymentContainer" style="display: flex; flex-direction: row; width: 100%">
         <div class="info" style="flex:3; display:flex;font-weight: bold; flex-direction: row"><i
             :class="icon"
             style="margin-right:0.5rem; font-size:24px; color: #01356a"></i>
@@ -72,7 +72,7 @@ export default {
           <div style="display:flex; font-weight: bold">Exp. Date: {{ expDate }}
         </div>
         </div>
-        <div class="removeBtn" style="flex:1 ; width: 100%;display: flex; justify-content: flex-end;">
+        <div v-if="this.$route.path===('/user')" class="removeBtn" style="flex:1 ; width: 100%;display: flex; justify-content: flex-end;">
         <button :hidden="buyingAccess" class="btn btn-danger" @click="removeCard">Remove Card</button>
       </div>
       </div>

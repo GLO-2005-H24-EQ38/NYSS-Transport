@@ -19,7 +19,8 @@ export default {
       QRValue: null,
       showQRCode: false,
     }
-  },mounted() {
+  },
+  mounted() {
     console.log(this.transaction)
     this.accessNumber = this.transaction.accessNumber
     this.transactionNumber = this.transaction.transactionNumber
@@ -58,7 +59,7 @@ export default {
       {{ 'Ticket' }} {{ "•" }}
         </div>
       <div class="expirationDate2" style="display: flex; justify-content: center; flex-direction: row">
-      {{ expDate }}
+      {{ this.expDate }}
         </div>
 <!--    <img-->
 <!--        style="object-fit: contain"-->
@@ -70,18 +71,18 @@ export default {
          Access n.
         </div>
         <div style="flex: 1; font-size: 1.70rem; color: black">
-         {{ accessNumber }}
+         {{ this.accessNumber }}
         </div>
       </div>
       <div style="display: flex; flex-direction: row">
-        <div class="card-text" style="flex:1; justify-content: flex-start; display: flex">Purchased : {{ transactionDate }}</div>
+        <div class="card-text" style="flex:1; justify-content: flex-start; display: flex">Purchased : {{ this.transactionDate }}</div>
       </div>
       <hr>
       <div class="card-text">Transaction #</div>
-      <div class="card-text" style="margin-bottom: 1rem">{{ transactionNumber }}</div>
+      <div class="card-text" style="margin-bottom: 1rem">{{ this.transactionNumber }}</div>
     </div>
 <!--      <div class="invalid">Invalid</div>-->
-    <QRCodeTicket />
+    <QRCodeTicket :q-r-value="this.QRValue" />
       <img
           class="logoPosition"
         src="@/assets/rtc_logo.jpg"
