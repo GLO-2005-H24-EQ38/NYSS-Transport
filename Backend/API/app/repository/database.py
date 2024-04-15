@@ -328,7 +328,7 @@ class Database:
                         accessType=access["accessType"],
                         transactionDate=access["transactionDate"],
                         expirationDate=access["expirationDate"],
-                        transactionNumber=access["transactionNumber"],
+                        transactionNumber=str(access["transactionNumber"]),
                         company=access["company"],
                         outOfSale=True if access["outOfSale"] else False,
                         deletionDate=access.get("outOfSaleDate") if access[
@@ -368,7 +368,7 @@ class Database:
                     accessType=access["accessType"],
                     transactionDate=access["transactionDate"],
                     expirationDate=access["expirationDate"],
-                    transactionNumber=access["transactionNumber"],
+                    transactionNumber=str(access["transactionNumber"]),
                     company=access["company"],
                     outOfSale=True if access["outOfSale"] else False,
                     deletionDate=access.get("deletionDate") if access["outOfSale"] else None,
