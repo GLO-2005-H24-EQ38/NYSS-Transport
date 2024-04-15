@@ -13,7 +13,12 @@ export const addPaymentMethod = async (paymentMethod) => {
         body: JSON.stringify(paymentMethod),
     });
     console.log(response);
-    return await response.json();
+    if (response.status === 400) {
+        let error = document.getElementById('errorAddPayment');
+        error.innerText = "Invalid Card Information";
+    }
+    await response.json();
+    return response;
 }
 
 export const getPaymentMethod = async () => {

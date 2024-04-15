@@ -4,6 +4,7 @@ import AdminAccessContainer from "@/components/Access/Admin/AdminAccessContainer
 import AddAccess from "@/components/Access/Admin/AddAccess.vue";
 import {getUser} from "@/api/getuser.js";
 import Cookies from "js-cookie";
+import { checkAdminOnline } from '@/api/login.js'
 
 export default {
   name: "AdminView",
@@ -31,13 +32,20 @@ export default {
       this.user.birthDate = res.dateOfBirth;
       this.user.company = res.company;
       return res
+    },
+    async validateToken() {
+      const response = await checkAdminOnline()
+
+      if (response.status !== 200) {
+        Cookies.remove('adminToken')
+        this.$router.push('/login')
+      }else {
+        console.log('Token is valid')
+      }
     }
   },
   mounted() {
-    console.log(Cookies.get('adminToken'));
-    if (!Cookies.get('adminToken')){
-      this.$router.push('/login');
-    }
+    this.validateToken()
     console.log('=------------------->', this.getUserInfo());
     this.getUserInfo();
   },

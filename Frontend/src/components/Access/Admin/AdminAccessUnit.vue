@@ -1,23 +1,27 @@
 <script>
 
 import QRCodeTicket from "@/components/CommuterProfile/QRCodeTicket.vue";
+import {deleteAccess} from "@/api/access.js";
 
 export default {
   name: "AdminAccessUnit",
   components: {QRCodeTicket},
-  data() {
-    return {
-      accessName: "2 passages",
-      expDate: "2021-12-31",
-      price: 3.75,
-      inputEnabled: false
+  props: {
+    access: {
+      type: Object,
+      required: true
     }
   },
   methods: {
-    modifyAccess() {
-      this.inputEnabled = true;
+    async deleteAccess() {
+      const res = await deleteAccess(this.access.accessId);
+      console.log(res.status)
     }
-  }
+  },
+  data() {
+    return {
+    }
+  },
 }
 </script>
 
@@ -45,12 +49,9 @@ export default {
 <!--          <button class="btn btn-danger btn-block">Delete Access</button>-->
 <!--    </div>-->
 <!--  </div>-->
-    <div class="access-card" style="position: relative">
+    <div class="access-card" v-if="this.access.outOfSale === false" style="position: relative">
     <div class="expirationDate" style="display: flex; justify-content: center; flex-direction: row">
-      {{ 'Ticket' }} {{ "•" }}
-        </div>
-      <div class="expirationDate2" style="display: flex; justify-content: center; flex-direction: row">
-      {{ expDate }}
+      {{ this.access.accessType }}
         </div>
 <!--    <img-->
 <!--        style="object-fit: contain"-->
@@ -62,24 +63,20 @@ export default {
          Access Name
         </div>
         <div style="flex: 1; font-size: 1.70rem; color: black">
-         {{ accessNumber }}
+         {{ this.access.accessName }}
         </div>
       </div>
       <div style="display: flex; flex-direction: row">
-        <div class="card-text" style="justify-content: flex-start; display: flex; font-size: 1.5rem; font-weight: bold; color: black">{{'2 passages RTC Quebec Pass Montly'
-          }}</div>
+        <div class="card-text" style="justify-content: flex-start; display: flex; font-size: 1.5rem; color: darkgray">{{ this.access.duration }} {{ 'days' }}
+        </div>
       </div>
       <hr>
-      <div class="card-text" style="justify-content: flex-end; display: flex; font-size: 1.5rem; font-weight: bold; color: black; margin-bottom: 1rem">{{ '$3.75' }}</div>
+      <div class="card-text" style="justify-content: flex-end; display: flex; font-size: 1.5rem; font-weight: bold; color: black; margin-bottom: 1rem">{{ this.access.price }}</div>
     </div>
       <div style="width: 100%; display: flex;">
-        <button class="btn btn-danger" style="width: 100%; height: 3rem">Delete Access</button>
+        <button class="btn btn-danger" style="width: 100%; height: 3rem" @click="deleteAccess">Delete Access</button>
       </div>
 <!--      <div class="invalid">Invalid</div>-->
-      <img
-          class="logoPosition"
-        src="@/assets/rtc_logo.jpg"
-        alt="stm"/>
   </div>
 </template>
 

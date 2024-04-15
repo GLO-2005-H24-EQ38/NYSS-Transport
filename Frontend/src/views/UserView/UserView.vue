@@ -5,6 +5,7 @@ import UserInfo from '@/components/CommuterProfile/UserInfo.vue'
 import TransactionContainer from '@/components/CommuterProfile/TransactionContainer.vue'
 import Cookies from 'js-cookie'
 import { getUser } from '@/api/getuser.js'
+import { checkCommuterOnline } from '@/api/login.js'
 
 export default {
   name: 'UserView',
@@ -32,13 +33,20 @@ export default {
       this.user.birthDate = res.dateOfBirth
       this.user.company = res.company
       return res
+    },
+    async validateToken() {
+      const response = await checkCommuterOnline()
+
+      if (response.status !== 200) {
+        Cookies.remove('commuterToken')
+        this.$router.push('/login')
+      }else {
+        console.log('Token is valid')
+      }
     }
   },
   mounted() {
-    console.log(Cookies.get('commuterToken'))
-    if (!Cookies.get('commuterToken')) {
-      this.$router.push('/login')
-    }
+    this.validateToken()
 
   }
 }

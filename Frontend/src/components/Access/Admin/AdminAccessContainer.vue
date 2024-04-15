@@ -1,15 +1,33 @@
 <script>
 import AdminAccessUnit from "@/components/Access/Admin/AdminAccessUnit.vue";
+import {getAdminAccess} from "@/api/access.js";
 
 export default {
   name: "AdminAccessContainer",
-  components: {AdminAccessUnit}
+  components: {AdminAccessUnit},
+  data() {
+    return {
+      list: []
+    }
+  },
+  methods: {
+    async getAccessCards() {
+      const res = await getAdminAccess();
+      this.list = res;
+    },
+  },
+  mounted() {
+    this.getAccessCards();
+  },
+  updated() {
+    this.getAccessCards();
+  }
 }
 </script>
 
 <template>
-<div class="access-cards-container">
-    <AdminAccessUnit v-for="index in 3" :key="index" />
+  <div class="access-cards-container">
+    <AdminAccessUnit v-for="(access,index) in this.list" :key="index" :access="access"/>
   </div>
 </template>
 
