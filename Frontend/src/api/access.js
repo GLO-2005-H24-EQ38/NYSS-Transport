@@ -56,3 +56,29 @@ export const addAccess = async (query) => {
     return response;
 }
 
+export const getAdminAccess = async () => {
+    const response = await fetch(URL_API + 'admin/access/search', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': Cookies.get('adminToken'),
+            'Access-Control-Allow-Origin': '*'
+        },
+    });
+    const data = await response.json();
+    return data;
+}
+
+export const deleteAccess = async (query) => { //query is the id of the access
+    const response = await fetch(URL_API + 'admin/access/' + query, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': Cookies.get('adminToken'),
+            'Access-Control-Allow-Origin': '*'
+        },
+    });
+
+    return response;
+}
+
