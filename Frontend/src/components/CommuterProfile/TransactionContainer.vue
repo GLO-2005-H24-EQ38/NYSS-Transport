@@ -14,7 +14,6 @@ export default {
   methods: {
     async fetchTransactions() {
       this.transactions = await getTransactions()
-
     }
   },
   mounted() {
@@ -25,7 +24,7 @@ export default {
 
 <template>
   <div class="transaction-container">
-    <Transaction v-for="transaction in this.transactions " :key="transaction.transactionNumber"  :transaction="transaction"/>
+    <Transaction v-for="transaction in this.transactions " :key="transaction.accessNumber"  :transaction="transaction"/>
   </div>
 
 </template>

@@ -47,7 +47,7 @@ export default {
   },
   mounted() {
     this.validateToken()
-
+    this.getUserInfo()
   }
 }
 </script>
