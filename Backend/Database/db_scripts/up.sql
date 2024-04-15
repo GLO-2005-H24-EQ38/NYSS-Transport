@@ -76,7 +76,6 @@ CREATE TABLE transaction (
     expirationDate DATE NOT NULL ,
     PRIMARY KEY (accessNumber),
     FOREIGN KEY (user) REFERENCES commuter (user)  ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY (creditCard) REFERENCES creditCard (number),
     FOREIGN KEY (accessId) REFERENCES access (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 

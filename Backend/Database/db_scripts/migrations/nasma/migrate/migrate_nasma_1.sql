@@ -1,48 +1,9 @@
 DROP FUNCTION IF EXISTS RetrieveWallet;
 DROP FUNCTION IF EXISTS AddAccess;
 
+
+
 DELIMITER //
-
--- Function to retrieve the wallet (all the bought access) of a commuter
-CREATE FUNCTION RetrieveWallet(
-    p_email VARCHAR(100)
-)
-RETURNS VARCHAR(10000) DETERMINISTIC
-BEGIN
-    -- Declare variable for wallet info
-    DECLARE wallet_info VARCHAR(10000);
-
-    -- Initialize the wallet_info JSON array
-    SET wallet_info = '';
-
-    -- Retrieve access information for the user
-    SELECT GROUP_CONCAT(
-        CONCAT(
-            '{"accessNumber": "', t.accessNumber, '",',
-            '"accessName": "', a.name, '",',
-            '"accessType": "', a.type, '",',
-            '"transactionDate": ', t.transactionDate, ',',
-            '"expirationDate": ', t.expirationDate, ',',
-            '"outOfSale": ', suspended, ',',
-            '"deletionDate": ',
-                IF(suspended, (SELECT deletionDate FROM suspendedAccess sus WHERE sus.access = a.id), 0), ',',
-            '"transactionNumber": "', t.transactionNumber, '",',
-            '"company": "', a.company, '"',
-            IF(a.type = 'ticket', CONCAT(',"numberOfPassage": ', tk.passes), ''),
-            '}'
-        ) SEPARATOR ','
-    ) INTO wallet_info
-    FROM transaction t
-    JOIN access a ON t.accessId = a.id
-    LEFT JOIN ticket tk ON a.id = tk.access
-    WHERE t.user = p_email;
-
-    -- Finalize the JSON array
-    SET wallet_info = CONCAT('[', wallet_info, ']');
-
-    RETURN wallet_info;
-END //
-
 -- Function to add an access
 CREATE FUNCTION AddAccess(
     p_access_id VARCHAR(100),

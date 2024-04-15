@@ -47,7 +47,7 @@ class CommuterRepository:
         Retrieve payment information of a commuter based on email.
         """
         payment_info = self.database.get_card_info(email)
-        print(payment_info)
+
         if payment_info:
             return payment_info
         else:
@@ -76,10 +76,10 @@ class CommuterRepository:
         """
         Delete payment method for the commuter with the given email.
         """
-        try:
-            return self.database.delete_payment_method(email)
-        except IntegrityError:
-            return False
+        # try:
+        return self.database.delete_payment_method(email)
+        # except IntegrityError:
+        #     return False
 
     def get_commuter_full_info(self, email) -> CommuterFullInfo:
         """

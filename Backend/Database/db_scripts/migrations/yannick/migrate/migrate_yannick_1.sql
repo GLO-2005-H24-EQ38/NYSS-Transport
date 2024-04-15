@@ -11,10 +11,10 @@ CREATE FUNCTION BuyAccess(
     p_email VARCHAR(100),
     p_access_id VARCHAR(100)
 )
-RETURNS VARCHAR(10000) DETERMINISTIC
+RETURNS TEXT DETERMINISTIC
 BEGIN
     -- Declare variable to hold access details
-    DECLARE access_bought_info VARCHAR(10000);
+    DECLARE access_bought_info TEXT;
 
     -- Declare variables for access details
     DECLARE access_name VARCHAR(100);
@@ -24,7 +24,7 @@ BEGIN
     DECLARE access_number VARCHAR(36);
     DECLARE access_expire_date DATE;
     DECLARE access_duration INT;
-    DECLARE json_access_bought_info VARCHAR(10000);
+    DECLARE json_access_bought_info TEXT;
     DECLARE transaction_number BIGINT;
     DECLARE number_of_passage INT;
 
@@ -95,10 +95,10 @@ DELIMITER ;
 DELIMITER //
 -- Function to get access bought by a user
 CREATE FUNCTION GetAccessBought(p_email VARCHAR(100))
-RETURNS VARCHAR(10000) DETERMINISTIC
+RETURNS TEXT DETERMINISTIC
 BEGIN
     -- Declare variable to hold bought access details
-    DECLARE access_bought_info VARCHAR(10000);
+    DECLARE access_bought_info TEXT;
 
     -- Initialize the access_bought_info
     SET access_bought_info = '';

@@ -7,6 +7,7 @@ from typing import List
 import pymysql
 from dotenv import load_dotenv
 from pymysql import OperationalError, IntegrityError
+from pymysqlpool.pool import Pool
 
 from app.service.dtos.admin_dtos import Admin, AdminFullInfo, Access
 from app.service.dtos.commuter_dtos import Commuter, CommuterFullInfo, CreditCard, SearchAccessQuery, BoughtAccess
@@ -37,26 +38,22 @@ class Database:
 
     def _open_sql_connection(self):
         """
-            Open SQL connection using pymysql
+            Open a Pool of SQL connection using to handle concurrent requests
         """
-        self.connection = pymysql.connect(
-            host=self.host,
-            port=self.port,
-            user=self.user,
-            password=self.password,
-            db=self.database,
-            autocommit=True
-        )
-
-        self.cursor = self.connection.cursor()
+        self.pool: Pool = Pool(host=self.host, port=self.port, user=self.user, password=self.password, db=self.database,
+                               autocommit=True)
+        self.pool.init()
 
     def register_commuter(self, commuter: CommuterFullInfo) -> bool:
         """
         Register a new commuter in the database.
         """
         request = f"CALL RegisterCommuter(%s, %s, %s, %s, %s, %s)"
-        self.cursor.execute(request, (
+        connection = self.pool.get_conn()
+        cursor = connection.cursor()
+        cursor.execute(request, (
             commuter.email, commuter.name, commuter.password, commuter.address, commuter.date_of_birth, commuter.tel))
+        self.pool.release(connection)
 
         return True
 
@@ -65,11 +62,16 @@ class Database:
         Fetch commuter details from the database
         """
         request = "SELECT email, password FROM user WHERE email = %s"
-        self.cursor.execute(request, (email,))
-        result = self.cursor.fetchall()
+        connection = self.pool.get_conn()
+        cursor = connection.cursor()
+
+        cursor.execute(request, (email,))
+        result = cursor.fetchall()
+        self.pool.release(connection)
 
         if result:
-            return Commuter(result[0][0], result[0][1])
+            result = result[0]
+            return Commuter(result['email'], result['password'])
         else:
             raise InvalidCommuter(ErrorResponseStatus.NOT_FOUND, RequestErrorCause.NOT_FOUND,
                                   RequestErrorDescription.NOT_FOUND_DESCRIPTION)
@@ -79,9 +81,12 @@ class Database:
         Register a new admin in the database.
         """
         request = f"CALL RegisterAdmin(%s, %s, %s, %s, %s, %s, %s, %s)"
-        self.cursor.execute(request, (
+        connection = self.pool.get_conn()
+        cursor = connection.cursor()
+        cursor.execute(request, (
             admin.email, admin.name, admin.password, admin.address, admin.date_of_birth, admin.tel,
             admin.admin_code, admin.company))
+        self.pool.release(connection)
 
         return True
 
@@ -90,8 +95,11 @@ class Database:
         Fetch commuter details from the database.
         """
         request = "SELECT email, password, code FROM user JOIN admin WHERE email = %s AND user = email"
-        self.cursor.execute(request, (email,))
-        result = self.cursor.fetchall()
+        connection = self.pool.get_conn()
+        cursor = connection.cursor()
+        cursor.execute(request, (email,))
+        result = cursor.fetchall()
+        self.pool.release(connection)
 
         if result:
             return Admin(result[0][0], result[0][1], result[0][2])
@@ -104,7 +112,10 @@ class Database:
         Add a payment method (credit card) for a commuter in the database.
         """
         request = f"CALL addCreditcard(%s, %s, %s, %s)"
-        self.cursor.execute(request, (credit_card.holder, credit_card.cardNumber, credit_card.expirationDate, email))
+        connection = self.pool.get_conn()
+        cursor = connection.cursor()
+        cursor.execute(request, (credit_card.holder, credit_card.cardNumber, credit_card.expirationDate, email))
+        self.pool.release(connection)
         return True
 
     def delete_payment_method(self, email: str) -> bool:
@@ -112,7 +123,11 @@ class Database:
         Delete a payment method (credit card) for a commuter in the database.
         """
         request = f"CALL deleteCreditcard(%s)"
-        self.cursor.execute(request, email)
+        connection = self.pool.get_conn()
+        cursor = connection.cursor()
+        cursor.execute(request, email)
+        self.pool.release(connection)
+
         return True
 
     def get_card_info(self, email: str) -> CreditCard | None:
@@ -120,10 +135,15 @@ class Database:
         Retrieve credit card information of a commuter from the database.
         """
         request = "SELECT GetCreditCard(%s);"
-        self.cursor.execute(request, email)
-        result = self.cursor.fetchall()
-        if result[0][0]:
-            result = json.loads(result[0][0])
+        connection = self.pool.get_conn()
+        cursor = connection.cursor()
+        cursor.execute(request, email)
+        result = cursor.fetchall()
+        self.pool.release(connection)
+
+        result = result[0][f"GetCreditCard('{email}')"]
+        if result:
+            result = json.loads(result)
             last4_card_digits = result["cardNumber"][:1] + result["cardNumber"][-4:]
             return CreditCard(last4_card_digits=last4_card_digits, **result)
         else:
@@ -134,20 +154,22 @@ class Database:
         Search for access available for a commuter in the database.
         """
         request, parameters = search.searchQuery()
-
-        self.cursor.execute(request, parameters)
-        result = self.cursor.fetchall()
+        connection = self.pool.get_conn()
+        cursor = connection.cursor()
+        cursor.execute(request, parameters)
+        result = cursor.fetchall()
+        self.pool.release(connection)
 
         access_list = []
         for access in result:
             access_list.append(Access(
-                accesId=access[0],
-                accessName=access[1],
-                price=access[2],
-                company=access[3],
-                accessType=access[4],
-                duration=access[5],
-                numberOfPassage=access[7] if access[4] == "ticket" else None
+                accesId=access['id'],
+                accessName=access['name'],
+                price=access['price'],
+                company=access['company'],
+                accessType=access['type'],
+                duration=access['duration'],
+                numberOfPassage=access['suspended'] if access['type'] == "ticket" else None
             ))
         return access_list
 
@@ -160,10 +182,11 @@ class Database:
             "LEFT JOIN ticket ON access.id = ticket.access "
             "LEFT JOIN suspendedAccess ON access.id = suspendedAccess.access "
             "WHERE access.company = (SELECT company FROM admin WHERE user = %s)")
-
-        self.cursor.execute(request, email)
-        result = self.cursor.fetchall()
-        print(result)
+        connection = self.pool.get_conn()
+        cursor = connection.cursor()
+        cursor.execute(request, email)
+        result = cursor.fetchall()
+        self.pool.release(connection)
 
         access_list = []
         for access in result:
@@ -185,17 +208,21 @@ class Database:
         Retrieve all the information of a commuter from the database.
         """
         request = "SELECT * FROM user WHERE email = %s and role = 'commuter'"
-        self.cursor.execute(request, email)
-        result = self.cursor.fetchall()
+        connection = self.pool.get_conn()
+        cursor = connection.cursor()
+        cursor.execute(request, email)
+        result = cursor.fetchall()
+        self.pool.release(connection)
 
+        result = result[0]
         if result:
             commuter = CommuterFullInfo(
-                email=result[0][0],
-                name=result[0][1],
-                password=result[0][2],
-                address=result[0][3],
-                dateOfBirth=result[0][4].strftime("%Y-%m-%d"),
-                tel=str(result[0][5])
+                email=result['email'],
+                name=result['name'],
+                password=result['password'],
+                address=result['address'],
+                dateOfBirth=result['birthday'].strftime("%Y-%m-%d"),
+                tel=str(result['phone'])
             )
             return commuter
         else:
@@ -206,8 +233,11 @@ class Database:
         Retrieve all the information of an admin from the database.
         """
         request = "SELECT email, name, password, address, birthday, phone, code, company FROM user JOIN admin WHERE email = %s AND user = email"
-        self.cursor.execute(request, email)
-        result = self.cursor.fetchall()
+        connection = self.pool.get_conn()
+        cursor = connection.cursor()
+        cursor.execute(request, email)
+        result = cursor.fetchall()
+        self.pool.release(connection)
 
         if result:
             admin = AdminFullInfo(
@@ -229,9 +259,12 @@ class Database:
         Create new access by admin in the database.
         """
         request = "SELECT AddAccess(%s, %s, %s, %s, %s, %s, %s)"
-        self.cursor.execute(request, (
+        connection = self.pool.get_conn()
+        cursor = connection.cursor()
+        cursor.execute(request, (
             access.id, access.name, access.price, access.company, access.type, access.duration, access.numberOfPassage))
-        result = self.cursor.fetchall()
+        result = cursor.fetchall()
+        self.pool.release(connection)
 
         if result:
             result = json.loads(result[0][0])
@@ -254,7 +287,10 @@ class Database:
         """
         request = "CALL DeleteAccess(%s)"
         try:
-            self.cursor.execute(request, access_id)
+            connection = self.pool.get_conn()
+            cursor = connection.cursor()
+            cursor.execute(request, access_id)
+            self.pool.release(connection)
         except IntegrityError:
             pass  # ignored request because the Access was already suspended
         except OperationalError as error:
@@ -267,13 +303,16 @@ class Database:
         """
         try:
             request = "SELECT BuyAccess(%s, %s, %s)"
-            self.cursor.execute(request, (transaction.quantity, email, transaction.accessId))
-            result = self.cursor.fetchall()
+            connection = self.pool.get_conn()
+            cursor = connection.cursor()
+            cursor.execute(request, (transaction.quantity, email, transaction.accessId))
+            result = cursor.fetchall()
+            self.pool.release(connection)
+
+            result = result[0][f"BuyAccess({transaction.quantity}, '{email}', '{transaction.accessId}')"]
 
             if result:
-                print(result)
-                result = json.loads(result[0][0])
-
+                result = json.loads(result)
                 bought_access_list = []
                 for access in result:
                     bought_access_list.append(BoughtAccess(
@@ -303,13 +342,18 @@ class Database:
         Retrieve all the access a commuter bought from the database.
         """
         request = "SELECT GetAccessBought(%s);"
-        self.cursor.execute(request, email)
-        result = self.cursor.fetchall()
+        connection = self.pool.get_conn()
+        cursor = connection.cursor()
+        cursor.execute(request, email)
+        result = cursor.fetchall()
+        self.pool.release(connection)
 
         bought_access_list = []
-
-        if result[0][0]:
-            result = json.loads(result[0][0].strip("'"))
+        print(result)
+        result = result[0][f"GetAccessBought('{email}')"]
+        if result:
+            result = json.loads(result)
+            print(type(result), result)
             for access in result:
                 bought_access_list.append(BoughtAccess(
                     accessNumber=access["accessNumber"],
@@ -331,10 +375,13 @@ class Database:
         Retrieve all the companies names.
         """
         request = "SELECT name FROM company"
-        self.cursor.execute(request)
-        result = self.cursor.fetchall()
+        connection = self.pool.get_conn()
+        cursor = connection.cursor()
+        cursor.execute(request)
+        result = cursor.fetchall()
+        self.pool.release(connection)
+
         companies = []
         for company in result:
             companies.append(company[0])
         return companies
-
