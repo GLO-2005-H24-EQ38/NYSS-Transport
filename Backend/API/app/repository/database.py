@@ -267,10 +267,11 @@ class Database:
             access.id, access.name, access.price, access.company, access.type, access.duration, access.numberOfPassage))
         result = cursor.fetchall()
         self.pool.release(connection)
+        print(result)
 
         result = result[0][
             (f"AddAccess('{access.id}', '{access.name}', {access.price}e0, '{access.company}',"
-             f" '{access.type}', {access.duration}, {access.numberOfPassage})")]
+             f" '{access.type}', {access.duration}, {access.numberOfPassage if access.type == 'ticket' else 'NULL'})")]
 
         if result:
             result = json.loads(result)
