@@ -20,16 +20,6 @@ export default {
         <img style="object-fit: contain;  width: 10rem;" src="./assets/NYSS-White.png" />
       </div>
     </div>
-    <div v-if="this.$route.path === '/'" class="nav-container"
-         style="margin-left:2rem; flex: 2; justify-content: center">
-      <div class="input-group rounded">
-        <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
-               aria-describedby="search-addon" />
-        <span style="background-color: transparent" class="input-group-text border-0" id="search-addon">
-          <i class="bi bi-search" style="cursor:pointer; color: white"></i>
-        </span>
-      </div>
-    </div>
     <div class="nav-container" style="flex:1; justify-content: right">
       <div class="nav-options" v-if="this.$route.path === '/' || this.$route.path === '/user'"
            @click="this.$router.push('/')">
