@@ -1,5 +1,5 @@
 <script>
-import {Admin, Commuter} from "@/Users.js";
+import {Admin, Commuter} from "@/Objects.js";
 import {signUp} from "@/api/signup.js";
 
 export default {
@@ -28,16 +28,17 @@ export default {
     async createAccount() {
       if (this.signUpOption === 'commuter') {
         const commuter = new Commuter(this.name, this.email, this.address, this.tel, this.password, this.dateOfBirth)
-        if(!await signUp(commuter)) {
-          console.error('Failed to Sign Up Commuter')
+        const response = await signUp(commuter);
+        if (response.status === 201) {
+          this.$router.push('/login')
         }
       } else {
         const admin = new Admin(this.name, this.email, this.address, this.tel, this.password, this.dateOfBirth, this.adminCode, this.company)
-        if(!await signUp(admin)) {
-          console.error('Failed to Sign Up Admin')
+        const response = await signUp(admin);
+        if (response.status !== 201) {
+          this.$router.push('/login');
         }
       }
-      this.$router.push('/login');
     }
   }
 }
@@ -65,7 +66,8 @@ export default {
       <div class="input-group mb-3">
         <span class="input-group-text" id="basic-addon1"><i class="bi bi-calendar-date"></i></span>
         <input type="text" class="form-control" placeholder="Date of Birth" aria-label="Date of Birth"
-               aria-describedby="basic-addon1" onfocus="(this.type='date')" onblur="(this.type='text')" v-model="dateOfBirth">
+               aria-describedby="basic-addon1" onfocus="(this.type='date')" onblur="(this.type='text')"
+               v-model="dateOfBirth">
       </div>
       <div class="input-group mb-3">
         <span class="input-group-text" id="basic-addon1"><i class="bi bi-house-fill"></i></span>
@@ -104,14 +106,15 @@ export default {
           <span class="input-group-text" id="basic-addon1"><i class="bi bi-building-down"></i>
 </span>
         <input type="text" class="form-control" placeholder="Company Name" aria-label="Company Name"
-              v-model="company" aria-describedby="basic-addon1">
+               v-model="company" aria-describedby="basic-addon1">
       </div>
       <div v-if="signUpOption==='admin'" class="input-group mb-3">
           <span class="input-group-text" id="basic-addon1"><i class="bi bi-key-fill"></i>
 </span>
         <input type="text" class="form-control" placeholder="Admin Code" aria-label="Admin Code"
-              v-model="adminCode" aria-describedby="basic-addon1">
+               v-model="adminCode" aria-describedby="basic-addon1">
       </div>
+      <div id="errorSignUp" style="color:red; font-size: small"></div>
       <div style="font-size: small">
         Already have an account ? <a href="/login">Login in here</a>
       </div>

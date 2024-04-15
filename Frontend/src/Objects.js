@@ -24,6 +24,32 @@ export class Admin {
         this.adminCode = adminCode;
 
     }
+}
 
+export class AddPaymentMethod {
+    constructor(cardNumber, holder, expirationDate) {
+        this.cardNumber = cardNumber;
+        this.expirationDate = expirationDate;
+        this.holder = holder;
+    }
+}
+
+export class SearchAccessQuery {
+
+    constructor(name, accessType, company, price) {
+        this.name = name;
+        this.accessType = accessType;
+        this.company = company;
+        this.price = price;
+    }
+
+}
+
+export class BuyAccessQuery {
+
+    constructor(accessId,quantity) {
+        this.accessId = accessId;
+        this.quantity = quantity;
+    }
 
 }

@@ -1,10 +1,9 @@
 <script>
-import Transaction from "@/components/CommuterProfile/Transaction.vue";
 import AdminAccessUnit from "@/components/Access/Admin/AdminAccessUnit.vue";
 
 export default {
   name: "AdminAccessContainer",
-  components: {AdminAccessUnit, Transaction}
+  components: {AdminAccessUnit}
 }
 </script>
 

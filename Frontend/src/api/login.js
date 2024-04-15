@@ -1,11 +1,13 @@
-export var tokensList = [];
+import { URL_API } from '/src/api/url.js';
+
 export const loginCommuter = async (email, password) => {
     const errorMsg = document.getElementById("error");
     errorMsg.innerText = "";
-    const response = await fetch('http://localhost:8080/user/login', {
+    const response = await fetch(URL_API + 'user/login', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
         },
         body: JSON.stringify({"email": email, "password": password}),
     });
@@ -16,7 +18,6 @@ export const loginCommuter = async (email, password) => {
     } else {
         errorMsg.innerText = "Login Successful";
         errorMsg.style.color = "green";
-        tokensList.push(token);
     }
     console.log(token);
     return token;
@@ -24,7 +25,7 @@ export const loginCommuter = async (email, password) => {
 
 export const loginAdmin = async (email, password, adminCode) => {
     const errorMsg = document.getElementById("error");
-    const response = await fetch('http://localhost:8080/user/login', {
+    const response = await fetch( URL_API + 'user/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

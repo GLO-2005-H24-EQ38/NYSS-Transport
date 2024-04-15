@@ -185,9 +185,12 @@ BEGIN
     RETURN credit_card_info;
 END //
 
+DELIMITER ;
+
+
 -- TODO remove thes once data has been added
 -- example of a transaction with credit card present
-SET @transaction_number = SELECT BuyAccess(1, 'user1@example.com', 2);
+SET @transaction_number =  BuyAccess(1, 'user1@example.com', 2);
 
 -- example of a transaction with missing credit card (should fail and throw an error)
 -- SET @transaction_number = 2;

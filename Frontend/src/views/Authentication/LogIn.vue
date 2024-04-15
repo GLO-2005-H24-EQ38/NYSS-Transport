@@ -12,23 +12,24 @@ export default {
     }
   },
   methods: {
-    // TODO A revoir avec userCookie
     async login() {
       if (this.loginOption === 'commuter') {
         const res = await loginCommuter(this.email, this.password);
         console.log("Login Commuter")
-        if(res.token)
+        if(res.token) {
           Cookies.set('commuterToken', res.token, { expires: 7});
           Cookies.remove('adminToken');
-
           this.$router.push('/');
+        }
+
       } else {
         const res = await loginAdmin(this.email, this.password, this.adminCode);
         console.log("Login Admin")
-        if(res.token)
-          Cookies.set('adminToken', res.token, { expires: 7 });
+        if(res.token) {
+          Cookies.set('adminToken', res.token, {expires: 7});
           Cookies.remove('commuterToken');
           this.$router.push('/admin');
+        }
       }
     }
   }

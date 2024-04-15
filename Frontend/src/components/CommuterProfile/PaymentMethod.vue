@@ -1,50 +1,92 @@
 <script>
 import PaymentMethodForm from "@/components/CommuterProfile/PaymentMethodForm.vue";
+import {deletePaymentMethod, getPaymentMethod} from "@/api/payment.js";
 
 export default {
   name: "paymentMethod",
   components: {PaymentMethodForm},
+  props:{
+     buyingAccess:{
+       type: Boolean,
+       default: false
+     }
+
+  },
+
   data() {
     return {
-      showForm: false,
+      paymentExists: false,
+      cardNumber: '',
+      expDate: '',
+      holder: '',
+      icon: 'fa fa-credit-card',
     }
   },
   methods: {
-    showPaymentMethodForm() {
-      this.showForm = !this.showForm;
+    async getCard() {
+      const res = await getPaymentMethod();
+      if (res !== 0) {
+        this.paymentExists = true;
+        this.setupCard(res);
+      } else {
+        this.paymentExists = false;
+      }
     },
+    setupCard(res) {
+      this.cardNumber = res.cardNumber;
+      this.expDate = res.expirationDate;
+      this.holder = res.holder;
+      if (this.cardNumber.startsWith('3')) {
+        this.icon = 'fa fa-cc-amex';
+      }
+      else if (this.cardNumber.startsWith('4')) {
+        this.icon = 'fa fa-cc-visa';
+      } else if (this.cardNumber.startsWith('5')) {
+        this.icon = 'fa fa-cc-mastercard';
+      } else if (this.cardNumber.startsWith('6')) {
+        this.icon = 'fa fa-cc-discover';
+      }
+    },
+    async removeCard() {
+      const res = await deletePaymentMethod();
+      console.log(res);
+      await this.getCard()
+    }
+  },
+  created() {
+    this.getCard();
+  },
+  updated() {
+    this.getCard();
   }
 }
 </script>
 
 <template>
-  <div>
-<!--    <div  class="PaymentMethod">-->
-<!--      <PaymentMethodForm/>-->
-<!--    </div>-->
-    <div class="PaymentMethod"
-         style="display: flex; justify-content: flex-start; align-items: start; flex-direction: column">
-      <div style="display: flex; align-items: start; flex-direction: column">
-         <div style="display:flex; justify-content:center; align-items: center; font-weight: bold"><i class="fa fa-cc-visa"
-                                                                                                   style="margin-right:0.5rem; font-size:24px; color:#01356a"></i>Credit
-        Card ending in ···· 4559
+    <div v-if="paymentExists" class="PaymentMethod">
+      <div class="paymentContainer" style="display: flex; align-items: start; flex-direction: row">
+        <div class="info" style="flex:3; display:flex;font-weight: bold; flex-direction: row"><i
+            :class="icon"
+            style="margin-right:0.5rem; font-size:24px; color: #01356a"></i>
+          ···· {{ cardNumber.substring(1)}} {{ ','  }}
+          <div style="display:flex; font-weight: bold">Exp. Date: {{ expDate }}
+        </div>
+        </div>
+        <div class="removeBtn" style="flex:1 ; width: 100%;display: flex; justify-content: flex-end;">
+        <button :hidden="buyingAccess" class="btn btn-danger" @click="removeCard">Remove Card</button>
       </div>
-      <div style="display:flex; justify-content:flex-start; align-items: center; font-weight: bold">Exp. Date: 12/24</div>
-      </div>
-      <div style="width: 100%;display: flex; justify-content: flex-end;">
-        <button class="btn btn-danger">Remove Card</button>
       </div>
     </div>
-  </div>
+    <div v-else class="PaymentMethod">
+      <PaymentMethodForm v-if="paymentExists === false && buyingAccess === false" @close="getCard" :paymentcallback="getCard"/>
+      <div v-if="buyingAccess" style="display: flex; justify-content: center">
+        <button class="btn btn-primary" @click="this.$router.push('/user'); " style="background: #01356a">Go add Card</button>
+      </div>
+    </div>
 
 
 </template>
 
 <style scoped>
-.PaymentMethod {
-  background-color: #f1f1f1;
-  padding: 1rem;
-  margin: 0.5rem;
-  border-radius: 20px;
-}
+
 </style>

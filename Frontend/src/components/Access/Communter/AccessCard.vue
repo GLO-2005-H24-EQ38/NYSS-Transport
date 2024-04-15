@@ -1,23 +1,56 @@
 <script>
+import stmLogo from '@/assets/stm_logo.png';
+import rtcLogo from '@/assets/rtc_logo.jpg';
+import samyLogo from '@/assets/samy.jpeg';
+import BuyAccessPrompt from '@/components/Access/Communter/buyAccessPrompt.vue'
+
 export default {
   name: "AccessCard",
+  components: { BuyAccessPrompt },
+  props: {
+    access: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
     return {
-      added: false,
-      quantity: 1
+      quantity: 0,
+      logo: ''
     }
   },
   methods: {
     decrementQuantity() {
       this.quantity = this.quantity - 1;
-      if (this.quantity === 0) {
-        this.added = false;
-        this.quantity = 1;
+      if (this.quantity <= 0) {
+        this.quantity = 0;
+
       }
     },
     incrementQuantity() {
       this.quantity = this.quantity + 1;
+      if (this.quantity <= 0) {
+        this.quantity = 0;
+
+      }
+    },
+    getLogo() {
+      if (this.access.company === 'STM') {
+        this.logo = stmLogo;
+      } else if (this.access.company === 'RTC') {
+        this.logo = rtcLogo;
+      } else {
+        this.logo = samyLogo;
+      }
     }
+  },
+  created() {
+    if (this.access)
+      this.getLogo();
+  },
+  updated() {
+    if (this.access)
+      this.getLogo();
   }
 }
 </script>
@@ -26,33 +59,31 @@ export default {
   <div class="access-card">
     <img
         style="object-fit: contain"
-        src="../../../assets/stm_logo.png"
+        :src="this.logo"
         alt="stm"/>
     <div class="card-body">
       <div class="card-title" style="display: flex; flex-direction: row">
         <div style="flex: 1">
-          2 Passages
+          {{ this.access.accessName }}
         </div>
         <div style="flex: 1; display: flex; justify-content: end; align-items: end">
-          $3.75
+          $ {{ this.access.price }}
         </div>
       </div>
-      <div class="card-text">Type: Ticket</div>
+      <div class="card-text">Type: {{ this.access.accessType }}</div>
     </div>
     <div style="margin: 1rem;">
-      <div @click="added = true" v-if="!added" style="width: 100%" class="btn btn-primary btn-lg btn-block">
+      <div @click="incrementQuantity()" v-if="!quantity" style="width: 100%" class="btn btn-primary btn-lg btn-block">
         <i class="bi bi-plus-lg"></i>
         Add
       </div>
-      <div v-if="added" style="width: 100%; display: flex; flex-direction: row">
+      <div v-if="quantity" style="width: 100%; display: flex; flex-direction: row">
         <div style="display: flex; flex-direction: row; flex: 3; justify-content: space-evenly; align-items: center">
          <i class="bi bi-dash-lg btn btn-outline-primary" @click="decrementQuantity"></i>
           <div style="font-size: large">{{ quantity }}</div>
           <i class="bi bi-plus-lg btn btn-outline-primary" @click="incrementQuantity"></i>
         </div>
-        <div class="btn btn-primary btn-lg btn-block" style="flex: 1">
-          Buy
-        </div>
+        <buyAccessPrompt v-if="quantity > 0"  :accessId="this.access.accessId" :quantity="quantity" @close="quantity = 0" />
       </div>
     </div>
   </div>
@@ -108,7 +139,7 @@ export default {
   align-items: center;
 }
 
-.registerVisitButton {
+.expirationDate {
   transition: ease-in-out 0.25s;
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
   background-color: #ffffff;

@@ -1,91 +1,80 @@
 <script>
+import {AddPaymentMethod} from "@/Objects.js";
+import {addPaymentMethod} from "@/api/payment.js";
+
+
 export default {
   name: "PaymentMethodForm",
+  props: {
+  },
+  data() {
+    return {
+      cardNumber: '',
+      holder: '',
+      expirationDate: '',
+    }
+  },
+  methods: {
+   async addCard() {
+      const paymentMethod = new AddPaymentMethod(parseInt(this.cardNumber), this.holder, this.expirationDate);
+      const res = await addPaymentMethod(paymentMethod)
+
+      if (  "Successfully added payment method" === res.message ) {
+
+        this.$emit('close');
+      }
+
+    }
+  }
 }
 </script>
 <template>
-  <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+  <div class="modal fade" id="paymentMethodModal" aria-hidden="true" aria-labelledby="paymentMethodModalLabel" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-body" style="display: flex; justify-content: space-between">
-        <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Add Card</h1>
+        <h1 class="modal-title fs-5" id="paymentMethodModalLabel">Add Card</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div id="paymentMethod">
-        <form>
+        <div  >
           <div id="CardNumber">
             <label for="CardNumber">Card Number</label>
-            <input type="text" class="form-control" placeholder="1234 45678 9012 3456" aria-label="Username"
-                   aria-describedby="basic-addon1">
+            <input type="number" class="form-control" placeholder="1234 45678 9012 3456" aria-label="Username"
+                   v-model="cardNumber" aria-describedby="basic-addon1">
           </div>
           <div style="display: flex; flex-direction: row; margin-top: 1rem" >
             <div id="CardHolder" style="flex: 2; margin-left: 0.25rem">
               <label for="CardHolder">Card Holder Name:</label>
               <input type="text" class="form-control" placeholder="Elon Musk" aria-label="Username"
-                     aria-describedby="basic-addon1">
+                     v-model="holder" aria-describedby="basic-addon1">
             </div>
             <div id="ExpirationDate" style="flex:1; margin-left: 0.25rem;">
               <label for="ExpirationDate">Exp. Date</label>
               <input type="text" class="form-control" placeholder="01/23" aria-label="Username"
-                     aria-describedby="basic-addon1">
+                  v-model="expirationDate"   aria-describedby="basic-addon1">
             </div>
-            <div id="CVV" style="flex: 1; margin-left: 0.25rem;">
-              <label for="CVV">CVV</label>
+            <div id="CVC" style="flex: 1; margin-left: 0.25rem;">
+              <label for="CVC">CVC</label>
               <input type="password" class="form-control" placeholder="123" aria-label="Username"
                      aria-describedby="basic-addon1">
             </div>
           </div>
           <div style="display: flex; justify-content: flex-end; margin-top: 1rem">
-            <button class="btn btn-primary">Add Card</button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal"  @click="addCard">Add Card</button>
           </div>
-        </form>
+        </div>
       </div>
       </div>
     </div>
   </div>
 </div>
-  <div data-bs-target="#exampleModalToggle" data-bs-toggle="modal" class="addPayment" style="display: flex; justify-content: center; flex-direction: column; align-items: center;">
-    <div style="font-size: 2rem"><i class="bi bi-plus-circle"></i></div>
-    <div href="#" >Add Payment Method</div>
+  <div data-bs-target="#paymentMethodModal" data-bs-toggle="modal" class="addPayment">
+    <a href="#" >Add Payment Method</a>
 </div>
 
-<!--  <div class="modal-background">-->
-<!--    <div class="modal-content">-->
-<!--      <button class="close-btn">×</button>-->
 
-<!--      <div id="paymentMethod" class="container-fluid">-->
-<!--        <form>-->
-<!--          <div id="CardNumber" style="margin: 0.5rem">-->
-<!--            <label for="CardNumber">Card Number</label>-->
-<!--            <input type="text" class="form-control" placeholder="1234 45678 9012 3456" aria-label="Username"-->
-<!--                   aria-describedby="basic-addon1">-->
-<!--          </div>-->
-<!--          <div style="display: flex; flex-direction: row">-->
-<!--            <div id="CardHolder" style="flex: 2; margin: 0.5rem">-->
-<!--              <label for="CardHolder">Card Holder Name:</label>-->
-<!--              <input type="text" class="form-control" placeholder="Elon Musk" aria-label="Username"-->
-<!--                     aria-describedby="basic-addon1">-->
-<!--            </div>-->
-<!--            <div id="ExpirationDate" style="flex:1;  margin: 0.5rem">-->
-<!--              <label for="ExpirationDate">Exp. Date</label>-->
-<!--              <input type="text" class="form-control" placeholder="01/23" aria-label="Username"-->
-<!--                     aria-describedby="basic-addon1">-->
-<!--            </div>-->
-<!--            <div id="CVV" style="flex: 1; margin: 0.5rem">-->
-<!--              <label for="CVV">CVV</label>-->
-<!--              <input type="password" class="form-control" placeholder="123" aria-label="Username"-->
-<!--                     aria-describedby="basic-addon1">-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <div style="display: flex; justify-content: flex-end; margin: 0.5rem">-->
-<!--            <button class="btn btn-primary">Add Card</button>-->
-
-<!--          </div>-->
-<!--        </form>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
 </template>
 
 <style scoped>
