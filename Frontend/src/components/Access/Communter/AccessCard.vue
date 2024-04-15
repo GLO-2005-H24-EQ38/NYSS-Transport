@@ -3,6 +3,7 @@ import stmLogo from '@/assets/stm_logo.png';
 import rtcLogo from '@/assets/rtc_logo.jpg';
 import samyLogo from '@/assets/samy.jpeg';
 import BuyAccessPrompt from '@/components/Access/Communter/buyAccessPrompt.vue'
+import QRCodeTicket from "@/components/CommuterProfile/QRCodeTicket.vue";
 
 export default {
   name: "AccessCard",
@@ -56,39 +57,91 @@ export default {
 </script>
 
 <template>
-    <div class="access-card" style="position: relative">
-    <div class="expirationDate" style="display: flex; justify-content: center; flex-direction: row">
-      {{  this.access.accessType }}
+  <!--    <div class="access-card" style="position: relative">-->
+  <!--    <div class="expirationDate" style="display: flex; justify-content: center; flex-direction: row">-->
+  <!--      {{  this.access.accessType }}-->
+  <!--        </div>-->
+  <!--    <div class="card-body">-->
+  <!--      <div class="card-title" style="display: flex; flex-direction: column">-->
+  <!--        <div style="flex: 1; padding-top: 2rem; font-size: 1.70rem; color: black">-->
+  <!--         {{ this.access.accessName }}-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--      <div style="display: flex; flex-direction: row">-->
+  <!--        <div class="card-text" style="flex:1; justify-content: flex-end; display: flex; margin-top: 3rem">{{ "$" }}{{ this.access.price.toFixed(2) }}</div>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--      <div style="margin-top: 1.5rem">-->
+  <!--      <div @click="incrementQuantity()" v-if="!quantity" style="width: 100%" class="btn btn-primary btn-lg btn-block addButton">-->
+  <!--        <i class="bi bi-plus-lg"></i>-->
+  <!--        Add-->
+  <!--      </div>-->
+  <!--      <div v-if="quantity" style="width: 100%; display: flex; flex-direction: row">-->
+  <!--        <div style="display: flex; flex-direction: row; flex: 3; justify-content: space-evenly; align-items: center">-->
+  <!--         <i class="bi bi-dash-lg btn addButton" @click="decrementQuantity"></i>-->
+  <!--          <div style="font-size: large">{{ quantity }}</div>-->
+  <!--          <i class="bi bi-plus-lg btn addButton" @click="incrementQuantity"></i>-->
+  <!--        </div>-->
+  <!--        <buyAccessPrompt v-if="quantity > 0"  :accessId="this.access.accessId" :quantity="quantity" @close="quantity = 0" />-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--      <img-->
+  <!--          class="logoPosition"-->
+  <!--          style="height: 25%; object-fit: contain"-->
+  <!--        :src="this.logo"-->
+  <!--        alt="stm"/>-->
+  <!--  </div>-->
+  <div class="access-card" style="position: relative">
+    <div style="padding-left: 0.5rem; padding-right: 0.5rem">
+      <div class="card-body">
+        <div class="card-title" style="display: flex; flex-direction: row;">
+          <div
+            style="flex: 3; font-size: 2rem; color: black; display: flex; justify-content: flex-start; align-items: center">
+            {{ this.access.accessName }}
+          </div>
+          <div id="image" style="flex:1">
+            <div style="display: flex;flex-direction: column; justify-content: flex-end">
+              <div style="display: flex; justify-content: flex-end; margin-bottom: 0.5rem">
+                <div class="expirationDate"
+                     style="width: max-content; display: flex; justify-content: center; flex-direction: row">
+                  {{ this.access.accessType }}
+                </div>
+              </div>
+              <img
+                class="logoPosition"
+                :src="this.logo"
+                alt="stm" />
+            </div>
+          </div>
         </div>
-    <div class="card-body">
-      <div class="card-title" style="display: flex; flex-direction: column">
-        <div style="flex: 1; padding-top: 2rem; font-size: 1.70rem; color: black">
-         {{ this.access.accessName }}
+
+        <hr>
+        <div style="display: flex; flex-direction: row; justify-content: space-between">
+          <div style="display: flex; justify-content: flex-start; align-items: center" class="card-title">Price</div>
+          <div
+            style="display: flex; justify-content: flex-end; flex: 1; font-size: 1.70rem; color: black; font-weight: bold"
+            class="card-text">{{ '$' }} {{ this.access.price.toFixed(2) }}
+          </div>
         </div>
-      </div>
-      <div style="display: flex; flex-direction: row">
-        <div class="card-text" style="flex:1; justify-content: flex-end; display: flex; margin-top: 3rem">{{ "$" }}{{ this.access.price.toFixed(2) }}</div>
       </div>
     </div>
-      <div style="margin-top: 1.5rem">
-      <div @click="incrementQuantity()" v-if="!quantity" style="width: 100%" class="btn btn-primary btn-lg btn-block addButton">
+
+    <div style="margin-top: 0.5rem">
+      <div @click="incrementQuantity()" v-if="!quantity" style="width: 100%"
+           class="btn btn-primary btn-lg btn-block addButton">
         <i class="bi bi-plus-lg"></i>
         Add
       </div>
       <div v-if="quantity" style="width: 100%; display: flex; flex-direction: row">
         <div style="display: flex; flex-direction: row; flex: 3; justify-content: space-evenly; align-items: center">
-         <i class="bi bi-dash-lg btn addButton" @click="decrementQuantity"></i>
+          <i class="bi bi-dash-lg btn addButton" @click="decrementQuantity"></i>
           <div style="font-size: large">{{ quantity }}</div>
           <i class="bi bi-plus-lg btn addButton" @click="incrementQuantity"></i>
         </div>
-        <buyAccessPrompt v-if="quantity > 0"  :accessId="this.access.accessId" :quantity="quantity" @close="quantity = 0" />
+        <buyAccessPrompt v-if="quantity > 0" :accessId="this.access.accessId" :quantity="quantity"
+                         @close="quantity = 0" />
       </div>
     </div>
-      <img
-          class="logoPosition"
-          style="height: 25%; object-fit: contain"
-        :src="this.logo"
-        alt="stm"/>
   </div>
 </template>
 
@@ -97,27 +150,21 @@ export default {
   transition: ease-in-out 0.25s;
   position: relative;
   width: 23rem;
-  height: 15rem;
+  height: 100%;
   margin: 20px;
   border-radius: 5px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-
 .logoPosition {
-  padding: 1px;
+  height: 4rem;
   border: none;
-  position: absolute;
-  top: 25%;
   border-top-right-radius: 0.5rem;
-  right: 3%;
 }
 
 .card-body {
   position: relative;
-  padding-top: 20px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-top: 0.5rem;
   margin: 0;
   flex-direction: column;
   justify-content: space-between;
@@ -127,17 +174,9 @@ export default {
 
 .card-title {
   font-size: 1.25rem;
-  font-weight: bold;
-  width: 60%;
-  color: #000000;
+  color: darkgray;
 }
 
-.card-text {
-  color: #000000;
-  font-weight: bold;
-  font-size: 2rem;
-  flex-grow: 1;
-}
 
 .addButton {
   cursor: pointer;
@@ -151,12 +190,12 @@ export default {
 
 .expirationDate {
   transition: ease-in-out 0.25s;
+  border-radius: 1rem;
   background-color: #0368cc;
   border: none;
-  width: 100%;
-  position: absolute;
   color: white;
-  padding: 0.5rem 0.5rem ;
+  font-size: 1rem;
+  padding: 0.25rem 0.75rem;
 }
 
 .addButton:hover {

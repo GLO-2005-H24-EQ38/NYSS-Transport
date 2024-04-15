@@ -8,29 +8,33 @@ export default {
     transaction: {
       type: Object,
       required: true
+    },
+    qrCodeValue: {
+      type: String,
+      required: true
     }
   },
   data() {
     return {
+      accessName: '',
       accessNumber: '',
+      accessType: '',
       transactionNumber: '',
       expDate: '',
       transactionDate: '',
       type: '',
-      QRValue: '',
-      showQRCode: false
+      showQRCode: false,
+      expired: null
     }
   }, mounted() {
-    console.log(this.transaction)
+    this.accessName = this.transaction.accessName
+    this.accessType = this.transaction.accessType
     this.accessNumber = this.transaction.accessNumber
     this.transactionNumber = this.transaction.transactionNumber
     this.expDate = this.transaction.expirationDate
     this.transactionDate = this.transaction.transactionDate
     this.type = this.transaction.accessType
-    this.QRValue = 'Access N.: ' + this.accessNumber +
-      '\nTransaction N.: ' + this.transactionNumber +
-      '\nExpires on: ' + this.expDate +
-      '\nType: ' + this.type
+    this.expired = new Date().getDate() > new Date(this.expDate).getDate()
   }
 }
 </script>
@@ -60,9 +64,10 @@ export default {
   <!--  </div>-->
   <div class="access-card" style="position: relative">
     <div class="expirationDate" style="display: flex; justify-content: center; flex-direction: row">
-      {{ 'Ticket' }} {{ '•' }}
+      {{ this.accessType }} {{ '•' }}
     </div>
-    <div class="expirationDate2" style="display: flex; justify-content: center; flex-direction: row">
+    <div class="expirationDate2" style="display: flex; justify-content: center; flex-direction: row"
+         :style="{color: expired ? 'red': 'green'}">
       {{ expDate }}
     </div>
     <!--    <img-->
@@ -72,10 +77,10 @@ export default {
     <div class="card-body">
       <div class="card-title" style="display: flex; flex-direction: column">
         <div style="flex: 1">
-          Access n.
+          Access Name
         </div>
         <div style="flex: 1; font-size: 1.70rem; color: black">
-          {{ accessNumber }}
+          {{ accessName }}
         </div>
       </div>
       <div style="display: flex; flex-direction: row">
@@ -87,8 +92,7 @@ export default {
       <div class="card-text">Transaction #</div>
       <div class="card-text" style="margin-bottom: 1rem">{{ this.transactionNumber }}</div>
     </div>
-    <!--      <div class="invalid">Invalid</div>-->
-    <QRCodeTicket :QRValue="QRValue.toString()" />
+    <QRCodeTicket :number="accessNumber" />
     <img
       class="logoPosition"
       src="@/assets/rtc_logo.jpg"
