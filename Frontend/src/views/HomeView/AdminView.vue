@@ -37,7 +37,7 @@ export default {
       const response = await checkAdminOnline()
 
       if (response.status !== 200) {
-        Cookies.remove('commuterToken')
+        Cookies.remove('AdminToken')
         this.$router.push('/login')
       }else {
         console.log('Token is valid')
