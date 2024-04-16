@@ -67,7 +67,6 @@ class AdminService():
         else:
             # If it's not a ticket, verify that numberOfPassage is not defined
             if new_access.numberOfPassage is not None:
-                print(new_access.numberOfPassage)
                 raise InvalidAdmin(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
                                    RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION)
 

@@ -120,7 +120,6 @@ def suspend_access(accessId):
     """
     try:
         token = request.headers.get("Authorization")
-        print("access_id : ", accessId)
         response = admin_service.suspend_access(accessId, Token(token))
         return jsonify(response), 204
     except RequestError as error:

@@ -267,7 +267,6 @@ class Database:
             access.id, access.name, access.price, access.company, access.type, access.duration, access.numberOfPassage))
         result = cursor.fetchall()
         self.pool.release(connection)
-        print(result)
 
         result = result[0][
             (f"AddAccess('{access.id}', '{access.name}', {access.price}e0, '{access.company}',"
@@ -356,11 +355,9 @@ class Database:
         self.pool.release(connection)
 
         bought_access_list = []
-        print(result)
         result = result[0][f"GetAccessBought('{email}')"]
         if result:
             result = json.loads(result)
-            print(type(result), result)
             for access in result:
                 bought_access_list.append(BoughtAccess(
                     accessNumber=access["accessNumber"],
