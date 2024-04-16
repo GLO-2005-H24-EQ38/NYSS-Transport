@@ -23,6 +23,7 @@ export default {
       transactionNumber: '',
       accessCompany: '',
       expDate: '',
+      numberOfPassage: '',
       transactionDate: '',
       type: '',
       showQRCode: false,
@@ -36,6 +37,7 @@ export default {
     this.transactionNumber = this.transaction.transactionNumber
     this.expDate = this.transaction.expirationDate
     this.accessCompany = this.transaction.company
+    this.numberOfPassage = this.transaction.numberOfPassage
     this.transactionDate = this.transaction.transactionDate
     this.type = this.transaction.accessType
     this.expired = new Date().getDate() > new Date(this.expDate).getDate()
@@ -89,6 +91,9 @@ export default {
     <div class="expirationDate2" style="display: flex; justify-content: center; flex-direction: row"
          :style="{color: expired ? 'red': 'green'}">
       {{ expDate }}
+    </div>
+    <div v-if="numberOfPassage" class="expirationDate3" style="display: flex; justify-content: center; flex-direction: row">
+    {{'Numer Of Passages : '}}  {{ numberOfPassage }}
     </div>
     <!--    <img-->
     <!--        style="object-fit: contain"-->
@@ -171,6 +176,16 @@ export default {
   border-top-right-radius: 0.5rem;
   right: 5%;
   color: forestgreen;
+  font-size: small;
+  font-weight: bold;
+}
+
+.expirationDate3 {
+  border: none;
+  position: absolute;
+  top: 5%;
+  color: darkgray;
+  left: 3%;
   font-size: small;
   font-weight: bold;
 }
