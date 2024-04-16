@@ -25,9 +25,9 @@ export default {
     }
   },
   methods: {
+    // fetch user informations
     async getUserInfo() {
       const res = await getUser()
-      console.log('=------------------->', res)
       this.user.name = res.name
       this.user.address = res.address
       this.user.email = res.email
@@ -40,6 +40,7 @@ export default {
       const res = await getAdminAccess()
       this.accessCardsList = res
     },
+    //validate token to check if user is still logged in
     async validateToken() {
       const response = await checkAdminOnline()
 
@@ -53,7 +54,6 @@ export default {
   },
   mounted() {
     this.validateToken()
-    console.log('=------------------->', this.getUserInfo())
     this.getUserInfo()
     this.getAccessCards()
   }

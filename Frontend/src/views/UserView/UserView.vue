@@ -1,6 +1,4 @@
 <script>
-import PaymentMethod from '@/components/CommuterProfile/PaymentMethod.vue'
-
 import UserInfo from '@/components/CommuterProfile/UserInfo.vue'
 import TransactionContainer from '@/components/CommuterProfile/TransactionContainer.vue'
 import Cookies from 'js-cookie'
@@ -9,7 +7,7 @@ import { checkCommuterOnline } from '@/api/login.js'
 
 export default {
   name: 'UserView',
-  components: { TransactionContainer, PaymentMethod, UserInfo },
+  components: { TransactionContainer, UserInfo },
   data() {
     return {
       user: {
@@ -23,6 +21,7 @@ export default {
     }
   },
   methods: {
+    // fetch user informations
     async getUserInfo() {
       const res = await getUser()
       console.log('=------------------->', res)
@@ -34,14 +33,12 @@ export default {
       this.user.company = res.company
       return res
     },
+    //validate token to check if user is still logged in
     async validateToken() {
       const response = await checkCommuterOnline()
-
       if (response.status !== 200) {
         Cookies.remove('commuterToken')
         this.$router.push('/login')
-      }else {
-        console.log('Token is valid')
       }
     }
   },
@@ -57,9 +54,7 @@ export default {
     <div style="flex: 4"><h2 style="margin:1rem">Profile</h2>
       <UserInfo :user="this.user" />
     </div>
-
   </div>
-
   <h2 style="margin:1rem">Wallet</h2>
   <TransactionContainer />
 </template>

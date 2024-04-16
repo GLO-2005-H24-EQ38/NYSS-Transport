@@ -13,12 +13,12 @@ export default {
     }
   },
   methods: {
+    // search required access requested by commuter
     search() {
-
       const searchQuery = new SearchAccessQuery(this.name, this.accessType, this.company, this.price);
-
       this.$emit('searchQuery', searchQuery);
     },
+     // change search bar to mobile mode if screen width is less than 900px
     isMobile() {
       if (window.innerWidth <= 900) {
         this.mobileMode = true;

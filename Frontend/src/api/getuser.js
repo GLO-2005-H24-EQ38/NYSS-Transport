@@ -19,6 +19,5 @@ export const getUser = async () => {
             'Access-Control-Allow-Origin': '*'
         }
     });
-    console.log(response.status);
     return await response.json();
 }

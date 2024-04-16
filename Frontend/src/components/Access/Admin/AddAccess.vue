@@ -21,15 +21,16 @@ export default {
     }
   },
   methods: {
+    // Open the modal
     openModal() {
       this.modal_demo.show()
     },
+    // Close the modal
     closeModal() {
       this.modal_demo.toggle()
       this.$emit('close')
     },
     async addAccess() {
-      console.log('Add Access', this.adminCompany)
       const access = {
         accessName: this.accessName,
         price: parseInt(this.price),
@@ -37,10 +38,11 @@ export default {
         duration: parseInt(this.duration),
         company: this.adminCompany
       }
+      // If the access type is a ticket, add the number of passages
       if (this.accessType === 'ticket') {
         access.numberOfPassage = parseInt(this.numberOfPassage)
       }
-
+     // Add the access and if successful, clear the form and close the modal
       const res = await addAccess(access)
       if (res.status === 201) {
           this.accessName = '',
@@ -52,7 +54,6 @@ export default {
       } else {
         console.error('Error Adding Access')
       }
-      console.log(res)
     }
   },
   beforeUnmount() {

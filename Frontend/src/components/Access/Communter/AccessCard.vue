@@ -1,5 +1,5 @@
 <script>
-import { rtcLogo, stLevisLogo, stmLogo, rtlongueuilLogo } from '@/assets/logo.js'
+import { rtcLogo, stLevisLogo, stmLogo, rtLongueuilLogo } from '@/assets/logo.js'
 
 import BuyAccessPrompt from '@/components/Access/Communter/buyAccessPrompt.vue'
 export default {
@@ -40,7 +40,7 @@ export default {
       } else if (this.access.company === 'STLevis'){
         this.logo = stLevisLogo;
       } else if (this.access.company === 'RTL'){
-        this.logo = rtlongueuilLogo;
+        this.logo = rtLongueuilLogo;
       } else {
         this.logo = 'No Logo Found'
       }
@@ -58,40 +58,6 @@ export default {
 </script>
 
 <template>
-  <!--    <div class="access-card" style="position: relative">-->
-  <!--    <div class="expirationDate" style="display: flex; justify-content: center; flex-direction: row">-->
-  <!--      {{  this.access.accessType }}-->
-  <!--        </div>-->
-  <!--    <div class="card-body">-->
-  <!--      <div class="card-title" style="display: flex; flex-direction: column">-->
-  <!--        <div style="flex: 1; padding-top: 2rem; font-size: 1.70rem; color: black">-->
-  <!--         {{ this.access.accessName }}-->
-  <!--        </div>-->
-  <!--      </div>-->
-  <!--      <div style="display: flex; flex-direction: row">-->
-  <!--        <div class="card-text" style="flex:1; justify-content: flex-end; display: flex; margin-top: 3rem">{{ "$" }}{{ this.access.price.toFixed(2) }}</div>-->
-  <!--      </div>-->
-  <!--    </div>-->
-  <!--      <div style="margin-top: 1.5rem">-->
-  <!--      <div @click="incrementQuantity()" v-if="!quantity" style="width: 100%" class="btn btn-primary btn-lg btn-block addButton">-->
-  <!--        <i class="bi bi-plus-lg"></i>-->
-  <!--        Add-->
-  <!--      </div>-->
-  <!--      <div v-if="quantity" style="width: 100%; display: flex; flex-direction: row">-->
-  <!--        <div style="display: flex; flex-direction: row; flex: 3; justify-content: space-evenly; align-items: center">-->
-  <!--         <i class="bi bi-dash-lg btn addButton" @click="decrementQuantity"></i>-->
-  <!--          <div style="font-size: large">{{ quantity }}</div>-->
-  <!--          <i class="bi bi-plus-lg btn addButton" @click="incrementQuantity"></i>-->
-  <!--        </div>-->
-  <!--        <buyAccessPrompt v-if="quantity > 0"  :accessId="this.access.accessId" :quantity="quantity" @close="quantity = 0" />-->
-  <!--      </div>-->
-  <!--    </div>-->
-  <!--      <img-->
-  <!--          class="logoPosition"-->
-  <!--          style="height: 25%; object-fit: contain"-->
-  <!--        :src="this.logo"-->
-  <!--        alt="stm"/>-->
-  <!--  </div>-->
   <div class="access-card" style="position: relative">
     <div style="padding-left: 0.5rem; padding-right: 0.5rem">
       <div class="card-body">
@@ -121,7 +87,7 @@ export default {
           <div style="display: flex; justify-content: flex-start; align-items: center" class="card-title">Price</div>
           <div
             style="display: flex; justify-content: flex-end; flex: 1; font-size: 1.70rem; color: black; font-weight: bold"
-            class="card-text">{{ '$' }} {{ this.access.price.toFixed(2) }}
+            class="card-text">${{ this.access.price.toFixed(2) }}
           </div>
         </div>
       </div>

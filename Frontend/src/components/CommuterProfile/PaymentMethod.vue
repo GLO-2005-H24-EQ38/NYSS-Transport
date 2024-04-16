@@ -23,6 +23,7 @@ export default {
     }
   },
   methods: {
+    // get the card from the payment method and update the view
     async getCard() {
       const res = await getPaymentMethod()
       if (res !== 0) {
@@ -36,6 +37,7 @@ export default {
       this.cardNumber = res.cardNumber
       this.expDate = res.expirationDate
       this.holder = res.holder
+      // set the icon of the card based on the card number
       if (this.cardNumber.startsWith('3')) {
         this.icon = 'fa fa-cc-amex'
       } else if (this.cardNumber.startsWith('4')) {
@@ -46,9 +48,9 @@ export default {
         this.icon = 'fa fa-cc-discover'
       }
     },
+    // remove the card from the payment method and update the view
     async removeCard() {
-      const res = await deletePaymentMethod()
-      console.log(res)
+      await deletePaymentMethod()
       await this.getCard()
     }
   },

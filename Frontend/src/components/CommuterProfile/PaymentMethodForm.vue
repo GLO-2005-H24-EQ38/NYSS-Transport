@@ -24,14 +24,14 @@ export default {
     closeModal() {
       this.modal_demo.toggle()
     },
+    // add a new card to the payment method while checking the validity of the card
     async addCard() {
       const paymentMethod = new AddPaymentMethod(parseInt(this.cardNumber), this.holder, this.expirationDate);
       const res = await addPaymentMethod(paymentMethod)
+      //validate the card
       if (res.status === 201) {
         this.closeModal();
         this.$emit('close')
-      } else {
-        console.error('Error Adding Payment Method')
       }
     }
   },

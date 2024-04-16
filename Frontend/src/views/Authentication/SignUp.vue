@@ -26,14 +26,18 @@ export default {
   },
   methods: {
     async createAccount() {
+      // validate whether we sign up a commuter or an admin based on the radio button
       if (this.signUpOption === 'commuter') {
         const commuter = new Commuter(this.name, this.email, this.address, this.tel, this.password, this.dateOfBirth)
         const response = await signUp(commuter)
+        // if the response is success (CREATED), the account is created and the user is redirected to the login page
         if (response.status === 201) {
           this.$router.push('/login')
         }
-      } else {
+      }
+      else {
         const admin = new Admin(this.name, this.email, this.address, this.tel, this.password, this.dateOfBirth, this.adminCode, this.company)
+        // if the response is success (CREATED), the account is created and the user is redirected to the login page
         const response = await signUp(admin);
         if (response.status === 201) {
           this.$router.push('/login');

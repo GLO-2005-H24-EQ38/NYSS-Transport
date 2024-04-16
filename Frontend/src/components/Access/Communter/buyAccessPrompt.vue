@@ -31,10 +31,9 @@ export default {
     closeModal() {
       this.modal_demo.toggle()
       this.$emit('close')
-    }
-    ,async buyNewAccess() {
-      console.log('Buying access')
-
+    },
+    // Buy the access and close the modal if successful
+    async buyNewAccess() {
       const query = new BuyAccessQuery(this.accessId, this.quantity)
       const result = await buyAccess(this.cvc, query)
       if (result.status === 200 ) {

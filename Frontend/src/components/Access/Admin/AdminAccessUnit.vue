@@ -1,11 +1,9 @@
 <script>
 
-import QRCodeTicket from '@/components/CommuterProfile/QRCodeTicket.vue'
 import { deleteAccess } from '@/api/access.js'
 
 export default {
   name: 'AdminAccessUnit',
-  components: { QRCodeTicket },
   props: {
     access: {
       type: Object,
@@ -18,9 +16,9 @@ export default {
   },
   methods: {
     async deleteAccess() {
-      const res = await deleteAccess(this.access.accessId)
+      // Delete the access and emit an event to update the list of accesses
+      await deleteAccess(this.access.accessId)
       this.$emit("deleteAccess")
-      console.log(res.status)
     }
   },
   data() {
@@ -37,10 +35,10 @@ export default {
         {{ this.access.accessType }}
 
       </div>
-      <div v-if="showOutOfSale">
-        Deletion Date: {{ this.access.deletionDate }}
-      </div>
     </div>
+    <div v-if="showOutOfSale" class="expirationDate3">
+        Deleted on: {{ this.access.deletionDate }}
+      </div>
     <div class="card-body">
       <div class="card-title" style="display: flex; flex-direction: column">
         <div style="width: 50%">
@@ -51,14 +49,17 @@ export default {
         </div>
       </div>
       <div style="display: flex; flex-direction: row">
-        <div class="card-text" style="justify-content: flex-start; display: flex; font-size: 1.5rem; color: darkgray">
-          {{ this.access.duration }} {{ 'days' }}
+        <div class="card-text" style="justify-content: flex-start; display: flex; font-size: 1rem; color: darkgray">
+          Duration : {{ this.access.duration }} {{ 'days' }}
         </div>
       </div>
       <hr>
       <div class="card-text"
-           style="justify-content: flex-end; display: flex; font-size: 1.5rem; font-weight: bold; color: black; margin-bottom: 1rem">
-        Price: {{ this.access.price }}$
+           style="justify-content: space-between; display: flex; font-size: 1.5rem; font-weight: bold; color: black; margin-bottom: 1rem">
+        <div>
+          Price
+        </div>
+         ${{ this.access.price.toFixed(2) }}
       </div>
     </div>
     <div style="width: 100%; display: flex;">
@@ -100,48 +101,28 @@ export default {
 }
 
 .expirationDate {
-  padding: 1px;
   border: none;
   position: absolute;
-  top: 3%;
-  border-top-right-radius: 0.5rem;
-  right: 5%;
-  font-size: small;
-  color: darkgray;
-  font-weight: bold;
-}
-
-.expirationDate2 {
-  padding: 1px;
-  border: none;
-  position: absolute;
-  top: 3%;
-  border-top-right-radius: 0.5rem;
-  right: 3%;
-  color: forestgreen;
-  font-size: small;
-  font-weight: bold;
-}
-
-.invalid {
-  border: none;
-  position: absolute;
-  top: 60%;
-  background-color: darkred;
-  padding: 0.5rem 1rem;
-  right: 5%;
+  background-color: #01356a;
+  padding: 0.25rem 0.5rem;
+  border-radius: 5rem;
   color: white;
+  top: 3%;
+  right: 5%;
   font-size: small;
   font-weight: bold;
 }
 
-.logoPosition {
+.expirationDate3 {
   padding: 1px;
   border: none;
   position: absolute;
-  top: 60%;
+  top: 55%;
+  left: 2.5%;
   border-top-right-radius: 0.5rem;
-  left: 5%;
+  color: red;
+  font-size: small;
+  font-weight: bold;
 }
 
 .card-title {

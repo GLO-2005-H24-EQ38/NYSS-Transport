@@ -1,6 +1,5 @@
 <script>
 import AdminAccessUnit from '@/components/Access/Admin/AdminAccessUnit.vue'
-import { getAdminAccess } from '@/api/access.js'
 
 export default {
   name: 'AdminAccessContainer',
@@ -15,7 +14,6 @@ export default {
 </script>
 
 <template>
-
     <h3 style="margin:1rem">Active Accesses</h3>
     <div class="access-cards-container ">
       <AdminAccessUnit @deleteAccess="this.$emit('update')" v-for="(access,index) in this.accessCards" :key="index"

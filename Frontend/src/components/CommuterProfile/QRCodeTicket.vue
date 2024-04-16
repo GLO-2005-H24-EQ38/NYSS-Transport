@@ -14,16 +14,11 @@ export default {
   data() {
     return {
       qr_modal: null,
-      qr_code: ''
     }
   },methods: {
+    // opening the modal to show qr code information
     openModal() {
-      console.log('number', this.number)
-      this.qr_code = this.number;
-      console.log('qr_code', this.qr_code)
       this.qr_modal.show()
-      this.qr_code = this.number
-
     },
     closeModal() {
       this.qr_modal.toggle()
@@ -32,15 +27,14 @@ export default {
   },
 
   updated() {
+      // initialize the modal
       this.qr_modal = new Modal(`#${this.number}`, {})
-      console.log(this.qr_modal)
   },
 
   beforeUnmount() {
-    console.log(this.qr_modal._isShown)
+    // close the modal if it is open
     if (this.qr_modal._isShown) {
       this.closeModal()
-      console.log(this.qr_modal._isShown)
     }
   }
 }
@@ -85,19 +79,6 @@ export default {
 </template>
 
 <style scoped>
-.modal-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1050;
-}
-
 .qrCode .qrcode__image {
   border-radius: 5rem;
   border-color: white;

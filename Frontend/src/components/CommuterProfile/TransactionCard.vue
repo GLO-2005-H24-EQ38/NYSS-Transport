@@ -1,5 +1,5 @@
 <script>
-import { rtcLogo, stLevisLogo, stmLogo, rtlongueuilLogo } from '@/assets/logo.js'
+import { rtcLogo, stLevisLogo, stmLogo, rtLongueuilLogo } from '@/assets/logo.js'
 import QRCodeTicket from '@/components/CommuterProfile/QRCodeTicket.vue'
 
 export default {
@@ -40,10 +40,12 @@ export default {
     this.numberOfPassage = this.transaction.numberOfPassage
     this.transactionDate = this.transaction.transactionDate
     this.type = this.transaction.accessType
+    // check if the access is expired to be used in text color style
     this.expired = new Date().getDate() > new Date(this.expDate).getDate()
     this.getLogo();
   },
   methods: {
+    // get the logo of the company
     getLogo() {
       if (this.accessCompany === 'STM') {
         this.logo = stmLogo;
@@ -52,7 +54,7 @@ export default {
       } else if (this.accessCompany === 'STLevis') {
         this.logo = stLevisLogo;
       } else if (this.accessCompany === 'RTL') {
-        this.logo = rtlongueuilLogo;
+        this.logo = rtLongueuilLogo;
       } else {
         this.logo = 'No Logo Found'
       }
@@ -62,28 +64,6 @@ export default {
 </script>
 
 <template>
-  <!--  <div class="access-card" style="position: relative">-->
-  <!--    <div class="expirationDate" style="display: flex; justify-content: center">-->
-  <!--         Expires on {{ expDate }}-->
-  <!--        </div>-->
-  <!--    <img-->
-  <!--        style="object-fit: contain"-->
-  <!--        src="@/assets/stm_logo.png"-->
-  <!--        alt="stm"/>-->
-  <!--    <div class="card-body">-->
-  <!--      <div class="card-title" style="display: flex; flex-direction: row">-->
-  <!--        <div style="flex: 1">-->
-  <!--         Access N.# : {{ accessNumber }}-->
-  <!--        </div>-->
-  <!--      </div>-->
-  <!--      <div style="display: flex; flex-direction: row">-->
-  <!--        <div class="card-text" style="flex:1">Type: Ticket</div>-->
-  <!--        <div class="card-text" style="flex:1; justify-content: flex-end; display: flex">Purchased : {{ transactionDate }}</div>-->
-  <!--      </div>-->
-  <!--      <div class="card-text">Transaction N.#: {{ transactionNumber }}</div>-->
-  <!--    </div>-->
-  <!--    <QRCodeTicket />-->
-  <!--  </div>-->
   <div class="access-card" style="position: relative">
     <div class="expirationDate" style="display: flex; justify-content: center; flex-direction: row">
       {{ this.accessType }} {{ '•' }}
@@ -93,12 +73,8 @@ export default {
       {{ expDate }}
     </div>
     <div v-if="numberOfPassage" class="expirationDate3" style="display: flex; justify-content: center; flex-direction: row">
-    {{'Numer Of Passages : '}}  {{ numberOfPassage }}
+    {{'Number Of Passages : '}}  {{ numberOfPassage }}
     </div>
-    <!--    <img-->
-    <!--        style="object-fit: contain"-->
-    <!--        src="@/assets/stm_logo.png"-->
-    <!--        alt="stm"/>-->
     <div class="card-body">
       <div class="card-title" style="display: flex; flex-direction: row; margin-top: 1rem">
         <div
@@ -186,18 +162,6 @@ export default {
   top: 5%;
   color: darkgray;
   left: 3%;
-  font-size: small;
-  font-weight: bold;
-}
-
-.invalid {
-  border: none;
-  position: absolute;
-  top: 60%;
-  background-color: darkred;
-  padding: 0.5rem 1rem;
-  right: 5%;
-  color: white;
   font-size: small;
   font-weight: bold;
 }

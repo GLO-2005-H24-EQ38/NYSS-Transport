@@ -12,7 +12,6 @@ export const addPaymentMethod = async (paymentMethod) => {
         },
         body: JSON.stringify(paymentMethod),
     });
-    console.log(response);
     if (response.status === 400) {
         let error = document.getElementById('errorAddPayment');
         error.innerText = "Invalid Card Information";
@@ -44,5 +43,5 @@ export const deletePaymentMethod = async () => {
             'Access-Control-Allow-Origin': '*'
         }
     });
-    console.log(response);
+    return response;
 }

@@ -18,6 +18,7 @@ export default {
   },
   methods: {
     getUserType() {
+      // Determine the user type based on the active route
       if (this.$route.path === '/admin') {
         this.userType = 'Admin';
       } else {
