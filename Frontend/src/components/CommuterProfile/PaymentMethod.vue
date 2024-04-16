@@ -80,7 +80,7 @@ export default {
     <PaymentMethodForm v-if="paymentExists === false && buyingAccess === false" @close="getCard"
                        :paymentcallback="getCard" />
     <div v-if="buyingAccess" style="display: flex; justify-content: center">
-      <button class="btn btn-primary" @click="this.$router.push('/user'); " style="background: #01356a">Go add Card
+      <button class="btn btn-primary" @click="this.$router.push('/user'); " style="background: #01356a">+ Add Card
       </button>
     </div>
   </div>
