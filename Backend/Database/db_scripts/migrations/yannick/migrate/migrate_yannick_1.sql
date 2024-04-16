@@ -192,16 +192,5 @@ END //
 
 DELIMITER ;
 
-
--- TODO remove thes once data has been added
--- example of a transaction with credit card present
-SET @transaction_number =  BuyAccess(1, 'user1@example.com', 2);
-
--- example of a transaction with missing credit card (should fail and throw an error)
--- SET @transaction_number = 2;
--- SET @p_email = 'emai';
--- SET @result = BuyAccess(1, @transaction_number, @p_email, 1);
-
-CALL DeleteAccess(1);
-
+INSERT INTO company (name) VALUES('RTC'),('STLevis'),('STM'),('RTL');
 

@@ -20,7 +20,7 @@ CREATE PROCEDURE RegisterCommuter(
     IN p_email VARCHAR(100),
     IN p_name VARCHAR(100),
     IN p_password VARCHAR(100),
-    IN p_address VARCHAR(50),
+    IN p_address VARCHAR(1000),
     IN p_dob DATE,
     IN p_phone BIGINT
 )
@@ -38,7 +38,7 @@ CREATE PROCEDURE RegisterAdmin(
     IN p_email VARCHAR(100),
     IN p_name VARCHAR(100),
     IN p_password VARCHAR(100),
-    IN p_address VARCHAR(50),
+    IN p_address VARCHAR(1000),
     IN p_dob DATE,
     IN p_phone BIGINT,
     IN p_admin_code VARCHAR(100),
@@ -92,9 +92,3 @@ BEGIN
     END IF;
 END; //
 DELIMITER ;
-
--- TODO remove this once data added
-CALL RegisterCommuter('Samy@sa.my', 'Samy','sami:)','Quebec', '2000-01-01', 4521445987);
-CALL RegisterCommuter('Nasma@nas.ma', 'Nasma','nasooma','Quebec', '2000-01-01', 4521445987);
-CALL RegisterCommuter('Yannick@yann.ick', 'Yannick','the_one_true_yannick','Quebec', '2000-01-01', 4521445987);
-CALL RegisterAdmin('admin@nyss.ca', 'Incognito', 'fishing_with_an_f', 'Montreal', '1900-01-01', '4185559999', 52, 'RTC Quebec');
