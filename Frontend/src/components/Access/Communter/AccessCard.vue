@@ -105,8 +105,7 @@ export default {
           <div style="font-size: large">{{ quantity }}</div>
           <i class="bi bi-plus-lg btn addButton" @click="incrementQuantity"></i>
         </div>
-        <buyAccessPrompt v-if="quantity > 0" :accessId="this.access.accessId" :quantity="quantity"
-                         @close="quantity = 0" />
+        <buyAccessPrompt v-if="quantity > 0" :accessId="this.access.accessId" :quantity="quantity" />
       </div>
     </div>
   </div>
