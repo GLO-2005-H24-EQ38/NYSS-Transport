@@ -29,6 +29,7 @@ export default {
       this.modal_demo.show()
     },
     closeModal() {
+      this.cvc =""
       this.modal_demo.toggle()
     },
     // Buy the access and close the modal if successful
