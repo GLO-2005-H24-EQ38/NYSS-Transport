@@ -37,7 +37,7 @@ export default {
     <div class="name-section">
       <div style="display: flex; justify-content: center; align-items: center; flex-direction: column">
         <img src="../../assets/user.png" width="150rem" style="border-radius: 5rem; object-fit: contain"
-             alt="The One True Samy"/>
+             alt="commuter"/>
         <div style="font-weight: bold;">{{ this.user.name }}</div>
         <div>{{ this.userType }}</div>
       </div>

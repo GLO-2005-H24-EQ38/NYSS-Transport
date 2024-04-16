@@ -119,7 +119,7 @@ export default {
       <div v-if="signUpOption==='admin'" class="input-group mb-3">
           <span class="input-group-text" id="basic-addon1"><i class="bi bi-key-fill"></i>
 </span>
-        <input type="text" class="form-control" placeholder="Admin Code" aria-label="Admin Code"
+        <input type="password" class="form-control" placeholder="Admin Code" aria-label="Admin Code"
                v-model="adminCode" aria-describedby="basic-addon1">
       </div>
       <div id="errorSignUp" style="color:red; font-size: small"></div>

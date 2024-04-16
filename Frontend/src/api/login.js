@@ -33,9 +33,6 @@ export const loginAdmin = async (email, password, adminCode) => {
     });
     if (response.status !== 200) {
     errorMsg.innerText = "Invalid Email or Password or Admin Code";
-    } else {
-        errorMsg.innerText = "Login Successful";
-        errorMsg.style.color = "green";
     }
     const token = await response.json();
     return token;
