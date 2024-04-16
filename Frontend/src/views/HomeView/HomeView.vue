@@ -32,8 +32,10 @@ export default {
     }
   },
   mounted() {
-    this.validateToken();
     this.getAllAccessCards()
+  },
+  created() {
+    this.validateToken()
   }
 }
 </script>

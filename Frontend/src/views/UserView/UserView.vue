@@ -43,8 +43,11 @@ export default {
     }
   },
   mounted() {
-    this.validateToken()
+
     this.getUserInfo()
+  },
+  created() {
+    this.validateToken()
   }
 }
 </script>
