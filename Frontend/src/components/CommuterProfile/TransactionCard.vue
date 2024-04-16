@@ -78,7 +78,7 @@ export default {
     <div class="card-body">
       <div class="card-title" style="display: flex; flex-direction: row; margin-top: 1rem">
         <div
-          style="flex: 3; font-size: 2rem; color: black; display: flex; justify-content: flex-start; align-items: center">
+          style="width: 60%; font-size: 2rem; color: black; display: flex; justify-content: flex-start; align-items: center;">
           {{ this.accessName }}
         </div>
         <div id="image" style="flex:1">
