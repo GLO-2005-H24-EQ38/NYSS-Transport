@@ -1,4 +1,5 @@
 <script>
+import { rtcLogo, stLevisLogo, stmLogo } from '@/assets/logo.js'
 import QRCodeTicket from '@/components/CommuterProfile/QRCodeTicket.vue'
 
 export default {
@@ -20,11 +21,13 @@ export default {
       accessNumber: '',
       accessType: '',
       transactionNumber: '',
+      accessCompany: '',
       expDate: '',
       transactionDate: '',
       type: '',
       showQRCode: false,
-      expired: null
+      expired: null,
+      logo: null
     }
   }, mounted() {
     this.accessName = this.transaction.accessName
@@ -32,9 +35,22 @@ export default {
     this.accessNumber = this.transaction.accessNumber
     this.transactionNumber = this.transaction.transactionNumber
     this.expDate = this.transaction.expirationDate
+    this.accessCompany = this.transaction.company
     this.transactionDate = this.transaction.transactionDate
     this.type = this.transaction.accessType
     this.expired = new Date().getDate() > new Date(this.expDate).getDate()
+    this.getLogo();
+  },
+  methods: {
+    getLogo() {
+      if (this.accessCompany === 'STM') {
+        this.logo = stmLogo;
+      } else if (this.accessCompany === 'RTC') {
+        this.logo = rtcLogo;
+      } else if (this.accessCompany === 'STLevis') {
+        this.logo = stLevisLogo;
+      }
+    }
   }
 }
 </script>
@@ -75,12 +91,18 @@ export default {
     <!--        src="@/assets/stm_logo.png"-->
     <!--        alt="stm"/>-->
     <div class="card-body">
-      <div class="card-title" style="display: flex; flex-direction: column">
-        <div style="flex: 1">
-          Access Name
+      <div class="card-title" style="display: flex; flex-direction: row; margin-top: 1rem">
+        <div
+          style="flex: 3; font-size: 2rem; color: black; display: flex; justify-content: flex-start; align-items: center">
+          {{ this.accessName }}
         </div>
-        <div style="flex: 1; font-size: 1.70rem; color: black">
-          {{ accessName }}
+        <div id="image" style="flex:1">
+          <div style="display: flex;flex-direction: column; justify-content: flex-end">
+            <img
+              class="logoPosition"
+              :src="this.logo"
+              :alt="this.accessCompany"  />
+          </div>
         </div>
       </div>
       <div style="display: flex; flex-direction: row">
@@ -93,10 +115,6 @@ export default {
       <div class="card-text" style="margin-bottom: 1rem">{{ this.transactionNumber }}</div>
     </div>
     <QRCodeTicket :number="accessNumber" />
-    <img
-      class="logoPosition"
-      src="@/assets/rtc_logo.jpg"
-      alt="stm" />
   </div>
 </template>
 
@@ -169,7 +187,7 @@ export default {
   padding: 1px;
   border: none;
   position: absolute;
-  top: 20%;
+  top: 25%;
 
   border-top-right-radius: 0.5rem;
   right: 5%;

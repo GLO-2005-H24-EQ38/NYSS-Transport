@@ -1,10 +1,7 @@
 <script>
-import stmLogo from '@/assets/stm_logo.png';
-import rtcLogo from '@/assets/rtc_logo.jpg';
-import samyLogo from '@/assets/samy.jpeg';
-import BuyAccessPrompt from '@/components/Access/Communter/buyAccessPrompt.vue'
-import QRCodeTicket from "@/components/CommuterProfile/QRCodeTicket.vue";
+import { rtcLogo, stLevisLogo, stmLogo } from '@/assets/logo.js'
 
+import BuyAccessPrompt from '@/components/Access/Communter/buyAccessPrompt.vue'
 export default {
   name: "AccessCard",
   components: { BuyAccessPrompt },
@@ -40,8 +37,8 @@ export default {
         this.logo = stmLogo;
       } else if (this.access.company === 'RTC') {
         this.logo = rtcLogo;
-      } else {
-        this.logo = samyLogo;
+      } else if (this.access.company === 'STLevis'){
+        this.logo = stLevisLogo;
       }
     }
   },
