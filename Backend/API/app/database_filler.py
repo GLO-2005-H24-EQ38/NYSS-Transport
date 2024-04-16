@@ -235,9 +235,9 @@ def add_random_commuters_in_database(number_of_commuters):
             print(f"Failed to fully create commuter or credit card {i + 1}")
 
     # we save the list of commuter in a json file, so we can log in with them later
-    # with open("commuters.json", "w") as file:
-    #     file.write(str(list_of_commuters))
-    #     file.write("\n")
+    with open("commuters.json", "w") as file:
+        file.write(str(list_of_commuters))
+        file.write("\n")
 
 
 def add_random_admin_in_database(number_of_admins):
@@ -256,9 +256,9 @@ def add_random_admin_in_database(number_of_admins):
             print(f"Failed to fully create admin {i + 1}")
 
     # we save the list of admins in a json file, so we can log in with them later
-    # with open("admins.json", "w") as file:
-    #     file.write(str(list_of_admins))
-    #     file.write("\n")
+    with open("admins.json", "w") as file:
+        file.write(str(list_of_admins))
+        file.write("\n")
 
 
 '''----------------------------END OF USER GENERATION----------------------------'''
