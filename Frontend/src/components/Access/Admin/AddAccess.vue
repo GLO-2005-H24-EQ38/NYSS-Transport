@@ -51,8 +51,6 @@ export default {
           this.duration = null,
           this.numberOfPassage = null,
           this.closeModal()
-      } else {
-        console.error('Error Adding Access')
       }
     }
   },

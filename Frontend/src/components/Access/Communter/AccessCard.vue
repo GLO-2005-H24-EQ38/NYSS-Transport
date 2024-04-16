@@ -3,7 +3,7 @@ import { rtcLogo, stLevisLogo, stmLogo, rtLongueuilLogo } from '@/assets/logo.js
 
 import BuyAccessPrompt from '@/components/Access/Communter/buyAccessPrompt.vue'
 export default {
-  name: "AccessCard",
+  name: 'AccessCard',
   components: { BuyAccessPrompt },
   props: {
     access: {
@@ -19,40 +19,41 @@ export default {
   },
   methods: {
     decrementQuantity() {
-      this.quantity = this.quantity - 1;
+      this.quantity = this.quantity - 1
       if (this.quantity <= 0) {
-        this.quantity = 0;
+        this.quantity = 0
 
       }
     },
     incrementQuantity() {
-      this.quantity = this.quantity + 1;
+      this.quantity = this.quantity + 1
       if (this.quantity <= 0) {
-        this.quantity = 0;
+        this.quantity = 0
 
       }
     },
     getLogo() {
       if (this.access.company === 'STM') {
-        this.logo = stmLogo;
+        this.logo = stmLogo
       } else if (this.access.company === 'RTC') {
-        this.logo = rtcLogo;
-      } else if (this.access.company === 'STLevis'){
-        this.logo = stLevisLogo;
-      } else if (this.access.company === 'RTL'){
-        this.logo = rtLongueuilLogo;
+        this.logo = rtcLogo
+      } else if (this.access.company === 'STLevis') {
+        this.logo = stLevisLogo
+      } else if (this.access.company === 'RTL') {
+        this.logo = rtLongueuilLogo
       } else {
         this.logo = 'No Logo Found'
       }
+      console.log(this.access);
     }
   },
   created() {
     if (this.access)
-      this.getLogo();
+      this.getLogo()
   },
   updated() {
     if (this.access)
-      this.getLogo();
+      this.getLogo()
   }
 }
 </script>
@@ -83,11 +84,15 @@ export default {
         </div>
 
         <hr>
-        <div style="display: flex; flex-direction: row; justify-content: space-between">
+        <div style="position: relative; display: flex; flex-direction: row; justify-content: space-between">
           <div style="display: flex; justify-content: flex-start; align-items: center" class="card-title">Price</div>
           <div
             style="display: flex; justify-content: flex-end; flex: 1; font-size: 1.70rem; color: black; font-weight: bold"
             class="card-text">${{ this.access.price.toFixed(2) }}
+          </div>
+           <div v-if="this.access.accessType ==='ticket'" class="expirationDate3"
+               style="display: flex; justify-content: center; flex-direction: row">
+            {{ 'number of passages : ' }} {{ this.access.numberOfPassage }}
           </div>
         </div>
       </div>
@@ -162,6 +167,14 @@ export default {
   color: white;
   font-size: 1rem;
   padding: 0.25rem 0.75rem;
+}
+
+.expirationDate3 {
+  border: none;
+  position: absolute;
+  top: -30%;
+  color: black;
+  font-size: small;
 }
 
 .addButton:hover {

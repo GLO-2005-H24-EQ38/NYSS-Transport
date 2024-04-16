@@ -73,7 +73,7 @@ export default {
       {{ expDate }}
     </div>
     <div v-if="numberOfPassage" class="expirationDate3" style="display: flex; justify-content: center; flex-direction: row">
-    {{'Number Of Passages : '}}  {{ numberOfPassage }}
+    {{'number of passages : '}}  {{ numberOfPassage }}
     </div>
     <div class="card-body">
       <div class="card-title" style="display: flex; flex-direction: row; margin-top: 1rem">
