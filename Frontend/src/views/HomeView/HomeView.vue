@@ -11,42 +11,38 @@ export default {
   components: { SearchSideBar, AccessContainer },
   data() {
     return {
-      accesslist: []
+      accessList: []
     }
   }, methods: {
+    // fetch acccess cards based on user search query
     async getAccessCards(searchQuery) {
       const query = new SearchAccessQuery(searchQuery.name, searchQuery.accessType, searchQuery.company, searchQuery.price)
-      console.log(query)
-      this.accesslist = await getAccess(query)
-      console.log(this.accesslist)
-
+      this.accessList = await getAccess(query)
     },
+    // fetch all valid access from database
     async getAllAccessCards() {
-      this.accesslist = await getAllAccess()
+      this.accessList = await getAllAccess()
     }, async validateToken() {
       const response = await checkCommuterOnline()
 
       if (response.status !== 200) {
         Cookies.remove('commuterToken')
         this.$router.push('/login')
-      }else {
-        console.log('Token is valid')
       }
     }
   },
   mounted() {
-
-    this.validateToken();
     this.getAllAccessCards()
-
-
+  },
+  created() {
+    this.validateToken()
   }
 }
 </script>
 
 <template>
   <div>
-    <AccessContainer :accessCards="accesslist" />
+    <AccessContainer :accessCards="accessList" />
     <SearchSideBar @searchQuery="getAccessCards" />
   </div>
 </template>

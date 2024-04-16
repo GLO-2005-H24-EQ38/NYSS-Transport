@@ -11,8 +11,6 @@ export const getAllAccess = async () => {
         },
         body: JSON.stringify({})
     });
-
-
     if (response.status === 200) {
         return await response.json();
     } else {

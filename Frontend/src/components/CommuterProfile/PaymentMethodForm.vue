@@ -14,7 +14,7 @@ export default {
       holder: '',
       expirationDate: '',
       modal_demo: null,
-
+      cvc: null,
     }
   },
   methods: {
@@ -24,14 +24,14 @@ export default {
     closeModal() {
       this.modal_demo.toggle()
     },
+    // add a new card to the payment method while checking the validity of the card
     async addCard() {
       const paymentMethod = new AddPaymentMethod(parseInt(this.cardNumber), this.holder, this.expirationDate);
       const res = await addPaymentMethod(paymentMethod)
+      //validate the card
       if (res.status === 201) {
         this.closeModal();
         this.$emit('close')
-      } else {
-        console.error('Error Adding Payment Method')
       }
     }
   },
@@ -48,7 +48,7 @@ export default {
 <template>
   <div class="modal fade" id="paymentMethodModal" aria-hidden="true" aria-labelledby="paymentMethodModalLabel"
        tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered" style="display: flex; justify-content: center; align-items: center">
       <div class="modal-content">
         <div class="modal-body" style="display: flex; justify-content: space-between">
           <h1 class="modal-title fs-5" id="paymentMethodModalLabel">Add Card</h1>
@@ -62,7 +62,7 @@ export default {
                 <input type="number" class="form-control" placeholder="1234 5678 9012 3456" aria-label="Username"
                        v-model="cardNumber" aria-describedby="basic-addon1">
               </div>
-              <div style="display: flex; flex-direction: row; margin-top: 1rem">
+              <div class="holderExpCVC">
                 <div id="CardHolder" style="flex: 2; margin-left: 0.25rem">
                   <label for="CardHolder">Card Holder Name:</label>
                   <input type="text" class="form-control" placeholder="Elon Musk" aria-label="Username"
@@ -75,8 +75,8 @@ export default {
                 </div>
                 <div id="CVC" style="flex: 1; margin-left: 0.25rem;">
                   <label for="CVC">CVC</label>
-                  <input type="password" class="form-control" placeholder="123" aria-label="Username"
-                         aria-describedby="basic-addon1">
+                  <input id="cvcAddPayment" type="password"  class="form-control" placeholder="123" aria-label="Username"
+                       v-model="cvc"  aria-describedby="basic-addon1">
                 </div>
               </div>
               <div id="errorAddPayment" style="color: red; font-size: small"></div>
@@ -97,17 +97,15 @@ export default {
 </template>
 
 <style scoped>
-.modal-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1050;
+
+.holderExpCVC {
+  display: flex; flex-direction: row; margin-top: 1rem
+}
+
+@media screen and (max-width: 500px) {
+  .holderExpCVC {
+    flex-direction: column;
+  }
 }
 
 .modal-content {

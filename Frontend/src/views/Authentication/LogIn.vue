@@ -13,18 +13,18 @@ export default {
   },
   methods: {
     async login() {
+      // if commuter is selected
       if (this.loginOption === 'commuter') {
         const res = await loginCommuter(this.email, this.password);
-        console.log("Login Commuter")
+        // if token is returned, meaning that the login is validated
         if(res.token) {
+          // set the token in the cookie with a 7 days expiration
           Cookies.set('commuterToken', res.token, { expires: 7});
           Cookies.remove('adminToken');
           this.$router.push('/');
         }
-
       } else {
         const res = await loginAdmin(this.email, this.password, this.adminCode);
-        console.log("Login Admin")
         if(res.token) {
           Cookies.set('adminToken', res.token, {expires: 7});
           Cookies.remove('commuterToken');

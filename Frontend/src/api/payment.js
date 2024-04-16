@@ -2,6 +2,13 @@ import Cookies from "js-cookie";
 import {URL_API} from '/src/api/url.js'
 
 export const addPaymentMethod = async (paymentMethod) => {
+    let cvc = document.getElementById('cvcAddPayment');
+    let onlyDigits = /^\d+$/.test(cvc.value);
+    if (cvc.value.length !== 3 || !onlyDigits) {
+        let error = document.getElementById('errorAddPayment');
+        error.innerText = "Invalid Card Information";
+        return 0;
+    }
     const response = await fetch(URL_API + 'user/payment', {
         method: 'POST',
         headers: {
@@ -12,7 +19,6 @@ export const addPaymentMethod = async (paymentMethod) => {
         },
         body: JSON.stringify(paymentMethod),
     });
-    console.log(response);
     if (response.status === 400) {
         let error = document.getElementById('errorAddPayment');
         error.innerText = "Invalid Card Information";
@@ -44,5 +50,5 @@ export const deletePaymentMethod = async () => {
             'Access-Control-Allow-Origin': '*'
         }
     });
-    console.log(response);
+    return response;
 }

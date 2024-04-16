@@ -1,4 +1,5 @@
 <script>
+import { rtcLogo, stLevisLogo, stmLogo, rtLongueuilLogo } from '@/assets/logo.js'
 import QRCodeTicket from '@/components/CommuterProfile/QRCodeTicket.vue'
 
 export default {
@@ -8,74 +9,85 @@ export default {
     transaction: {
       type: Object,
       required: true
+    },
+    qrCodeValue: {
+      type: String,
+      required: true
     }
   },
   data() {
     return {
+      accessName: '',
       accessNumber: '',
+      accessType: '',
       transactionNumber: '',
+      accessCompany: '',
       expDate: '',
+      numberOfPassage: '',
       transactionDate: '',
       type: '',
-      QRValue: '',
-      showQRCode: false
+      showQRCode: false,
+      expired: null,
+      logo: null
     }
   }, mounted() {
-    console.log(this.transaction)
+    this.accessName = this.transaction.accessName
+    this.accessType = this.transaction.accessType
     this.accessNumber = this.transaction.accessNumber
     this.transactionNumber = this.transaction.transactionNumber
     this.expDate = this.transaction.expirationDate
+    this.accessCompany = this.transaction.company
+    this.numberOfPassage = this.transaction.numberOfPassage
     this.transactionDate = this.transaction.transactionDate
     this.type = this.transaction.accessType
-    this.QRValue = 'Access N.: ' + this.accessNumber +
-      '\nTransaction N.: ' + this.transactionNumber +
-      '\nExpires on: ' + this.expDate +
-      '\nType: ' + this.type
+    // check if the access is expired to be used in text color style
+    this.expired = new Date().getDate() > new Date(this.expDate).getDate()
+    this.getLogo();
+  },
+  methods: {
+    // get the logo of the company
+    getLogo() {
+      if (this.accessCompany === 'STM') {
+        this.logo = stmLogo;
+      } else if (this.accessCompany === 'RTC') {
+        this.logo = rtcLogo;
+      } else if (this.accessCompany === 'STLevis') {
+        this.logo = stLevisLogo;
+      } else if (this.accessCompany === 'RTL') {
+        this.logo = rtLongueuilLogo;
+      } else {
+        this.logo = 'No Logo Found'
+      }
+    }
   }
 }
 </script>
 
 <template>
-  <!--  <div class="access-card" style="position: relative">-->
-  <!--    <div class="expirationDate" style="display: flex; justify-content: center">-->
-  <!--         Expires on {{ expDate }}-->
-  <!--        </div>-->
-  <!--    <img-->
-  <!--        style="object-fit: contain"-->
-  <!--        src="@/assets/stm_logo.png"-->
-  <!--        alt="stm"/>-->
-  <!--    <div class="card-body">-->
-  <!--      <div class="card-title" style="display: flex; flex-direction: row">-->
-  <!--        <div style="flex: 1">-->
-  <!--         Access N.# : {{ accessNumber }}-->
-  <!--        </div>-->
-  <!--      </div>-->
-  <!--      <div style="display: flex; flex-direction: row">-->
-  <!--        <div class="card-text" style="flex:1">Type: Ticket</div>-->
-  <!--        <div class="card-text" style="flex:1; justify-content: flex-end; display: flex">Purchased : {{ transactionDate }}</div>-->
-  <!--      </div>-->
-  <!--      <div class="card-text">Transaction N.#: {{ transactionNumber }}</div>-->
-  <!--    </div>-->
-  <!--    <QRCodeTicket />-->
-  <!--  </div>-->
   <div class="access-card" style="position: relative">
     <div class="expirationDate" style="display: flex; justify-content: center; flex-direction: row">
-      {{ 'Ticket' }} {{ '•' }}
+      {{ this.accessType }} {{ '•' }}
     </div>
-    <div class="expirationDate2" style="display: flex; justify-content: center; flex-direction: row">
+    <div class="expirationDate2" style="display: flex; justify-content: center; flex-direction: row"
+         :style="{color: expired ? 'red': 'green'}">
       {{ expDate }}
     </div>
-    <!--    <img-->
-    <!--        style="object-fit: contain"-->
-    <!--        src="@/assets/stm_logo.png"-->
-    <!--        alt="stm"/>-->
+    <div v-if="numberOfPassage" class="expirationDate3" style="display: flex; justify-content: center; flex-direction: row">
+    {{'number of passages : '}}  {{ numberOfPassage }}
+    </div>
     <div class="card-body">
-      <div class="card-title" style="display: flex; flex-direction: column">
-        <div style="flex: 1">
-          Access n.
+      <div class="card-title" style="display: flex; flex-direction: row; margin-top: 1rem">
+        <div
+          style="flex: 3; font-size: 2rem; color: black; display: flex; justify-content: flex-start; align-items: center">
+          {{ this.accessName }}
         </div>
-        <div style="flex: 1; font-size: 1.70rem; color: black">
-          {{ accessNumber }}
+        <div id="image" style="flex:1">
+          <div style="display: flex;flex-direction: column; justify-content: flex-end">
+            <img
+              class="logoPosition"
+              :src="this.logo"
+              :alt="this.accessCompany"  />
+          </div>
         </div>
       </div>
       <div style="display: flex; flex-direction: row">
@@ -87,12 +99,7 @@ export default {
       <div class="card-text">Transaction #</div>
       <div class="card-text" style="margin-bottom: 1rem">{{ this.transactionNumber }}</div>
     </div>
-    <!--      <div class="invalid">Invalid</div>-->
-    <QRCodeTicket :QRValue="QRValue.toString()" />
-    <img
-      class="logoPosition"
-      src="@/assets/rtc_logo.jpg"
-      alt="stm" />
+    <QRCodeTicket :number="accessNumber" />
   </div>
 </template>
 
@@ -149,14 +156,12 @@ export default {
   font-weight: bold;
 }
 
-.invalid {
+.expirationDate3 {
   border: none;
   position: absolute;
-  top: 60%;
-  background-color: darkred;
-  padding: 0.5rem 1rem;
-  right: 5%;
-  color: white;
+  top: 5%;
+  color: darkgray;
+  left: 3%;
   font-size: small;
   font-weight: bold;
 }
@@ -165,7 +170,7 @@ export default {
   padding: 1px;
   border: none;
   position: absolute;
-  top: 20%;
+  top: 25%;
 
   border-top-right-radius: 0.5rem;
   right: 5%;

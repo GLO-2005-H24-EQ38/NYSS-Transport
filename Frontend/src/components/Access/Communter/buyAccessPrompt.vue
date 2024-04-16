@@ -30,11 +30,9 @@ export default {
     },
     closeModal() {
       this.modal_demo.toggle()
-      this.$emit('close')
-    }
-    ,async buyNewAccess() {
-      console.log('Buying access')
-
+    },
+    // Buy the access and close the modal if successful
+    async buyNewAccess() {
       const query = new BuyAccessQuery(this.accessId, this.quantity)
       const result = await buyAccess(this.cvc, query)
       if (result.status === 200 ) {
@@ -54,8 +52,9 @@ export default {
 
   },
   mounted() {
-    this.modal_demo = new Modal('#exampleModal', {})
-  }
+      // initialize the modal
+      this.modal_demo = new Modal(`#${this.accessId}`, {})
+  },
 }
 </script>
 
@@ -65,7 +64,7 @@ export default {
     Buy
   </button>
 
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" :id="this.accessId" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">

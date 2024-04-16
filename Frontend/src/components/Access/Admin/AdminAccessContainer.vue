@@ -1,33 +1,28 @@
 <script>
-import AdminAccessUnit from "@/components/Access/Admin/AdminAccessUnit.vue";
-import {getAdminAccess} from "@/api/access.js";
+import AdminAccessUnit from '@/components/Access/Admin/AdminAccessUnit.vue'
 
 export default {
-  name: "AdminAccessContainer",
-  components: {AdminAccessUnit},
-  data() {
-    return {
-      list: []
+  name: 'AdminAccessContainer',
+  components: { AdminAccessUnit },
+  props: {
+    accessCards: {
+      type: Array,
+      required: true
     }
   },
-  methods: {
-    async getAccessCards() {
-      const res = await getAdminAccess();
-      this.list = res;
-    },
-  },
-  mounted() {
-    this.getAccessCards();
-  },
-  updated() {
-    this.getAccessCards();
-  }
 }
 </script>
 
 <template>
-  <div class="access-cards-container">
-    <AdminAccessUnit v-for="(access,index) in this.list" :key="index" :access="access"/>
+    <h3 style="margin:1rem">Active Accesses</h3>
+    <div class="access-cards-container ">
+      <AdminAccessUnit @deleteAccess="this.$emit('update')" v-for="(access,index) in this.accessCards" :key="index"
+                       :access="access" />
+
+  </div>
+  <h3 style="margin:1rem">Inactive Accesses</h3>
+  <div class="access-cards-container ">
+    <AdminAccessUnit v-for="(access,index) in this.accessCards" :key="index" :showOutOfSale="true" :access="access" />
   </div>
 </template>
 
@@ -36,6 +31,8 @@ export default {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
-  margin-top: 40px;
+  margin-top: 0.5rem;
+  width: auto;
+
 }
 </style>

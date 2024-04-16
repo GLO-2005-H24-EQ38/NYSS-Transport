@@ -9,10 +9,9 @@ export const signUp = async (user) => {
     },
     body: JSON.stringify(user),
   });
-  console.log(JSON.stringify(user))
-  console.log(response);
+
+
   if (response.status === 400) {
-    console.log("I am here")
     const element = document.getElementById('errorSignUp');
     element.innerText = "Please fill all fields correctly";
   } else if (response.status === 409) {

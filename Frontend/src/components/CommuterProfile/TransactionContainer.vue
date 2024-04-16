@@ -1,5 +1,4 @@
 <script>
-import AccessCard from '@/components/Access/Communter/AccessCard.vue'
 import Transaction from '@/components/CommuterProfile/TransactionCard.vue'
 import { getTransactions } from '@/api/transactions.js'
 
@@ -24,7 +23,7 @@ export default {
 
 <template>
   <div class="transaction-container">
-    <Transaction v-for="transaction in this.transactions " :key="transaction.accessNumber"  :transaction="transaction"/>
+    <Transaction v-for="transaction in this.transactions " :key="transaction.accessNumber"  :transaction="transaction" :qr-code-value="transaction.accessNumber"/>
   </div>
 
 </template>

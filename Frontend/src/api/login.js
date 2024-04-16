@@ -12,7 +12,6 @@ export const loginCommuter = async (email, password) => {
         },
         body: JSON.stringify({"email": email, "password": password}),
     });
-    console.log(response.status);
     const token = await response.json();
     if (response.status !== 200) {
     errorMsg.innerText = "Invalid Email or Password";
@@ -20,7 +19,6 @@ export const loginCommuter = async (email, password) => {
         errorMsg.innerText = "Login Successful";
         errorMsg.style.color = "green";
     }
-    console.log(token);
     return token;
 }
 
@@ -40,7 +38,6 @@ export const loginAdmin = async (email, password, adminCode) => {
         errorMsg.style.color = "green";
     }
     const token = await response.json();
-    console.log(token);
     return token;
 }
 
