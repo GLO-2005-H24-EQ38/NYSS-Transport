@@ -35,7 +35,7 @@ export default {
       } else {
         const admin = new Admin(this.name, this.email, this.address, this.tel, this.password, this.dateOfBirth, this.adminCode, this.company)
         const response = await signUp(admin);
-        if (response.status !== 201) {
+        if (response.status === 201) {
           this.$router.push('/login');
         }
       }

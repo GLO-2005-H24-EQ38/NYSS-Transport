@@ -1,9 +1,9 @@
 <script>
-import {addAccess} from "@/api/access.js";
-import {Modal} from "bootstrap";
+import { addAccess } from '@/api/access.js'
+import { Modal } from 'bootstrap'
 
 export default {
-  name: "AddAccess",
+  name: 'AddAccess',
   props: {
     adminCompany: {
       type: String,
@@ -17,7 +17,7 @@ export default {
       accessType: '',
       duration: null,
       numberOfPassage: null,
-      modal_demo: null,
+      modal_demo: null
     }
   },
   methods: {
@@ -26,9 +26,10 @@ export default {
     },
     closeModal() {
       this.modal_demo.toggle()
+      this.$emit('close')
     },
     async addAccess() {
-      console.log('Add Access', this.adminCompany);
+      console.log('Add Access', this.adminCompany)
       const access = {
         accessName: this.accessName,
         price: parseInt(this.price),
@@ -37,15 +38,21 @@ export default {
         company: this.adminCompany
       }
       if (this.accessType === 'ticket') {
-        access.numberOfPassage = parseInt(this.numberOfPassage);
+        access.numberOfPassage = parseInt(this.numberOfPassage)
       }
-      const res = await addAccess(access);
+
+      const res = await addAccess(access)
       if (res.status === 201) {
-        this.closeModal()
+          this.accessName = '',
+          this.price = null,
+          this.accessType = '',
+          this.duration = null,
+          this.numberOfPassage = null,
+          this.closeModal()
       } else {
         console.error('Error Adding Access')
       }
-      console.log(res);
+      console.log(res)
     }
   },
   beforeUnmount() {
@@ -109,7 +116,7 @@ export default {
     </div>
   </div>
   <div
-       style="display: flex; width: 100%; flex-direction: column; align-items: center;">
+    style="display: flex; width: 100%; flex-direction: column; align-items: center;">
     <div href="#" class="add-access" style="width: 100%" @click="openModal">+ Add Access</div>
   </div>
 
@@ -127,6 +134,7 @@ export default {
   transition: ease-in-out 0.25s;
 
 }
+
 .add-access:hover {
   cursor: pointer;
   background-color: #0368cc;
