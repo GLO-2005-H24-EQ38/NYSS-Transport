@@ -60,7 +60,7 @@ export default {
 }
 </script>
 
-<template><h2 style="margin:1rem">List of Active Access</h2>
+<template>
   <h2 style="margin:1rem">Profile</h2>
   <UserInfo :user="this.user" />
   <AddAccess :admin-company="this.user.company" @close="getAccessCards" />
