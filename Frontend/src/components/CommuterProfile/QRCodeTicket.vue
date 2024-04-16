@@ -60,7 +60,7 @@ export default {
               <div id="details">
                 <div class="qrCode" style="display: flex; justify-content: center">
                   <div style="position:relative;">
-                    <qrcode-vue background="#ffffff" :value="this.number" size="200" level="H"></qrcode-vue>
+                    <qrcode-vue background="#ffffff" :value="this.number" size="200" level="Q"></qrcode-vue>
                   <img
                     class="qrcode__image"
                     src="@/assets/qrlogo.png"
@@ -72,7 +72,7 @@ export default {
             </div>
           </div>
           <div id="ticketInfo" style="display: flex; justify-content: center; flex-direction: column; margin-top: 2rem">
-            <div style="display: flex; justify-content: center; color: darkgray">Access Number</div>
+            <div style="display: flex; justify-content: center; color: darkgray; ">Access Number</div>
           <div style="display: flex; justify-content: center; "> {{ this.number.toUpperCase() }} </div>
           </div>
         </div>
