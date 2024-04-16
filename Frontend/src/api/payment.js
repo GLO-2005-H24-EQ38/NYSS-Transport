@@ -2,6 +2,13 @@ import Cookies from "js-cookie";
 import {URL_API} from '/src/api/url.js'
 
 export const addPaymentMethod = async (paymentMethod) => {
+    let cvc = document.getElementById('cvcAddPayment');
+    let onlyDigits = /^\d+$/.test(cvc.value);
+    if (cvc.value.length !== 3 || !onlyDigits) {
+        let error = document.getElementById('errorAddPayment');
+        error.innerText = "Invalid Card Information";
+        return 0;
+    }
     const response = await fetch(URL_API + 'user/payment', {
         method: 'POST',
         headers: {
