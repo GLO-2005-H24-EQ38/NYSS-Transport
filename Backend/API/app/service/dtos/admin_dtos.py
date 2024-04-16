@@ -3,7 +3,7 @@ import uuid
 from abc import ABC
 
 import random
-from datetime import datetime
+from datetime import datetime, timedelta, date
 
 import bcrypt
 
@@ -115,7 +115,8 @@ class AdminFullInfo(Admin):
                                RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION, "dateOfBirth")
         else:
             birth_date = datetime.strptime(date_of_birth, '%Y-%m-%d')
-            age = (datetime.now() - birth_date).days // 365
+            current_today = date.today()
+            age = current_today.year - birth_date.year - ((current_today.month, current_today.day) < (birth_date.month, birth_date.day))
             if age < 13:
                 raise RequestError(ErrorResponseStatus.BAD_REQUEST, RequestErrorCause.INVALID_PARAMETER,
                                    RequestErrorDescription.INVALID_PARAMETER_DESCRIPTION, "dateOfBirth")
