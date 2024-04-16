@@ -170,7 +170,7 @@ class Database:
                 company=access['company'],
                 accessType=access['type'],
                 duration=access['duration'],
-                numberOfPassage=access['suspended'] if access['type'] == "ticket" else None
+                numberOfPassage=access['passes'] if access['type'] == "ticket" else None
             ))
         return access_list
 
@@ -199,7 +199,7 @@ class Database:
                 accessType=access['type'],
                 duration=access['duration'],
                 outOfSale=True if access['suspended'] else False,
-                numberOfPassage=access['passes'] if access['suspended'] == "ticket" else None,
+                numberOfPassage=access['passes'] if access['type'] == "ticket" else None,
                 deletionDate=access['deletionDate'].strftime("%Y-%m-%d") if access['suspended'] else None
             ))
         return access_list
