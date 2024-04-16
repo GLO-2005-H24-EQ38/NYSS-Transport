@@ -41,7 +41,7 @@ export default {
     this.transactionDate = this.transaction.transactionDate
     this.type = this.transaction.accessType
     // check if the access is expired to be used in text color style
-    this.expired = new Date().getDate() > new Date(this.expDate).getDate()
+    this.expired = new Date().toISOString().split('T')[0] > new Date(this.expDate).toISOString().split('T')[0];
     this.getLogo();
   },
   methods: {
@@ -151,7 +151,6 @@ export default {
   top: 5%;
   border-top-right-radius: 0.5rem;
   right: 5%;
-  color: forestgreen;
   font-size: small;
   font-weight: bold;
 }
