@@ -63,36 +63,3 @@ END //
 
 DELIMITER ;
 
-
--- TODO remove thes once data has been added
-INSERT INTO user (email, name, password, address, birthday, phone) VALUE ('whatever@what.com', 'whatevs', 'IamHash', 'somewhere', '2024-03-26', 1234567890);
-INSERT INTO user (email, name, password, address, birthday) VALUE ('yo@yo.com', 'what', 'Hash', 'where', '2024-03-26');
-INSERT INTO user (email, name, password, address, birthday) VALUE ('Rando@rand.ran', 'what', 'Hash', 'where', '2024-03-26');
-INSERT INTO user (email, name, password, address, birthday) VALUE ('hello@whatsup.hi', 'what', 'Hash', 'where', '2024-03-26');
-INSERT INTO user (email, name, password, address, birthday) VALUE ('yolo@theRealones.real', 'what', 'Hash', 'where', '2024-03-26');
-INSERT INTO user (email, name, password, address, birthday) VALUE ('Nocredit@nobitches.L', 'what', 'Hash', 'where', '2024-03-26');
-
-INSERT INTO commuter (user) VALUE ('whatever@what.com');
-INSERT INTO commuter (user) VALUE ('yo@yo.com');
-INSERT INTO commuter (user) VALUE ('Rando@rand.ran');
-INSERT INTO commuter (user) VALUE ('hello@whatsup.hi');
-INSERT INTO commuter (user) VALUE ('yolo@theRealones.real');
-INSERT INTO commuter (user) VALUE ('Nocredit@nobitches.L');
-
-
-CALL addCreditcard('whatevs', 1234567890, '12/32', 'whatever@what.com'); /*adds credit card and updates commuter*/
-CALL addCreditcard('whatevs', 1234567890, '12/32', 'yo@yo.com'); /*only updates commuter*/
-CALL addCreditcard('whatevs', 1234567890, '12/32', 'Rando@rand.ran'); /*used in replacement*/
-CALL addCreditcard('shouldNotbeThere', 123456789012345, '12/32', 'hello@whatsup.hi');/*used in replacement*/
-CALL addCreditcard('whatevs', 1234567890, '12/32', 'yolo@theRealones.real'); /*used in deletion*/
-CALL addCreditcard('shouldNotbeThere', 123, '12/32', 'Nocredit@nobitches.L'); /*should not work*/
-
-CALL deleteCreditcard('yolo@theRealones.real'); /*deletes creditCard from commuter*/
-CALL deleteCreditcard('Nocredit@nobitches.L'); /*deletes creditCard from commuter and CreditCard table*/
-
-CALL addCreditcard('Rando', 0123123456789, '12/24', 'Rando@rand.ran'); /* replaces CreditCard without Deletion*/
-CALL addCreditcard('whatsup', 12345, '12/24', 'hello@whatsup.hi'); /* replaces CreditCard with Deletion*/
-
-
-
-

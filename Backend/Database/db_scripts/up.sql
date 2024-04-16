@@ -2,7 +2,7 @@ CREATE TABLE user (
     email varchar(100),
     name varchar(100) NOT NULL ,
     password varchar(100) NOT NULL ,
-    address varchar(100) NOT NULL ,
+    address varchar(1000) NOT NULL ,
     birthday date NOT NULL ,
     phone NUMERIC(10),
     role enum('commuter','admin') DEFAULT 'commuter' NOT NULL ,
@@ -26,7 +26,7 @@ CREATE TABLE company (
 
 CREATE TABLE access (
     id varchar(100),
-    name varchar(100) NOT NULL ,
+    name varchar(1000) NOT NULL ,
     price float NOT NULL ,
     company varchar(100),
     type enum('ticket','subscription') NOT NULL,
