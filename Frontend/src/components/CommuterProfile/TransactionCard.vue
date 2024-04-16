@@ -1,5 +1,5 @@
 <script>
-import { rtcLogo, stLevisLogo, stmLogo } from '@/assets/logo.js'
+import { rtcLogo, stLevisLogo, stmLogo, rtlongueuilLogo } from '@/assets/logo.js'
 import QRCodeTicket from '@/components/CommuterProfile/QRCodeTicket.vue'
 
 export default {
@@ -49,6 +49,10 @@ export default {
         this.logo = rtcLogo;
       } else if (this.accessCompany === 'STLevis') {
         this.logo = stLevisLogo;
+      } else if (this.accessCompany === 'RTL') {
+        this.logo = rtlongueuilLogo;
+      } else {
+        this.logo = 'No Logo Found'
       }
     }
   }

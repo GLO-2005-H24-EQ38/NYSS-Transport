@@ -1,12 +1,12 @@
 <script>
-import {Admin, Commuter} from "@/Objects.js";
-import {signUp} from "@/api/signup.js";
+import { Admin, Commuter } from '@/Objects.js'
+import { signUp } from '@/api/signup.js'
 
 export default {
-  name: "SignUp",
+  name: 'SignUp',
   computed: {
     address() {
-      return this.homeAddress + ', ' + this.city + ', ' + this.zipCode;
+      return this.homeAddress + ', ' + this.city + ', ' + this.zipCode
     }
   },
   data() {
@@ -28,15 +28,15 @@ export default {
     async createAccount() {
       if (this.signUpOption === 'commuter') {
         const commuter = new Commuter(this.name, this.email, this.address, this.tel, this.password, this.dateOfBirth)
-        const response = await signUp(commuter);
+        const response = await signUp(commuter)
         if (response.status === 201) {
           this.$router.push('/login')
         }
       } else {
         const admin = new Admin(this.name, this.email, this.address, this.tel, this.password, this.dateOfBirth, this.adminCode, this.company)
-        const response = await signUp(admin);
+        const response = await signUp(admin)
         if (response.status !== 201) {
-          this.$router.push('/login');
+          this.$router.push('/login')
         }
       }
     }
@@ -109,7 +109,7 @@ export default {
           <option value="STM">STM</option>
           <option value="RTC">RTC</option>
           <option value="STLevis">STLevis</option>
-
+          <option value="RTL">RTL</option>
         </select>
       </div>
       <div v-if="signUpOption==='admin'" class="input-group mb-3">
@@ -137,6 +137,7 @@ export default {
   background-image: url("@/assets/quebec-map.png");
   min-height: 100vh;
 }
+
 select {
   border: none;
 }

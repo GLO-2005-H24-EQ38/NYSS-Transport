@@ -1,5 +1,5 @@
 <script>
-import { rtcLogo, stLevisLogo, stmLogo } from '@/assets/logo.js'
+import { rtcLogo, stLevisLogo, stmLogo, rtlongueuilLogo } from '@/assets/logo.js'
 
 import BuyAccessPrompt from '@/components/Access/Communter/buyAccessPrompt.vue'
 export default {
@@ -39,6 +39,10 @@ export default {
         this.logo = rtcLogo;
       } else if (this.access.company === 'STLevis'){
         this.logo = stLevisLogo;
+      } else if (this.access.company === 'RTL'){
+        this.logo = rtlongueuilLogo;
+      } else {
+        this.logo = 'No Logo Found'
       }
     }
   },
